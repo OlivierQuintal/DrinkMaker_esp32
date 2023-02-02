@@ -2,8 +2,9 @@
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
-
-
+#include <HX711.h>
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
 
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
@@ -36,10 +37,55 @@ void setup()
   Serial.println("\n");
 
   //----------------------------------------------------GPIO
-  pinMode(led, OUTPUT);
-  digitalWrite(led, LOW);
-  pinMode(capteurLuminosite, INPUT);
+    pinMode(led, OUTPUT);
+    digitalWrite(led, LOW);
+    pinMode(capteurLuminosite, INPUT);
 
+  // ---GIOP solenoide
+    #define solenoide_1 6
+    #define solenoide_2 7
+    #define solenoide_3 10
+    #define solenoide_4 11
+    #define solenoide_5 12
+    #define solenoide_6 13
+    #define solenoide_7 14
+    #define solenoide_8 15
+    #define solenoide_9 16
+    #define solenoide_10 17
+
+    pinMode(solenoide_1, OUTPUT);
+    pinMode(solenoide_2, OUTPUT);
+    pinMode(solenoide_3, OUTPUT);
+    pinMode(solenoide_4, OUTPUT);
+    pinMode(solenoide_5, OUTPUT);
+    pinMode(solenoide_6, OUTPUT);
+    pinMode(solenoide_7, OUTPUT);
+    pinMode(solenoide_8, OUTPUT);
+    pinMode(solenoide_9, OUTPUT);
+    pinMode(solenoide_10, OUTPUT);
+
+  // ---GPIO Pompes
+    #define pompe_1 1
+    #define pompe_2 2
+
+  // ---GPIO boutons
+    #define btn_1 40
+    #define btn_2 39
+    #define btn_3 38
+
+  //------------------------------------------------------HX711
+  HX711 scale;
+  #define HX711_SDA 42
+  #define HX711_SCK 41
+  scale.begin(HX711_SDA, HX711_SCK);       
+
+  //------------------------------------------------------LCD 
+  LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
+  //------------------------------------------------------Capteur Alcool
+  #define capteur_alcool 18
+  pinMode(capteur_alcool, INPUT);
+  
   //----------------------------------------------------SPIFFS
   if (!SPIFFS.begin())
   {
