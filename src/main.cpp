@@ -5,15 +5,19 @@
 #include <HX711.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
+#include <ArduinoJson.h>
 
-//const char *ssid = "HUAWEI";
-//const char *password = "bigtits69";
+const char *ssid = "HUAWEI";
+const char *password = "bigtits69";
 
-const char *ssid = "wifiquintal";
-const char *password = "totoa1q9";
+//const char *ssid = "wifiquintal";
+//const char *password = "totoa1q9";
 
 const int led = 2;
 const int capteurLuminosite = 34;
+
+
+
 
 
 //-----Variable pour les ingrédients dans la machine 
@@ -35,6 +39,80 @@ void setup()
   //----------------------------------------------------Serial
   Serial.begin(115200);
   Serial.println("\n");
+
+
+  // ----------------- ---------------------------------test json
+
+  //-------------test no1 faire une recherche 
+  const __FlashStringHelper* input_json = F(
+      "{\"cod\":\"200\",\"message\":0,\"list\":[{\"dt\":1581498000,\"main\":{"
+      "\"temp\":3.23,\"feels_like\":-3.63,\"temp_min\":3.23,\"temp_max\":4.62,"
+      "\"pressure\":1014,\"sea_level\":1014,\"grnd_level\":1010,\"humidity\":"
+      "58,\"temp_kf\":-1.39},\"weather\":[{\"id\":800,\"main\":\"Clear\","
+      "\"description\":\"clear "
+      "sky\",\"icon\":\"01d\"}],\"clouds\":{\"all\":0},\"wind\":{\"speed\":6."
+      "19,\"deg\":266},\"sys\":{\"pod\":\"d\"},\"dt_txt\":\"2020-02-12 "
+      "09:00:00\"},{\"dt\":1581508800,\"main\":{\"temp\":6.09,\"feels_like\":-"
+      "1.07,\"temp_min\":6.09,\"temp_max\":7.13,\"pressure\":1015,\"sea_"
+      "level\":1015,\"grnd_level\":1011,\"humidity\":48,\"temp_kf\":-1.04},"
+      "\"weather\":[{\"id\":800,\"main\":\"Clear\",\"description\":\"clear "
+      "sky\",\"icon\":\"01d\"}],\"clouds\":{\"all\":9},\"wind\":{\"speed\":6."
+      "64,\"deg\":268},\"sys\":{\"pod\":\"d\"},\"dt_txt\":\"2020-02-12 "
+      "12:00:00\"}],\"city\":{\"id\":2643743,\"name\":\"London\",\"coord\":{"
+      "\"lat\":51.5085,\"lon\":-0.1257},\"country\":\"GB\",\"population\":"
+      "1000000,\"timezone\":0,\"sunrise\":1581492085,\"sunset\":1581527294}}");
+
+
+      // The filter: it contains "true" for each value we want to keep
+  StaticJsonDocument<200> filter;
+  filter["list"][0]["dt"] = true;
+  filter["list"][0]["main"]["temp"] = true;
+
+  // Deserialize the document
+  StaticJsonDocument<400> doc;
+  deserializeJson(doc, input_json, DeserializationOption::Filter(filter));
+
+  // Print the result
+  serializeJsonPretty(doc, Serial);
+
+
+
+//-------------------- afficher le contenue d'un fichier json enregistrer dans le spiffs
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
+  
+  File fichier = SPIFFS.open("/test.json");
+  if(!fichier){
+    Serial.println("Failed to open file for reading");
+    return;
+  }
+  int frite ; 
+  Serial.println("File Content:");
+  while(fichier.available()){
+    frite = fichier.read();
+    Serial.write(frite);
+  }
+
+
+// ------- trier le fichier json 
+  StaticJsonDocument<2000> filtre;
+  filtre["noDrink"] = true;
+
+/*
+  // Deserialize the document
+  StaticJsonDocument<4000> doc2;
+  deserializeJson(doc2, frite, DeserializationOption::Filter(filtre));
+
+  // Print the result
+  serializeJsonPretty(doc2, Serial);
+
+*/
+  fichier.close();
+
+
+
 
   //----------------------------------------------------GPIO
     pinMode(led, OUTPUT);
@@ -104,6 +182,10 @@ void setup()
     file.close();
     file = root.openNextFile();
   }
+
+
+
+  
 
   //----------------------------------------------------WIFI
   WiFi.begin(ssid, password);
@@ -199,6 +281,8 @@ void loop()
   Serial.println(PompeNo6);
   Serial.println(PompeNo7);
   Serial.println(PompeNo8);
+
+  
   delay(1000);
 
 }
