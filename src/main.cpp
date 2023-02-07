@@ -149,11 +149,6 @@ void setup()
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
-// pas sur que c'est bon ce que je viens de rajouter **********
-  server.on("/recipes.json", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/recipes.json", "text/plain");
-  });
-
 
   server.on("/calibrationPompes", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
     if(request->hasParam("BouteilleNo1", true))
