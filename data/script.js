@@ -10,23 +10,27 @@ function choixBouteille()
 
 $(document).ready(function(){             // cette fonction attend que le bouton APPLIQUER sois appuyer et envoie la valeur au ESP32
   $("#appliquer").click(function(){
-      var pompe1 = $("#Pompe1").val();
-      var pompe2 = $("#Pompe2").val();
-      var pompe3 = $("#Pompe3").val();
-      var pompe4 = $("#Pompe4").val();
-      var pompe5 = $("#Pompe5").val();
-      var pompe6 = $("#Pompe6").val();
-      var pompe7 = $("#Pompe7").val();
-      var pompe8 = $("#Pompe8").val();
+      var Bouteille1 = $("#Bouteille1").val();
+      var Bouteille2 = $("#Bouteille2").val();
+      var Bouteille3 = $("#Bouteille3").val();
+      var Bouteille4 = $("#Bouteille4").val();
+      var Bouteille5 = $("#Bouteille5").val();
+      var Bouteille6 = $("#Bouteille6").val();
+      var Bouteille7 = $("#Bouteille7").val();
+      var Bouteille8 = $("#Bouteille8").val();
+      var Bouteille9 = $("#Bouteille9").val();
+      var Bouteille10 = $("#Bouteille10").val();
       $.post("calibrationPompes",{
-          PompeNo1: pompe1,
-          PompeNo2: pompe2,
-          PompeNo3: pompe3,
-          PompeNo4: pompe4,
-          PompeNo5: pompe5,
-          PompeNo6: pompe6,
-          PompeNo7: pompe7,
-          PompeNo8: pompe8
+          BouteilleNo1: Bouteille1,
+          BouteilleNo2: Bouteille2,
+          BouteilleNo3: Bouteille3,
+          BouteilleNo4: Bouteille4,
+          BouteilleNo5: Bouteille5,
+          BouteilleNo6: Bouteille6,
+          BouteilleNo7: Bouteille7,
+          BouteilleNo8: Bouteille8,
+          BouteilleNo9: Bouteille9,
+          BouteilleNo10: Bouteille10
       });
   });
 });

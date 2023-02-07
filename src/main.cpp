@@ -24,15 +24,16 @@ void trouverDrinksPossibles(void);
 
 //-----Variable pour les ingrédients dans la machine 
 
-String PompeNo1 = "";
-String PompeNo2 = "";
-String PompeNo3 = "";
-String PompeNo4 = "";
-String PompeNo5 = "";
-String PompeNo6 = "";
-String PompeNo7 = "";
-String PompeNo8 = "";
-
+String BouteilleNo1 = "";
+String BouteilleNo2 = "";
+String BouteilleNo3 = "";
+String BouteilleNo4 = "";
+String BouteilleNo5 = "";
+String BouteilleNo6 = "";
+String BouteilleNo7 = "";
+String BouteilleNo8 = "";
+String BouteilleNo9 = "";
+String BouteilleNo10 = "";
 AsyncWebServer server(80);
 
 
@@ -41,13 +42,6 @@ void setup()
   //----------------------------------------------------Serial
   Serial.begin(115200);
   Serial.println("\n");
-
-
-  // ----------------- ---------------------------------test json
-
-
-
-
 
   //----------------------------------------------------GPIO
     pinMode(led, OUTPUT);
@@ -162,37 +156,45 @@ void setup()
 
 
   server.on("/calibrationPompes", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
-    if(request->hasParam("PompeNo1", true))
+    if(request->hasParam("BouteilleNo1", true))
     {
-      PompeNo1 = request->getParam("PompeNo1", true)->value();
+      BouteilleNo1 = request->getParam("BouteilleNo1", true)->value();
     }
-    if(request->hasParam("PompeNo2", true))
+    if(request->hasParam("BouteilleNo2", true))
     {
-      PompeNo2 = request->getParam("PompeNo2", true)->value();
+      BouteilleNo2 = request->getParam("BouteilleNo2", true)->value();
     }
-    if(request->hasParam("PompeNo3", true))
+    if(request->hasParam("BouteilleNo3", true))
     {
-      PompeNo3 = request->getParam("PompeNo3", true)->value();
+      BouteilleNo3 = request->getParam("BouteilleNo3", true)->value();
     }
-    if(request->hasParam("PompeNo4", true))
+    if(request->hasParam("BouteilleNo4", true))
     {
-      PompeNo4 = request->getParam("PompeNo4", true)->value();
+      BouteilleNo4 = request->getParam("BouteilleNo4", true)->value();
     }
-    if(request->hasParam("PompeNo5", true))
+    if(request->hasParam("BouteilleNo5", true))
     {
-      PompeNo5 = request->getParam("PompeNo5", true)->value();
+      BouteilleNo5 = request->getParam("BouteilleNo5", true)->value();
     }
-    if(request->hasParam("PompeNo6", true))
+    if(request->hasParam("BouteilleNo6", true))
     {
-      PompeNo6 = request->getParam("PompeNo6", true)->value();
+      BouteilleNo6 = request->getParam("BouteilleNo6", true)->value();
     }
-    if(request->hasParam("PompeNo7", true))
+    if(request->hasParam("BouteilleNo7", true))
     {
-      PompeNo7 = request->getParam("PompeNo7", true)->value();
+      BouteilleNo7 = request->getParam("BouteilleNo7", true)->value();
     }
-    if(request->hasParam("PompeNo8", true))
+    if(request->hasParam("BouteilleNo8", true))
     {
-      PompeNo8 = request->getParam("PompeNo8", true)->value();
+      BouteilleNo8 = request->getParam("BouteilleNo8", true)->value();
+    }
+    if(request->hasParam("BouteilleNo9", true))
+    {
+      BouteilleNo9 = request->getParam("BouteilleNo9", true)->value();
+    }
+    if(request->hasParam("BouteilleNo10", true))
+    {
+      BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
     request->send(204);
   });
@@ -209,15 +211,18 @@ void setup()
 void loop()
 {
 
-  Serial.println(PompeNo1);
-  Serial.println(PompeNo2);
-  Serial.println(PompeNo3);
-  Serial.println(PompeNo4);
-  Serial.println(PompeNo5);
-  Serial.println(PompeNo6);
-  Serial.println(PompeNo7);
-  Serial.println(PompeNo8);
+  Serial.println(BouteilleNo1);
+  Serial.println(BouteilleNo2);
+  Serial.println(BouteilleNo3);
+  Serial.println(BouteilleNo4);
+  Serial.println(BouteilleNo5);
+  Serial.println(BouteilleNo6);
+  Serial.println(BouteilleNo7);
+  Serial.println(BouteilleNo8);
+  Serial.println(BouteilleNo9);
+  Serial.println(BouteilleNo10);
 
+  Serial.println("ok");
   
   delay(1000);
 
