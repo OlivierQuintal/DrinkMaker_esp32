@@ -7,11 +7,11 @@
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
 
-//const char *ssid = "HUAWEI";
-//const char *password = "bigtits69";
+const char *ssid = "HUAWEI";
+const char *password = "bigtits69";
 
-const char *ssid = "wifiquintal";
-const char *password = "totoa1q9";
+//const char *ssid = "wifiquintal";
+//const char *password = "totoa1q9";
 
 const int led = 2;
 const int capteurLuminosite = 34;
@@ -20,6 +20,8 @@ const int capteurLuminosite = 34;
 //----- Fonctions 
 
 void trouverDrinksPossibles(void);
+void ingredientsDuDrink(void);
+String tableauDrinkPossible[50];      // augmenter cette valeur pour augmenter la valeur max de drink possible 
 
 
 //-----Variable pour les ingrédients dans la machine 
@@ -112,10 +114,6 @@ void setup()
     file = root.openNextFile();
   }
 
-
-
-  
-
   //----------------------------------------------------WIFI
   WiFi.begin(ssid, password);
   Serial.print("Tentative de connexion...");
@@ -191,14 +189,15 @@ void setup()
     {
       BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
+    trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
+    //ingredientsDuDrink();     // test
     request->send(204);
   });
 
   server.begin();
   Serial.println("Serveur actif!");
 
-//--------------------------Scan des drinks 
-  trouverDrinksPossibles();
+ 
 }
 //---------------------------------------------------------------------------
 
@@ -224,7 +223,13 @@ void loop()
 }
 
 
-
+//----------------------------------------------------------
+//          FONCTION TROUVER_DRINK_POSSIBLE
+//  Cette focntion passe en scan la database de tous les 
+//  drinks et met en mémoire dans un tableau les drins 
+//  qui sont possible d'être fait avec les ingédients que 
+//  nous avons mis dans la machine 
+//----------------------------------------------------------
 void trouverDrinksPossibles(void)
 {
   //-------------------- afficher le contenue d'un fichier json enregistrer dans le spiffs
@@ -251,50 +256,128 @@ void trouverDrinksPossibles(void)
     return;
   }
 
- String ingredientsAvailable[] = {"Gin", "Vodka", "Vermouth", "White rum", "Lime juice", "Syrup", "Tequila," , "Orange juice" , "Campari"};     // ingédients que nous allons mettre dans la machine 
- int ingredientsCount = sizeof(ingredientsAvailable) / sizeof(ingredientsAvailable[0]);                     // enregistre le nombre d'ingrédients
- Serial.print("nb ingredients :");
- Serial.println(ingredientsCount);
+  //String ingredientsAvailable[] = {"Gin", "Vodka", "Vermouth", "White rum", "Lime juice", "Syrup", "Tequila," , "Orange juice" , "Campari"};     // ingédients que nous allons mettre dans la machine 
+  String ingredientsAvailable[] = {BouteilleNo1, BouteilleNo2, BouteilleNo3, BouteilleNo4, BouteilleNo5, BouteilleNo6, BouteilleNo7 , BouteilleNo8 , BouteilleNo9, BouteilleNo10};
+  int ingredientsCount = sizeof(ingredientsAvailable) / sizeof(ingredientsAvailable[0]);                     // enregistre le nombre d'ingrédients
+  Serial.print("nb ingredients :");
+  Serial.println(ingredientsCount);
 
-JsonArray drinks = doc.as<JsonArray>();           // créé un array avec le json des recettes 
-
-for (JsonObject drink : drinks) {                 // sépare chacun des drinks pour les analysés
-  Serial.println("Drink name: " + drink["name"].as<String>());
-  Serial.println("Ingredients:");
-  delay(10);
-
-  JsonArray ingredients = drink["ingredients"];     // affiche le nom de l'ingédients 
-  bool canMakeDrink = true;
-  for (JsonObject ingredient : ingredients) {
-    const char *ingredientName = ingredient["ingredient"];
+  JsonArray drinks = doc.as<JsonArray>();           // créé un array avec le json des recettes 
+  int j = 0;                                  // compteur pour placer les drinks dans un tableau 
+  for (JsonObject drink : drinks) {                 // sépare chacun des drinks pour les analysés
+    Serial.println("Drink name: " + drink["name"].as<String>());
+    Serial.println("Ingredients:");
     delay(10);
-    bool hasIngredient = false;
-    for (int i = 0; i < ingredientsCount; i++) {            // passe en balayage un ingédient à la fois pour voir si nous l'avons ou non 
-      if (ingredientsAvailable[i] == ingredientName) {
-        hasIngredient = true;
-        delay(10);
-        break;
+
+    JsonArray ingredients = drink["ingredients"];     // affiche le nom de l'ingédients 
+    bool canMakeDrink = true;
+    
+    for (JsonObject ingredient : ingredients) {
+      const char *ingredientName = ingredient["ingredient"];
+      delay(10);
+      bool hasIngredient = false;
+      for (int i = 0; i < ingredientsCount; i++) {            // passe en balayage un ingédient à la fois dans le breuvage X pour voir si nous l'avons ou non 
+        if (ingredientsAvailable[i] == ingredientName) {
+          hasIngredient = true;
+          delay(10);
+          break;
+        }
+      }
+
+      if (!hasIngredient) {
+        canMakeDrink = false;
+        Serial.println("Missing ingredient: " + String(ingredientName));    // si nous n'avons pas l'ingrédient, il affiche l'ingédient manquant 
+      } else {
+        Serial.println(ingredientName);             // affiche simplement l'ingrédient si nous l'avons 
       }
     }
 
-    if (!hasIngredient) {
-      canMakeDrink = false;
-      Serial.println("Missing ingredient: " + String(ingredientName));    // si nous n'avons pas l'ingrédient, il affiche l'ingédient manquant 
+    if (canMakeDrink) {                                             // affiche si nous pouvons faire le drinks ou non 
+      Serial.println("Nous pouvons faire ce drink ");                        
+      list_drink_possible += " , " + drink["name"].as<String>();    // enregistre tout les drinks possible dans un string 
+
+      tableauDrinkPossible[j] = drink["name"].as<String>();         // place les drink possible dans un tableau pour pouvoir les utiliser plus tard 
+      j++;                                                      
+
     } else {
-      Serial.println(ingredientName);             // affiche simplement l'ingrédient si nous l'avons 
+      Serial.println("Impossible de faire ce drink ");                     
     }
+    Serial.println();
+  }
+  Serial.print("Liste des drinks possible : ");
+  Serial.println(list_drink_possible);            // affiche la liste des drinks qui est possible d'etre fait 
+
+  Serial.print("Liste dans le tableau 0 : ");
+  Serial.println(tableauDrinkPossible[0]);            // affiche la liste des drinks qui est possible d'etre fait
+  Serial.print("Liste dans le tableau 1: "); 
+  Serial.println(tableauDrinkPossible[1]);
+  Serial.print("Liste dans le tableau 2: ");
+  Serial.println(tableauDrinkPossible[2]);
+  Serial.print("Liste dans le tableau 3: ");
+  Serial.println(tableauDrinkPossible[3]);
+
+  recette_json.close();
+}
+
+//----------------------------------------------------------
+//          FONCTION INGREDIENT_DU_DRINK
+//  Cette focntion met dans un tableau les ingrédients 
+//  du drink que l'utilisateur à choisi
+//----------------------------------------------------------
+
+void ingredientsDuDrink(void)
+{
+  // prendre le nom du breuvage choisi par l'utilisteur (faire un lien avec le site web)
+  String drinkChoisi = tableauDrinkPossible[1]; //*************************************** va devoir changer cette ligne pour prendre la valeur dans de site web 
+
+  Serial.print("drink choisi : ");
+  Serial.println(drinkChoisi);
+
+  Serial.print("tableauDrinkPossible  : ");
+  Serial.println(tableauDrinkPossible[1]);
+
+   File recette_json = SPIFFS.open("/recipes.json","r");     // ouvre le fichier json avec les recettes 
+
+  if (!recette_json) {
+    Serial.println("Failed to open file for reading");    // affiche un message d'erruer si le fichier est introuvable 
+    return;
   }
 
-  if (canMakeDrink) {                                             // affiche si nous pouvons faire le drinks ou non 
-    Serial.println("Nous pouvons faire ce drink ");                        
-    list_drink_possible += " , " + drink["name"].as<String>();    // enregistre tout les drinks possible dans un string 
-  } else {
-    Serial.println("Impossible de faire ce drink ");                     
+  DynamicJsonDocument doc (65535);                        // grosseur du fichier dans le quel nous voulons parser le fichier json
+  DeserializationError error = deserializeJson(doc, recette_json);     //  parse du fichier json 
+  if (error) {
+    Serial.println("Failed to parse file");
+    Serial.println("Error: " + String(error.c_str()));
+    return;
   }
-  Serial.println();
-}
-Serial.print("Liste des drinks possible : ");
-Serial.println(list_drink_possible);            // affiche la liste des drinks qui est possible d'etre fait 
 
- recette_json.close();
+  JsonArray drinkss = doc.as<JsonArray>();           // créé un array avec le json des recettes 
+  int j = 0;                                  // compteur pour placer les drinks dans un tableau 
+  for (JsonObject drinkkk : drinkss) {                 // sépare chacun des drinks pour les analysés
+    Serial.println("Drink name: " + drinkkk["name"].as<String>());
+    Serial.print("drink trouver :  ");
+    Serial.println(drinkkk["name"].as<String>());
+     if (drinkChoisi == drinkkk["name"].as<String>())
+     {
+        Serial.println(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+     }
+    delay(10);
+  }
+
+  recette_json.close();
+
 }
+
+/*
+------------------choses à faire------------------------------------
+
+- Quand on entre une bouteille dans le site, le met directement dans le tableau ingredientsAvailable[]--------------------- fait 
+- Attendre que le btn appliquer sois appuyer avant de donner les drinks possible ------------------------------------------ fait 
+- Savoir la quantier de chacun des ingédients et la mettre dans une variables  
+- Mettre les ingrédients dans des variables pour les comparer a ceux des pompes 
+- Mettre le nom des drinks possible dans des variables (pt le mettre dans un tableau) ------------------------------------- fait 
+
+- faire la partie affichage des drink possible sur le site web et leurs ingrédients 
+- mettre une btn back sur le site 
+
+*/
