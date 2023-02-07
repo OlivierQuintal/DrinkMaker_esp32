@@ -1,6 +1,5 @@
 [
-  { "noDrink":"1",
-    "name": "Vesper",
+  { "name": "Vesper",
     "glass": "martini",
     "category": "Before Dinner Cocktail",
     "ingredients": [
@@ -16,8 +15,7 @@
     ],
     "garnish": "Lemon twist",
     "preparation": "Shake and strain into a chilled cocktail glass." },
-  { "noDrink":"2",
-    "name": "Bacardi",
+  { "name": "Bacardi",
     "glass": "martini",
     "category": "Before Dinner Cocktail",
     "ingredients": [

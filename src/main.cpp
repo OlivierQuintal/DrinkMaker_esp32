@@ -7,17 +7,19 @@
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
 
-const char *ssid = "HUAWEI";
-const char *password = "bigtits69";
+//const char *ssid = "HUAWEI";
+//const char *password = "bigtits69";
 
-//const char *ssid = "wifiquintal";
-//const char *password = "totoa1q9";
+const char *ssid = "wifiquintal";
+const char *password = "totoa1q9";
 
 const int led = 2;
 const int capteurLuminosite = 34;
 
 
+//----- Fonctions 
 
+void trouverDrinksPossibles(void);
 
 
 //-----Variable pour les ingrédients dans la machine 
@@ -43,73 +45,6 @@ void setup()
 
   // ----------------- ---------------------------------test json
 
-  //-------------test no1 faire une recherche 
-  const __FlashStringHelper* input_json = F(
-      "{\"cod\":\"200\",\"message\":0,\"list\":[{\"dt\":1581498000,\"main\":{"
-      "\"temp\":3.23,\"feels_like\":-3.63,\"temp_min\":3.23,\"temp_max\":4.62,"
-      "\"pressure\":1014,\"sea_level\":1014,\"grnd_level\":1010,\"humidity\":"
-      "58,\"temp_kf\":-1.39},\"weather\":[{\"id\":800,\"main\":\"Clear\","
-      "\"description\":\"clear "
-      "sky\",\"icon\":\"01d\"}],\"clouds\":{\"all\":0},\"wind\":{\"speed\":6."
-      "19,\"deg\":266},\"sys\":{\"pod\":\"d\"},\"dt_txt\":\"2020-02-12 "
-      "09:00:00\"},{\"dt\":1581508800,\"main\":{\"temp\":6.09,\"feels_like\":-"
-      "1.07,\"temp_min\":6.09,\"temp_max\":7.13,\"pressure\":1015,\"sea_"
-      "level\":1015,\"grnd_level\":1011,\"humidity\":48,\"temp_kf\":-1.04},"
-      "\"weather\":[{\"id\":800,\"main\":\"Clear\",\"description\":\"clear "
-      "sky\",\"icon\":\"01d\"}],\"clouds\":{\"all\":9},\"wind\":{\"speed\":6."
-      "64,\"deg\":268},\"sys\":{\"pod\":\"d\"},\"dt_txt\":\"2020-02-12 "
-      "12:00:00\"}],\"city\":{\"id\":2643743,\"name\":\"London\",\"coord\":{"
-      "\"lat\":51.5085,\"lon\":-0.1257},\"country\":\"GB\",\"population\":"
-      "1000000,\"timezone\":0,\"sunrise\":1581492085,\"sunset\":1581527294}}");
-
-
-      // The filter: it contains "true" for each value we want to keep
-  StaticJsonDocument<200> filter;
-  filter["list"][0]["dt"] = true;
-  filter["list"][0]["main"]["temp"] = true;
-
-  // Deserialize the document
-  StaticJsonDocument<400> doc;
-  deserializeJson(doc, input_json, DeserializationOption::Filter(filter));
-
-  // Print the result
-  serializeJsonPretty(doc, Serial);
-
-
-
-//-------------------- afficher le contenue d'un fichier json enregistrer dans le spiffs
-  if(!SPIFFS.begin(true)){
-    Serial.println("An Error has occurred while mounting SPIFFS");
-    return;
-  }
-  
-  File fichier = SPIFFS.open("/test.json");
-  if(!fichier){
-    Serial.println("Failed to open file for reading");
-    return;
-  }
-  int frite ; 
-  Serial.println("File Content:");
-  while(fichier.available()){
-    frite = fichier.read();
-    Serial.write(frite);
-  }
-
-
-// ------- trier le fichier json 
-  StaticJsonDocument<2000> filtre;
-  filtre["noDrink"] = true;
-
-/*
-  // Deserialize the document
-  StaticJsonDocument<4000> doc2;
-  deserializeJson(doc2, frite, DeserializationOption::Filter(filtre));
-
-  // Print the result
-  serializeJsonPretty(doc2, Serial);
-
-*/
-  fichier.close();
 
 
 
@@ -265,7 +200,8 @@ void setup()
   server.begin();
   Serial.println("Serveur actif!");
 
-
+//--------------------------Scan des drinks 
+  trouverDrinksPossibles();
 }
 //---------------------------------------------------------------------------
 
@@ -285,4 +221,80 @@ void loop()
   
   delay(1000);
 
+}
+
+
+
+void trouverDrinksPossibles(void)
+{
+  //-------------------- afficher le contenue d'un fichier json enregistrer dans le spiffs
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
+  
+  String list_drink_possible;                 // met en string tout les drinks possible 
+
+
+ File recette_json = SPIFFS.open("/recipes.json","r");     // ouvre le fichier json avec les recettes 
+
+  if (!recette_json) {
+    Serial.println("Failed to open file for reading");    // affiche un message d'erruer si le fichier est introuvable 
+    return;
+  }
+
+  DynamicJsonDocument doc (65535);                        // grosseur du fichier dans le quel nous voulons parser le fichier json
+  DeserializationError error = deserializeJson(doc, recette_json);     //  parse du fichier json 
+  if (error) {
+    Serial.println("Failed to parse file");
+    Serial.println("Error: " + String(error.c_str()));
+    return;
+  }
+
+ String ingredientsAvailable[] = {"Gin", "Vodka", "Vermouth", "White rum", "Lime juice", "Syrup", "Tequila," , "Orange juice" , "Campari"};     // ingédients que nous allons mettre dans la machine 
+ int ingredientsCount = sizeof(ingredientsAvailable) / sizeof(ingredientsAvailable[0]);                     // enregistre le nombre d'ingrédients
+ Serial.print("nb ingredients :");
+ Serial.println(ingredientsCount);
+
+JsonArray drinks = doc.as<JsonArray>();           // créé un array avec le json des recettes 
+
+for (JsonObject drink : drinks) {                 // sépare chacun des drinks pour les analysés
+  Serial.println("Drink name: " + drink["name"].as<String>());
+  Serial.println("Ingredients:");
+  delay(10);
+
+  JsonArray ingredients = drink["ingredients"];     // affiche le nom de l'ingédients 
+  bool canMakeDrink = true;
+  for (JsonObject ingredient : ingredients) {
+    const char *ingredientName = ingredient["ingredient"];
+    delay(10);
+    bool hasIngredient = false;
+    for (int i = 0; i < ingredientsCount; i++) {            // passe en balayage un ingédient à la fois pour voir si nous l'avons ou non 
+      if (ingredientsAvailable[i] == ingredientName) {
+        hasIngredient = true;
+        delay(10);
+        break;
+      }
+    }
+
+    if (!hasIngredient) {
+      canMakeDrink = false;
+      Serial.println("Missing ingredient: " + String(ingredientName));    // si nous n'avons pas l'ingrédient, il affiche l'ingédient manquant 
+    } else {
+      Serial.println(ingredientName);             // affiche simplement l'ingrédient si nous l'avons 
+    }
+  }
+
+  if (canMakeDrink) {                                             // affiche si nous pouvons faire le drinks ou non 
+    Serial.println("Nous pouvons faire ce drink ");                        
+    list_drink_possible += " , " + drink["name"].as<String>();    // enregistre tout les drinks possible dans un string 
+  } else {
+    Serial.println("Impossible de faire ce drink ");                     
+  }
+  Serial.println();
+}
+Serial.print("Liste des drinks possible : ");
+Serial.println(list_drink_possible);            // affiche la liste des drinks qui est possible d'etre fait 
+
+ recette_json.close();
 }
