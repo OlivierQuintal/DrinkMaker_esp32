@@ -7,22 +7,24 @@
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
 
-const char *ssid = "HUAWEI";
-const char *password = "bigtits69";
+//const char *ssid = "HUAWEI";
+//const char *password = "bigtits69";
 
-//const char *ssid = "wifiquintal";
-//const char *password = "totoa1q9";
+const char *ssid = "wifiquintal";
+const char *password = "totoa1q9";
 
 const int led = 2;
 const int capteurLuminosite = 34;
 
+String drink_voulue;
 
 //----- Fonctions 
 
 void trouverDrinksPossibles(void);
-void ingredientsDuDrink(void);
+void ingredientsDuDrink(String drink_voulue);
 String tableauDrinkPossible[50];      // augmenter cette valeur pour augmenter la valeur max de drink possible 
 
+DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
 //-----Variable pour les ingrédients dans la machine 
 
@@ -190,7 +192,7 @@ void setup()
       BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
     trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
-    //ingredientsDuDrink();     // test
+    ingredientsDuDrink(drink_voulue);     // test
     request->send(204);
   });
 
@@ -248,8 +250,9 @@ void trouverDrinksPossibles(void)
     return;
   }
 
-  DynamicJsonDocument doc (65535);                        // grosseur du fichier dans le quel nous voulons parser le fichier json
+  //DynamicJsonDocument doc (65535);                        // grosseur du fichier dans le quel nous voulons parser le fichier json
   DeserializationError error = deserializeJson(doc, recette_json);     //  parse du fichier json 
+  doc.shrinkToFit();                                                  // réduit la grosseur du fichier json pour qu'il soit plus petit
   if (error) {
     Serial.println("Failed to parse file");
     Serial.println("Error: " + String(error.c_str()));
@@ -325,46 +328,47 @@ void trouverDrinksPossibles(void)
 //  du drink que l'utilisateur à choisi
 //----------------------------------------------------------
 
-void ingredientsDuDrink(void)
+void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le drink voulue par l'utilisateur
 {
-  // prendre le nom du breuvage choisi par l'utilisteur (faire un lien avec le site web)
-  String drinkChoisi = tableauDrinkPossible[1]; //*************************************** va devoir changer cette ligne pour prendre la valeur dans de site web 
+  
+  //String drink = drink_voulue;     // décommanter lors des vrai test ************************************************
+  String breuvage = "Negroni";
+  bool breauvageTrouver = false;
 
-  Serial.print("drink choisi : ");
-  Serial.println(drinkChoisi);
+  JsonArray drinks2 = doc.as<JsonArray>();           // créé un array avec le json des recettes
+  for (JsonObject drink2 : drinks2)
+  {
+    if (drink2["name"] == breuvage)
+    {
+      breauvageTrouver = true;
+      //break;
+      
+    }
+    else 
+    {
+      breauvageTrouver = false;
+    }  
 
-  Serial.print("tableauDrinkPossible  : ");
-  Serial.println(tableauDrinkPossible[1]);
 
-   File recette_json = SPIFFS.open("/recipes.json","r");     // ouvre le fichier json avec les recettes 
 
-  if (!recette_json) {
-    Serial.println("Failed to open file for reading");    // affiche un message d'erruer si le fichier est introuvable 
-    return;
+    if (breauvageTrouver == true)
+    {
+      Serial.println("Le drink a été trouver");
+
+      JsonArray ingredients2 = drink2["ingredients"];     // affiche le nom de l'ingédients 
+    
+    for (JsonObject ingredient2 : ingredients2) 
+      {
+        // mettre le code pour mettre les ingrédients dans un tableau ****************************************************
+      }
+      
+    }
   }
 
-  DynamicJsonDocument doc (65535);                        // grosseur du fichier dans le quel nous voulons parser le fichier json
-  DeserializationError error = deserializeJson(doc, recette_json);     //  parse du fichier json 
-  if (error) {
-    Serial.println("Failed to parse file");
-    Serial.println("Error: " + String(error.c_str()));
-    return;
-  }
+  
 
-  JsonArray drinkss = doc.as<JsonArray>();           // créé un array avec le json des recettes 
-  int j = 0;                                  // compteur pour placer les drinks dans un tableau 
-  for (JsonObject drinkkk : drinkss) {                 // sépare chacun des drinks pour les analysés
-    Serial.println("Drink name: " + drinkkk["name"].as<String>());
-    Serial.print("drink trouver :  ");
-    Serial.println(drinkkk["name"].as<String>());
-     if (drinkChoisi == drinkkk["name"].as<String>())
-     {
-        Serial.println(" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-     }
-    delay(10);
-  }
 
-  recette_json.close();
+ 
 
 }
 
