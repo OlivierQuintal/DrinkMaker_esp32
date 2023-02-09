@@ -10,6 +10,8 @@
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
 
+//
+
 const char *ssid = "wifiquintal";
 const char *password = "totoa1q9";
 
