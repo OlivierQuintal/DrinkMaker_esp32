@@ -10,7 +10,7 @@
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
 
-//
+
 
 const char *ssid = "wifiquintal";
 const char *password = "totoa1q9";
@@ -25,6 +25,8 @@ String drink_voulue;
 void trouverDrinksPossibles(void);
 void ingredientsDuDrink(String drink_voulue);
 String tableauDrinkPossible[50];      // augmenter cette valeur pour augmenter la valeur max de drink possible 
+String ingerdinetDrinkChoisi[10];      // augmenter cette valeur pour augmenter la valeur max d'ingrédient par drink
+String quantite[10];
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
@@ -334,7 +336,7 @@ void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le 
 {
   
   //String drink = drink_voulue;     // décommanter lors des vrai test ************************************************
-  String breuvage = "Negroni";
+  String breuvage = "Planter's Punch";
   bool breauvageTrouver = false;
 
   JsonArray drinks2 = doc.as<JsonArray>();           // créé un array avec le json des recettes
@@ -358,16 +360,30 @@ void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le 
       Serial.println("Le drink a été trouver");
 
       JsonArray ingredients2 = drink2["ingredients"];     // affiche le nom de l'ingédients 
-    
+    int i = 0;
     for (JsonObject ingredient2 : ingredients2) 
       {
+        String rechercheDuDrink = ingredient2["ingredient"];
+        String rechercheQuantite = ingredient2["amount"];
+        ingerdinetDrinkChoisi[i] = rechercheDuDrink;
+        quantite[i] = rechercheQuantite;
+        i++; 
+        
         // mettre le code pour mettre les ingrédients dans un tableau ****************************************************
       }
-      
+      break;
     }
+    
   }
 
-  
+  Serial.println("Ingredient dans le drink choisi : ");
+  Serial.println(ingerdinetDrinkChoisi[0] + " " + quantite[0]);
+  Serial.println(ingerdinetDrinkChoisi[1] + " " + quantite[1]);
+  Serial.println(ingerdinetDrinkChoisi[2] + " " + quantite[2]);
+  Serial.println(ingerdinetDrinkChoisi[3] + " " + quantite[3]);
+  Serial.println(ingerdinetDrinkChoisi[4] + " " + quantite[4]);
+
+
 
 
  
@@ -377,11 +393,11 @@ void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le 
 /*
 ------------------choses à faire------------------------------------
 
-- Quand on entre une bouteille dans le site, le met directement dans le tableau ingredientsAvailable[]--------------------- fait 
-- Attendre que le btn appliquer sois appuyer avant de donner les drinks possible ------------------------------------------ fait 
-- Savoir la quantier de chacun des ingédients et la mettre dans une variables  
-- Mettre les ingrédients dans des variables pour les comparer a ceux des pompes 
-- Mettre le nom des drinks possible dans des variables (pt le mettre dans un tableau) ------------------------------------- fait 
+- Quand on entre une bouteille dans le site, le met directement dans le tableau ingredientsAvailable[] --------------------- fait 
+- Attendre que le btn appliquer sois appuyer avant de donner les drinks possible  ------------------------------------------ fait 
+- Savoir la quantier de chacun des ingédients et la mettre dans une variables     ------------------------------------------ fait
+- Mettre les ingrédients dans des variables pour les comparer a ceux des pompes   ------------------------------------------ fait
+- Mettre le nom des drinks possible dans des variables (pt le mettre dans un tableau)  ------------------------------------- fait 
 
 - faire la partie affichage des drink possible sur le site web et leurs ingrédients 
 - mettre une btn back sur le site 
