@@ -10,10 +10,12 @@
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
 
-//ttt
+const char *ssid = "RT-AC1200_E0_2G";
+const char *password = "eagle_4742";
 
-const char *ssid = "wifiquintal";
-const char *password = "totoa1q9";
+
+//const char *ssid = "wifiquintal";
+//const char *password = "totoa1q9";
 
 const int led = 2;
 const int capteurLuminosite = 34;
@@ -138,6 +140,11 @@ void setup()
   //----------------------------------------------------SERVER
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html", "text/html");
+  });
+
+  server.on("/choixDrink", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/index1.html", "text/html");
+    Serial.println("sdfjsgdfuysdgfosudfgsdifyg");
   });
 
   server.on("/w3.css", HTTP_GET, [](AsyncWebServerRequest *request) {
