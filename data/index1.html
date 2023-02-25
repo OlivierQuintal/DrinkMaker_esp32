@@ -1,33 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
+
+
+	<title>Page no2</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8" />
+	<link rel="stylesheet" type="text/css" href="w3.css">
+	<script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="script_page2.js"></script>
+	<script type="text/javascript" src="recipes.json"></script>
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+   
 	<title>Exemple de liste de breuvages</title>
-	<script>
-		// Tableau de breuvages
-		var breuvages = ["Café", "Thé", "Jus d'orange", "Limonade"];
-        
-		// Fonction pour générer les sections HTML pour chaque breuvage
-		function genererBreuvages() {
-			// Récupérer l'élément de liste
-			var liste = document.getElementById("breuvages");
-
-			// Vider la liste
-			liste.innerHTML = "";
-
-			// Boucler sur les breuvages et générer une section pour chaque breuvage
-			for (var i = 0; i < breuvages.length; i++) {
-				var breuvage = breuvages[i];
-				var section = document.createElement("section");
-				section.innerHTML = "<h2>" + breuvage + "</h2>";
-				liste.appendChild(section);
-			}
-		}
-	</script>
 </head>
+
 <body onload="genererBreuvages()">
 	<h1>Liste de breuvages</h1>
-	<div id="breuvages"></div>
-    <p><span id="listeBreuvages">bla bla</span></p>
+	<button onclick="genererBreuvages()">Générer la liste</button>
+	<div id="breuvages"href="/choixDrink"></div>
+    <!-- <p><span id="listeBreuvages">bla bla</span></p> -->
 </body>
 </html>
