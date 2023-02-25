@@ -162,6 +162,7 @@ void setup()
 
   server.on("/tableauBreuvages", HTTP_GET, [](AsyncWebServerRequest *request) {
     String valeur = "patate";
+    Serial.println("paatteee");
     request->send(200, "text/plain", valeur);
   });
 
