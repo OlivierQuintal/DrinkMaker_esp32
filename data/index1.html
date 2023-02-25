@@ -7,19 +7,22 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8" />
 	<link rel="stylesheet" type="text/css" href="w3.css">
 	<script type="text/javascript" src="jquery-3.6.0.min.js"></script>
-	<script type="text/javascript" src="script_page2.js"></script>
-	<script type="text/javascript" src="recipes.json"></script>
+	<script type="text/javascript" src="page2/script-page-deux.js"></script>
+	<script type="text/javascript" src="script.js"></script>
 
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-   
+
+    
 	<title>Exemple de liste de breuvages</title>
 </head>
-
 <body onload="genererBreuvages()">
 	<h1>Liste de breuvages</h1>
-	<button onclick="genererBreuvages()">Générer la liste</button>
-	<div id="breuvages"href="/choixDrink"></div>
-    <!-- <p><span id="listeBreuvages">bla bla</span></p> -->
+	<!-- <div id="breuvages"></div> -->
+	<select id="breuvages" class="w3-select" style="width:80%;">
+		<!-- <option value="" disabled selected>Choisir le breuvage </option> -->
+	</select>
+	
+    <p><span id="listeBreuvages">bla bla</span></p>
 </body>
 </html>

@@ -160,7 +160,7 @@ void setup()
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
-  server.on("/AfficheDrink", HTTP_GET, [](AsyncWebServerRequest *request) {
+  server.on("/page2/AfficheDrink", HTTP_GET, [](AsyncWebServerRequest *request) {
     String valeur = "patate";
     Serial.println("paatteee");
     request->send(200, "text/plain", valeur);

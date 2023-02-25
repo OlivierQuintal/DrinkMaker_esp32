@@ -1,493 +1,471 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <!-- afficher Drink Maker dans la barre de recherche  -->
-    <title>Drink Maker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8" />
-    <link rel="stylesheet" type="text/css" href="w3.css">
-    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="script.js"></script>
-    <script type="text/javascript" src="recipes.json"></script>
-     <!-- fin -->
+  <!-- afficher Drink Maker dans la barre de recherche  -->
+  <title>Drink Maker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="w3.css">
+  <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="script.js"></script>
+  <!-- fin -->
 
-<meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
- <!-- bloc de style qui permet de mettre une image en arrère plan du site web  -->
-<style>             
+  <!-- bloc de style qui permet de mettre une image en arrère plan du site web  -->
+  <style>
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
 
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
+    li {
+      float: left;
+    }
 
-li {
-  float: left;
-}
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
 
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover {
-  background-color: #111;
-}
+    li a:hover {
+      background-color: #111;
+    }
 
 
-.active {
-  background-color: #04AA6D;
-}
+    .active {
+      background-color: #04AA6D;
+    }
 
-body {      
-  margin: 0;  
-  font-family: Arial, Helvetica, sans-serif;
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-.hero-image {
-  background-image: url("https://images.absolutdrinks.com/drink-images/Raw/Absolut/0a40afe0-a9bb-4d62-8671-15c8aaf5aeef.jpg?impolicy=drinkcrop");
-  background-color: #cccccc;
-  height: 900px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
+    .hero-image {
+      background-image: url("https://images.absolutdrinks.com/drink-images/Raw/Absolut/0a40afe0-a9bb-4d62-8671-15c8aaf5aeef.jpg?impolicy=drinkcrop");
+      background-color: #cccccc;
+      height: 900px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
 
-.hero-text {
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-}
+    .hero-text {
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+    }
 
-.menu-image {
-  background-image: url("https://images.unsplash.com/photo-1554624158-c0d08d8dc6df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80");
-  background-color: #cccccc;
-  height: 1100px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
+    .menu-image {
+      background-image: url("https://images.unsplash.com/photo-1554624158-c0d08d8dc6df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80");
+      background-color: #cccccc;
+      height: 1100px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
 
-.menu-text {
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-}
+    .menu-text {
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+    }
 
-.inventaireBouteille{
-  color: white;
-}
+    .inventaireBouteille {
+      color: white;
+    }
 
-.menu {
-  text-align: center;
-  border-style: solid;
-  background-color: orangered;
-}
-</style> <!-- fin du bloc de style pour l'image en arrère plan -->
+    .menu {
+      text-align: center;
+      border-style: solid;
+      background-color: orangered;
+    }
+  </style> <!-- fin du bloc de style pour l'image en arrère plan -->
 
-<!-- bloc de style pour faire les barres de recherche et ainsi ajuster les boissons associer a chacunes des pompes -->
-<style>
-.dropbtn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-}
+  <!-- bloc de style pour faire les barres de recherche et ainsi ajuster les boissons associer a chacunes des pompes -->
+  <style>
+    .dropbtn {
+      background-color: #04AA6D;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
 
-.dropbtn:hover, .dropbtn:focus {
-  background-color: #3e8e41;
-}
+    .dropbtn:hover,
+    .dropbtn:focus {
+      background-color: #3e8e41;
+    }
 
-#myInput {
-  box-sizing: border-box;
-  background-image: url('searchicon.png');
-  background-position: 14px 12px;
-  background-repeat: no-repeat;
-  font-size: 16px;
-  padding: 14px 20px 12px 45px;
-  border: none;
-  border-bottom: 1px solid #ddd;
-}
+    #myInput {
+      box-sizing: border-box;
+      background-image: url('searchicon.png');
+      background-position: 14px 12px;
+      background-repeat: no-repeat;
+      font-size: 16px;
+      padding: 14px 20px 12px 45px;
+      border: none;
+      border-bottom: 1px solid #ddd;
+    }
 
-#myInput:focus {outline: 3px solid #ddd;}
+    #myInput:focus {
+      outline: 3px solid #ddd;
+    }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f6f6f6;
-  min-width: 230px;
-  overflow: auto;
-  border: 1px solid #ddd;
-  z-index: 1;
-}
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f6f6f6;
+      min-width: 230px;
+      overflow: auto;
+      border: 1px solid #ddd;
+      z-index: 1;
+    }
 
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
 
-.dropdown a:hover {background-color: #ddd;}
+    .dropdown a:hover {
+      background-color: #ddd;
+    }
 
-.show {display: block;}
-</style>
-<!-- fin du bloc de style pour les barres de recherches -->
+    .show {
+      display: block;
+    }
+  </style>
+  <!-- fin du bloc de style pour les barres de recherches -->
 
 </head>
 
 <body class="w3-animate-opacity">
 
-    <ul>                                                        <!-- barre de navigation  -->
-        <li><a class="active" href="#home">Home</a></li>
-        <li><a href="#drinks">Drinks</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li style="float:right"><a href="#about">About</a></li>
-    </ul>
 
-    <div class="hero-image">
-        <div class="hero-text">
-            <h1 style="font-size:50px">DRINK MAKER</h1>
-            <h3>The best way to fake your skills at bartending</h3>
-            <button onclick="lireJson()">Make a drink </button>    <!-- ce bouton va envoyer l'utilisateur a l'endroit ou il pourra faire son drink -- utiliser scroll-behavior: smooth; -->
-        </div>
+  <div class="hero-image">
+    <div class="hero-text">
+      <h1 style="font-size:50px">DRINK MAKER</h1>
+      <h3>The best way to fake your skills at bartending</h3>
+      <button onclick="lireJson()">Make a drink </button>
+      <!-- ce bouton va envoyer l'utilisateur a l'endroit ou il pourra faire son drink -- utiliser scroll-behavior: smooth; -->
     </div>
+  </div>
 
-    
 
-    <div class="menu-image">
-      <div class="w3-margin w3-center w3-padding-24 inventaireBouteille">
-          <h1 style="font-size:50px">BAR INVENTORY</h1>
 
-            <!-- dropdown utiliser pour permettre a l'utilisateur de pouvoir changer les bouteilles sur la machine -->
-        
-            <button onclick="choixBouteille()" class="dropbtn" style="width: 15%;">Pompe #1</button>
-            <button onclick="choixBouteille()" class="dropbtn" style="width: 15%;">Pompe #2</button>
-            <button onclick="choixBouteille()" class="dropbtn" style="width: 15%;">Pompe #3</button>
-            <button onclick="choixBouteille()" class="dropbtn" style="width: 15%;">Pompe #4</button>
-            <button onclick="choixBouteille()" class="dropbtn" style="width: 15%;">Pompe #5</button>
-            <button onclick="choixBouteille()" class="dropbtn" style="width: 15%;">Pompe #6</button>
-            <div id="inventaire" class="dropdown-content">        
-              <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-              <a href="#about">About</a>
-              <a href="#about">zxcxzvut</a>
-              <a href="#base">Base</a>
-              <a href="#blog">Blog</a>
-              <a href="#contact">Contact</a>
-              <a href="#custom">Custom</a>
-              <a href="#support">Support</a>
-              <a href="#tools">Tools</a>
-            </div>
+  <div class="menu-image">
+    <div class="w3-margin w3-center w3-padding-24 inventaireBouteille">
+      <h1 class="w3-padding">BAR INVENTORY</h1>
 
-            <div id="calibrationPompe" class="dropdown">
-              <h3 class="w3-padding">BAR INVENTORY</h3>
-      
-              <select id="Bouteille1" class="w3-select" style="width:80%;">
-                  <option value="" disabled selected>Bouteille no1 </option>
-                  <option value="Absinthe">Absinthe</option>
-                  <option value="Aperol">Aperol</option>
-                  <option value="Apricot brandy">Apricot brandy</option>
-                  <option value="Blackberry liqueur">Blackberry liqueur</option>
-                  <option value="Cachaca">Cachaca</option>
-                  <option value="Calvados">Calvados</option>
-                  <option value="Campari">Campari</option>
-                  <option value="Champagne">Champagne</option>
-                  <option value="Cherry liqueur">Cherry liqueur</option>
-                  <option value="Coconut milk">Coconut milk</option>
-                  <option value="Coffee liqueur">Coffee liqueur</option>
-                  <option value="Cognac">Cognac</option>
-                  <option value="Cola">Cola</option>
-                  <option value="Cranberry juice">Cranberry juice</option>
-                  <option value="Cream">Cream</option>
-                  <option value="Cream liqueur">Cream liqueur</option>
-                  <option value="Créme liqueur">Créme liqueur</option>
-                  <option value="Dark rum">Dark rum</option>
-                  <option value="DiSaronno">DiSaronno</option>
-                  <option value="DOM Bénédictine">DOM Bénédictine</option>
-                  <option value="Drambuie">Drambuie</option>
-                  <option value="Dry White Wine">Dry White Wine</option>
-                  <option value="Egg yolk">Egg yolk</option>
-                  <option value="Galliano">Galliano</option>
-                  <option value="Gin">Gin</option>
-                  <option value="Ginger Ale">Ginger Ale</option>
-                  <option value="Ginger beer">Ginger beer</option>
-                  <option value="Grapefruit juice">Grapefruit juice</option>
-                  <option value="Hot coffee">Hot coffee</option>
-                  <option value="Kirsch">Kirsch</option>
-                  <option value="Lemon juice">Lemon juice</option>
-                  <option value="Lillet Blonde">Lillet Blonde</option>
-                  <option value="Lime juice">Lime juice</option>
-                  <option value="Olive juice">Olive juice</option>
-                  <option value="Orange Bitters">Orange Bitters</option>
-                  <option value="Orange juice">Orange juice</option>
-                  <option value="Peach puree">Peach puree</option>
-                  <option value="Peach schnapps">Peach schnapps</option>
-                  <option value="Pineapple juice">Pineapple juice</option>
-                  <option value="Pisco">Pisco</option>
-                  <option value="Prosecco">Prosecco</option>
-                  <option value="Raspberry liqueur">Raspberry liqueur</option>
-                  <option value="Red Port">Red Port</option>
-                  <option value="Soda water">Soda water</option>
-                  <option value="Syrup">Syrup</option>
-                  <option value="Tequila">Tequila</option>
-                  <option value="Tomato juice">Tomato juice</option>
-                  <option value="Tomato juice">Tomato juice</option>
-                  <option value="Triple Sec">Triple Sec</option>
-                  <option value="Vermouth">Vermouth</option>
-                  <option value="Vodka">Vodka</option>
-                  <option value="Whiskey">Whiskey</option>
-                  <option value="White rum">White rum</option>                  
-              </select>
+      <select id="Bouteille1" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no1 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
 
-               <select id="Bouteille2" class="w3-select" style="width:80%;">
-                <option value="" disabled selected>Bouteille no2 </option>
-                <option value="Absinthe">Absinthe</option>
-                <option value="Aperol">Aperol</option>
-                <option value="Apricot brandy">Apricot brandy</option>
-                <option value="Blackberry liqueur">Blackberry liqueur</option>
-                <option value="Cachaca">Cachaca</option>
-                <option value="Calvados">Calvados</option>
-                <option value="Campari">Campari</option>
-                <option value="Champagne">Champagne</option>
-                <option value="Cherry liqueur">Cherry liqueur</option>
-                <option value="Coconut milk">Coconut milk</option>
-                <option value="Coffee liqueur">Coffee liqueur</option>
-                <option value="Cognac">Cognac</option>
-                <option value="Cola">Cola</option>
-                <option value="Cranberry juice">Cranberry juice</option>
-                <option value="Cream">Cream</option>
-                <option value="Cream liqueur">Cream liqueur</option>
-                <option value="Créme liqueur">Créme liqueur</option>
-                <option value="Dark rum">Dark rum</option>
-                <option value="DiSaronno">DiSaronno</option>
-                <option value="DOM Bénédictine">DOM Bénédictine</option>
-                <option value="Drambuie">Drambuie</option>
-                <option value="Dry White Wine">Dry White Wine</option>
-                <option value="Egg yolk">Egg yolk</option>
-                <option value="Galliano">Galliano</option>
-                <option value="Gin">Gin</option>
-                <option value="Ginger Ale">Ginger Ale</option>
-                <option value="Ginger beer">Ginger beer</option>
-                <option value="Grapefruit juice">Grapefruit juice</option>
-                <option value="Hot coffee">Hot coffee</option>
-                <option value="Kirsch">Kirsch</option>
-                <option value="Lemon juice">Lemon juice</option>
-                <option value="Lillet Blonde">Lillet Blonde</option>
-                <option value="Lime juice">Lime juice</option>
-                <option value="Olive juice">Olive juice</option>
-                <option value="Orange Bitters">Orange Bitters</option>
-                <option value="Orange juice">Orange juice</option>
-                <option value="Peach puree">Peach puree</option>
-                <option value="Peach schnapps">Peach schnapps</option>
-                <option value="Pineapple juice">Pineapple juice</option>
-                <option value="Pisco">Pisco</option>
-                <option value="Prosecco">Prosecco</option>
-                <option value="Raspberry liqueur">Raspberry liqueur</option>
-                <option value="Red Port">Red Port</option>
-                <option value="Soda water">Soda water</option>
-                <option value="Syrup">Syrup</option>
-                <option value="Tequila">Tequila</option>
-                <option value="Tomato juice">Tomato juice</option>
-                <option value="Tomato juice">Tomato juice</option>
-                <option value="Triple Sec">Triple Sec</option>
-                <option value="Vermouth">Vermouth</option>
-                <option value="Vodka">Vodka</option>
-                <option value="Whiskey">Whiskey</option>
-                <option value="White rum">White rum</option>                  
-              </select>
+      <select id="Bouteille2" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no2 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
 
-               <select id="Bouteille3" class="w3-select" style="width:80%;">
-              <option value="" disabled selected>Bouteille no3 </option>
-              <option value="Absinthe">Absinthe</option>
-              <option value="Aperol">Aperol</option>
-              <option value="Apricot brandy">Apricot brandy</option>
-              <option value="Blackberry liqueur">Blackberry liqueur</option>
-              <option value="Cachaca">Cachaca</option>
-              <option value="Calvados">Calvados</option>
-              <option value="Campari">Campari</option>
-              <option value="Champagne">Champagne</option>
-              <option value="Cherry liqueur">Cherry liqueur</option>
-              <option value="Coconut milk">Coconut milk</option>
-              <option value="Coffee liqueur">Coffee liqueur</option>
-              <option value="Cognac">Cognac</option>
-              <option value="Cola">Cola</option>
-              <option value="Cranberry juice">Cranberry juice</option>
-              <option value="Cream">Cream</option>
-              <option value="Cream liqueur">Cream liqueur</option>
-              <option value="Créme liqueur">Créme liqueur</option>
-              <option value="Dark rum">Dark rum</option>
-              <option value="DiSaronno">DiSaronno</option>
-              <option value="DOM Bénédictine">DOM Bénédictine</option>
-              <option value="Drambuie">Drambuie</option>
-              <option value="Dry White Wine">Dry White Wine</option>
-              <option value="Egg yolk">Egg yolk</option>
-              <option value="Galliano">Galliano</option>
-              <option value="Gin">Gin</option>
-              <option value="Ginger Ale">Ginger Ale</option>
-              <option value="Ginger beer">Ginger beer</option>
-              <option value="Grapefruit juice">Grapefruit juice</option>
-              <option value="Hot coffee">Hot coffee</option>
-              <option value="Kirsch">Kirsch</option>
-              <option value="Lemon juice">Lemon juice</option>
-              <option value="Lillet Blonde">Lillet Blonde</option>
-              <option value="Lime juice">Lime juice</option>
-              <option value="Olive juice">Olive juice</option>
-              <option value="Orange Bitters">Orange Bitters</option>
-              <option value="Orange juice">Orange juice</option>
-              <option value="Peach puree">Peach puree</option>
-              <option value="Peach schnapps">Peach schnapps</option>
-              <option value="Pineapple juice">Pineapple juice</option>
-              <option value="Pisco">Pisco</option>
-              <option value="Prosecco">Prosecco</option>
-              <option value="Raspberry liqueur">Raspberry liqueur</option>
-              <option value="Red Port">Red Port</option>
-              <option value="Soda water">Soda water</option>
-              <option value="Syrup">Syrup</option>
-              <option value="Tequila">Tequila</option>
-              <option value="Tomato juice">Tomato juice</option>
-              <option value="Tomato juice">Tomato juice</option>
-              <option value="Triple Sec">Triple Sec</option>
-              <option value="Vermouth">Vermouth</option>
-              <option value="Vodka">Vodka</option>
-              <option value="Whiskey">Whiskey</option>
-              <option value="White rum">White rum</option>                  
-              </select>
+      <select id="Bouteille3" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no3 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
 
-             <select id="Bouteille4" class="w3-select" style="width:80%;">
-            <option value="" disabled selected>Bouteille no4 </option>
-            <option value="Absinthe">Absinthe</option>
-            <option value="Aperol">Aperol</option>
-            <option value="Apricot brandy">Apricot brandy</option>
-            <option value="Blackberry liqueur">Blackberry liqueur</option>
-            <option value="Cachaca">Cachaca</option>
-            <option value="Calvados">Calvados</option>
-            <option value="Campari">Campari</option>
-            <option value="Champagne">Champagne</option>
-            <option value="Cherry liqueur">Cherry liqueur</option>
-            <option value="Coconut milk">Coconut milk</option>
-            <option value="Coffee liqueur">Coffee liqueur</option>
-            <option value="Cognac">Cognac</option>
-            <option value="Cola">Cola</option>
-            <option value="Cranberry juice">Cranberry juice</option>
-            <option value="Cream">Cream</option>
-            <option value="Cream liqueur">Cream liqueur</option>
-            <option value="Créme liqueur">Créme liqueur</option>
-            <option value="Dark rum">Dark rum</option>
-            <option value="DiSaronno">DiSaronno</option>
-            <option value="DOM Bénédictine">DOM Bénédictine</option>
-            <option value="Drambuie">Drambuie</option>
-            <option value="Dry White Wine">Dry White Wine</option>
-            <option value="Egg yolk">Egg yolk</option>
-            <option value="Galliano">Galliano</option>
-            <option value="Gin">Gin</option>
-            <option value="Ginger Ale">Ginger Ale</option>
-            <option value="Ginger beer">Ginger beer</option>
-            <option value="Grapefruit juice">Grapefruit juice</option>
-            <option value="Hot coffee">Hot coffee</option>
-            <option value="Kirsch">Kirsch</option>
-            <option value="Lemon juice">Lemon juice</option>
-            <option value="Lillet Blonde">Lillet Blonde</option>
-            <option value="Lime juice">Lime juice</option>
-            <option value="Olive juice">Olive juice</option>
-            <option value="Orange Bitters">Orange Bitters</option>
-            <option value="Orange juice">Orange juice</option>
-            <option value="Peach puree">Peach puree</option>
-            <option value="Peach schnapps">Peach schnapps</option>
-            <option value="Pineapple juice">Pineapple juice</option>
-            <option value="Pisco">Pisco</option>
-            <option value="Prosecco">Prosecco</option>
-            <option value="Raspberry liqueur">Raspberry liqueur</option>
-            <option value="Red Port">Red Port</option>
-            <option value="Soda water">Soda water</option>
-            <option value="Syrup">Syrup</option>
-            <option value="Tequila">Tequila</option>
-            <option value="Tomato juice">Tomato juice</option>
-            <option value="Tomato juice">Tomato juice</option>
-            <option value="Triple Sec">Triple Sec</option>
-            <option value="Vermouth">Vermouth</option>
-            <option value="Vodka">Vodka</option>
-            <option value="Whiskey">Whiskey</option>
-            <option value="White rum">White rum</option>                  
-             </select>
+      <select id="Bouteille4" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no4 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
 
-             <select id="Bouteille5" class="w3-select" style="width:80%;">
-          <option value="" disabled selected>Bouteille no5 </option>
-          <option value="Absinthe">Absinthe</option>
-          <option value="Aperol">Aperol</option>
-          <option value="Apricot brandy">Apricot brandy</option>
-          <option value="Blackberry liqueur">Blackberry liqueur</option>
-          <option value="Cachaca">Cachaca</option>
-          <option value="Calvados">Calvados</option>
-          <option value="Campari">Campari</option>
-          <option value="Champagne">Champagne</option>
-          <option value="Cherry liqueur">Cherry liqueur</option>
-          <option value="Coconut milk">Coconut milk</option>
-          <option value="Coffee liqueur">Coffee liqueur</option>
-          <option value="Cognac">Cognac</option>
-          <option value="Cola">Cola</option>
-          <option value="Cranberry juice">Cranberry juice</option>
-          <option value="Cream">Cream</option>
-          <option value="Cream liqueur">Cream liqueur</option>
-          <option value="Créme liqueur">Créme liqueur</option>
-          <option value="Dark rum">Dark rum</option>
-          <option value="DiSaronno">DiSaronno</option>
-          <option value="DOM Bénédictine">DOM Bénédictine</option>
-          <option value="Drambuie">Drambuie</option>
-          <option value="Dry White Wine">Dry White Wine</option>
-          <option value="Egg yolk">Egg yolk</option>
-          <option value="Galliano">Galliano</option>
-          <option value="Gin">Gin</option>
-          <option value="Ginger Ale">Ginger Ale</option>
-          <option value="Ginger beer">Ginger beer</option>
-          <option value="Grapefruit juice">Grapefruit juice</option>
-          <option value="Hot coffee">Hot coffee</option>
-          <option value="Kirsch">Kirsch</option>
-          <option value="Lemon juice">Lemon juice</option>
-          <option value="Lillet Blonde">Lillet Blonde</option>
-          <option value="Lime juice">Lime juice</option>
-          <option value="Olive juice">Olive juice</option>
-          <option value="Orange Bitters">Orange Bitters</option>
-          <option value="Orange juice">Orange juice</option>
-          <option value="Peach puree">Peach puree</option>
-          <option value="Peach schnapps">Peach schnapps</option>
-          <option value="Pineapple juice">Pineapple juice</option>
-          <option value="Pisco">Pisco</option>
-          <option value="Prosecco">Prosecco</option>
-          <option value="Raspberry liqueur">Raspberry liqueur</option>
-          <option value="Red Port">Red Port</option>
-          <option value="Soda water">Soda water</option>
-          <option value="Syrup">Syrup</option>
-          <option value="Tequila">Tequila</option>
-          <option value="Tomato juice">Tomato juice</option>
-          <option value="Tomato juice">Tomato juice</option>
-          <option value="Triple Sec">Triple Sec</option>
-          <option value="Vermouth">Vermouth</option>
-          <option value="Vodka">Vodka</option>
-          <option value="Whiskey">Whiskey</option>
-          <option value="White rum">White rum</option>                  
-              </select>
-              
-             <select id="Bouteille6" class="w3-select" style="width:80%;">
+      <select id="Bouteille5" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no5 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
+
+      <select id="Bouteille6" class="w3-select" style="width:80%;">
         <option value="" disabled selected>Bouteille no6 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
@@ -541,259 +519,251 @@ body {
         <option value="Vermouth">Vermouth</option>
         <option value="Vodka">Vodka</option>
         <option value="Whiskey">Whiskey</option>
-        <option value="White rum">White rum</option>                  
-             </select>
+        <option value="White rum">White rum</option>
+      </select>
 
-            <select id="Bouteille7" class="w3-select" style="width:80%;">
-      <option value="" disabled selected>Bouteille no7 </option>
-      <option value="Absinthe">Absinthe</option>
-      <option value="Aperol">Aperol</option>
-      <option value="Apricot brandy">Apricot brandy</option>
-      <option value="Blackberry liqueur">Blackberry liqueur</option>
-      <option value="Cachaca">Cachaca</option>
-      <option value="Calvados">Calvados</option>
-      <option value="Campari">Campari</option>
-      <option value="Champagne">Champagne</option>
-      <option value="Cherry liqueur">Cherry liqueur</option>
-      <option value="Coconut milk">Coconut milk</option>
-      <option value="Coffee liqueur">Coffee liqueur</option>
-      <option value="Cognac">Cognac</option>
-      <option value="Cola">Cola</option>
-      <option value="Cranberry juice">Cranberry juice</option>
-      <option value="Cream">Cream</option>
-      <option value="Cream liqueur">Cream liqueur</option>
-      <option value="Créme liqueur">Créme liqueur</option>
-      <option value="Dark rum">Dark rum</option>
-      <option value="DiSaronno">DiSaronno</option>
-      <option value="DOM Bénédictine">DOM Bénédictine</option>
-      <option value="Drambuie">Drambuie</option>
-      <option value="Dry White Wine">Dry White Wine</option>
-      <option value="Egg yolk">Egg yolk</option>
-      <option value="Galliano">Galliano</option>
-      <option value="Gin">Gin</option>
-      <option value="Ginger Ale">Ginger Ale</option>
-      <option value="Ginger beer">Ginger beer</option>
-      <option value="Grapefruit juice">Grapefruit juice</option>
-      <option value="Hot coffee">Hot coffee</option>
-      <option value="Kirsch">Kirsch</option>
-      <option value="Lemon juice">Lemon juice</option>
-      <option value="Lillet Blonde">Lillet Blonde</option>
-      <option value="Lime juice">Lime juice</option>
-      <option value="Olive juice">Olive juice</option>
-      <option value="Orange Bitters">Orange Bitters</option>
-      <option value="Orange juice">Orange juice</option>
-      <option value="Peach puree">Peach puree</option>
-      <option value="Peach schnapps">Peach schnapps</option>
-      <option value="Pineapple juice">Pineapple juice</option>
-      <option value="Pisco">Pisco</option>
-      <option value="Prosecco">Prosecco</option>
-      <option value="Raspberry liqueur">Raspberry liqueur</option>
-      <option value="Red Port">Red Port</option>
-      <option value="Soda water">Soda water</option>
-      <option value="Syrup">Syrup</option>
-      <option value="Tequila">Tequila</option>
-      <option value="Tomato juice">Tomato juice</option>
-      <option value="Tomato juice">Tomato juice</option>
-      <option value="Triple Sec">Triple Sec</option>
-      <option value="Vermouth">Vermouth</option>
-      <option value="Vodka">Vodka</option>
-      <option value="Whiskey">Whiskey</option>
-      <option value="White rum">White rum</option>                  
-            </select>
+      <select id="Bouteille7" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no7 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
 
-            <select id="Bouteille8" class="w3-select" style="width:80%;">
-    <option value="" disabled selected>Bouteille no8 </option>
-    <option value="Absinthe">Absinthe</option>
-    <option value="Aperol">Aperol</option>
-    <option value="Apricot brandy">Apricot brandy</option>
-    <option value="Blackberry liqueur">Blackberry liqueur</option>
-    <option value="Cachaca">Cachaca</option>
-    <option value="Calvados">Calvados</option>
-    <option value="Campari">Campari</option>
-    <option value="Champagne">Champagne</option>
-    <option value="Cherry liqueur">Cherry liqueur</option>
-    <option value="Coconut milk">Coconut milk</option>
-    <option value="Coffee liqueur">Coffee liqueur</option>
-    <option value="Cognac">Cognac</option>
-    <option value="Cola">Cola</option>
-    <option value="Cranberry juice">Cranberry juice</option>
-    <option value="Cream">Cream</option>
-    <option value="Cream liqueur">Cream liqueur</option>
-    <option value="Créme liqueur">Créme liqueur</option>
-    <option value="Dark rum">Dark rum</option>
-    <option value="DiSaronno">DiSaronno</option>
-    <option value="DOM Bénédictine">DOM Bénédictine</option>
-    <option value="Drambuie">Drambuie</option>
-    <option value="Dry White Wine">Dry White Wine</option>
-    <option value="Egg yolk">Egg yolk</option>
-    <option value="Galliano">Galliano</option>
-    <option value="Gin">Gin</option>
-    <option value="Ginger Ale">Ginger Ale</option>
-    <option value="Ginger beer">Ginger beer</option>
-    <option value="Grapefruit juice">Grapefruit juice</option>
-    <option value="Hot coffee">Hot coffee</option>
-    <option value="Kirsch">Kirsch</option>
-    <option value="Lemon juice">Lemon juice</option>
-    <option value="Lillet Blonde">Lillet Blonde</option>
-    <option value="Lime juice">Lime juice</option>
-    <option value="Olive juice">Olive juice</option>
-    <option value="Orange Bitters">Orange Bitters</option>
-    <option value="Orange juice">Orange juice</option>
-    <option value="Peach puree">Peach puree</option>
-    <option value="Peach schnapps">Peach schnapps</option>
-    <option value="Pineapple juice">Pineapple juice</option>
-    <option value="Pisco">Pisco</option>
-    <option value="Prosecco">Prosecco</option>
-    <option value="Raspberry liqueur">Raspberry liqueur</option>
-    <option value="Red Port">Red Port</option>
-    <option value="Soda water">Soda water</option>
-    <option value="Syrup">Syrup</option>
-    <option value="Tequila">Tequila</option>
-    <option value="Tomato juice">Tomato juice</option>
-    <option value="Tomato juice">Tomato juice</option>
-    <option value="Triple Sec">Triple Sec</option>
-    <option value="Vermouth">Vermouth</option>
-    <option value="Vodka">Vodka</option>
-    <option value="Whiskey">Whiskey</option>
-    <option value="White rum">White rum</option>                  
-            </select>
+      <select id="Bouteille8" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no8 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
 
-            <select id="Bouteille9" class="w3-select" style="width:80%;">
-    <option value="" disabled selected>Bouteille no9 </option>
-    <option value="Absinthe">Absinthe</option>
-    <option value="Aperol">Aperol</option>
-    <option value="Apricot brandy">Apricot brandy</option>
-    <option value="Blackberry liqueur">Blackberry liqueur</option>
-    <option value="Cachaca">Cachaca</option>
-    <option value="Calvados">Calvados</option>
-    <option value="Campari">Campari</option>
-    <option value="Champagne">Champagne</option>
-    <option value="Cherry liqueur">Cherry liqueur</option>
-    <option value="Coconut milk">Coconut milk</option>
-    <option value="Coffee liqueur">Coffee liqueur</option>
-    <option value="Cognac">Cognac</option>
-    <option value="Cola">Cola</option>
-    <option value="Cranberry juice">Cranberry juice</option>
-    <option value="Cream">Cream</option>
-    <option value="Cream liqueur">Cream liqueur</option>
-    <option value="Créme liqueur">Créme liqueur</option>
-    <option value="Dark rum">Dark rum</option>
-    <option value="DiSaronno">DiSaronno</option>
-    <option value="DOM Bénédictine">DOM Bénédictine</option>
-    <option value="Drambuie">Drambuie</option>
-    <option value="Dry White Wine">Dry White Wine</option>
-    <option value="Egg yolk">Egg yolk</option>
-    <option value="Galliano">Galliano</option>
-    <option value="Gin">Gin</option>
-    <option value="Ginger Ale">Ginger Ale</option>
-    <option value="Ginger beer">Ginger beer</option>
-    <option value="Grapefruit juice">Grapefruit juice</option>
-    <option value="Hot coffee">Hot coffee</option>
-    <option value="Kirsch">Kirsch</option>
-    <option value="Lemon juice">Lemon juice</option>
-    <option value="Lillet Blonde">Lillet Blonde</option>
-    <option value="Lime juice">Lime juice</option>
-    <option value="Olive juice">Olive juice</option>
-    <option value="Orange Bitters">Orange Bitters</option>
-    <option value="Orange juice">Orange juice</option>
-    <option value="Peach puree">Peach puree</option>
-    <option value="Peach schnapps">Peach schnapps</option>
-    <option value="Pineapple juice">Pineapple juice</option>
-    <option value="Pisco">Pisco</option>
-    <option value="Prosecco">Prosecco</option>
-    <option value="Raspberry liqueur">Raspberry liqueur</option>
-    <option value="Red Port">Red Port</option>
-    <option value="Soda water">Soda water</option>
-    <option value="Syrup">Syrup</option>
-    <option value="Tequila">Tequila</option>
-    <option value="Tomato juice">Tomato juice</option>
-    <option value="Tomato juice">Tomato juice</option>
-    <option value="Triple Sec">Triple Sec</option>
-    <option value="Vermouth">Vermouth</option>
-    <option value="Vodka">Vodka</option>
-    <option value="Whiskey">Whiskey</option>
-    <option value="White rum">White rum</option>                  
-            </select>
+      <select id="Bouteille9" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no9 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
 
-            <select id="Bouteille10" class="w3-select" style="width:80%;">
-    <option value="" disabled selected>Bouteille no10 </option>
-    <option value="Absinthe">Absinthe</option>
-    <option value="Aperol">Aperol</option>
-    <option value="Apricot brandy">Apricot brandy</option>
-    <option value="Blackberry liqueur">Blackberry liqueur</option>
-    <option value="Cachaca">Cachaca</option>
-    <option value="Calvados">Calvados</option>
-    <option value="Campari">Campari</option>
-    <option value="Champagne">Champagne</option>
-    <option value="Cherry liqueur">Cherry liqueur</option>
-    <option value="Coconut milk">Coconut milk</option>
-    <option value="Coffee liqueur">Coffee liqueur</option>
-    <option value="Cognac">Cognac</option>
-    <option value="Cola">Cola</option>
-    <option value="Cranberry juice">Cranberry juice</option>
-    <option value="Cream">Cream</option>
-    <option value="Cream liqueur">Cream liqueur</option>
-    <option value="Créme liqueur">Créme liqueur</option>
-    <option value="Dark rum">Dark rum</option>
-    <option value="DiSaronno">DiSaronno</option>
-    <option value="DOM Bénédictine">DOM Bénédictine</option>
-    <option value="Drambuie">Drambuie</option>
-    <option value="Dry White Wine">Dry White Wine</option>
-    <option value="Egg yolk">Egg yolk</option>
-    <option value="Galliano">Galliano</option>
-    <option value="Gin">Gin</option>
-    <option value="Ginger Ale">Ginger Ale</option>
-    <option value="Ginger beer">Ginger beer</option>
-    <option value="Grapefruit juice">Grapefruit juice</option>
-    <option value="Hot coffee">Hot coffee</option>
-    <option value="Kirsch">Kirsch</option>
-    <option value="Lemon juice">Lemon juice</option>
-    <option value="Lillet Blonde">Lillet Blonde</option>
-    <option value="Lime juice">Lime juice</option>
-    <option value="Olive juice">Olive juice</option>
-    <option value="Orange Bitters">Orange Bitters</option>
-    <option value="Orange juice">Orange juice</option>
-    <option value="Peach puree">Peach puree</option>
-    <option value="Peach schnapps">Peach schnapps</option>
-    <option value="Pineapple juice">Pineapple juice</option>
-    <option value="Pisco">Pisco</option>
-    <option value="Prosecco">Prosecco</option>
-    <option value="Raspberry liqueur">Raspberry liqueur</option>
-    <option value="Red Port">Red Port</option>
-    <option value="Soda water">Soda water</option>
-    <option value="Syrup">Syrup</option>
-    <option value="Tequila">Tequila</option>
-    <option value="Tomato juice">Tomato juice</option>
-    <option value="Tomato juice">Tomato juice</option>
-    <option value="Triple Sec">Triple Sec</option>
-    <option value="Vermouth">Vermouth</option>
-    <option value="Vodka">Vodka</option>
-    <option value="Whiskey">Whiskey</option>
-    <option value="White rum">White rum</option>                  
-            </select>
+      <select id="Bouteille10" class="w3-select" style="width:80%;">
+        <option value="" disabled selected>Bouteille no10 </option>
+        <option value="Absinthe">Absinthe</option>
+        <option value="Aperol">Aperol</option>
+        <option value="Apricot brandy">Apricot brandy</option>
+        <option value="Blackberry liqueur">Blackberry liqueur</option>
+        <option value="Cachaca">Cachaca</option>
+        <option value="Calvados">Calvados</option>
+        <option value="Campari">Campari</option>
+        <option value="Champagne">Champagne</option>
+        <option value="Cherry liqueur">Cherry liqueur</option>
+        <option value="Coconut milk">Coconut milk</option>
+        <option value="Coffee liqueur">Coffee liqueur</option>
+        <option value="Cognac">Cognac</option>
+        <option value="Cola">Cola</option>
+        <option value="Cranberry juice">Cranberry juice</option>
+        <option value="Cream">Cream</option>
+        <option value="Cream liqueur">Cream liqueur</option>
+        <option value="Créme liqueur">Créme liqueur</option>
+        <option value="Dark rum">Dark rum</option>
+        <option value="DiSaronno">DiSaronno</option>
+        <option value="DOM Bénédictine">DOM Bénédictine</option>
+        <option value="Drambuie">Drambuie</option>
+        <option value="Dry White Wine">Dry White Wine</option>
+        <option value="Egg yolk">Egg yolk</option>
+        <option value="Galliano">Galliano</option>
+        <option value="Gin">Gin</option>
+        <option value="Ginger Ale">Ginger Ale</option>
+        <option value="Ginger beer">Ginger beer</option>
+        <option value="Grapefruit juice">Grapefruit juice</option>
+        <option value="Hot coffee">Hot coffee</option>
+        <option value="Kirsch">Kirsch</option>
+        <option value="Lemon juice">Lemon juice</option>
+        <option value="Lillet Blonde">Lillet Blonde</option>
+        <option value="Lime juice">Lime juice</option>
+        <option value="Olive juice">Olive juice</option>
+        <option value="Orange Bitters">Orange Bitters</option>
+        <option value="Orange juice">Orange juice</option>
+        <option value="Peach puree">Peach puree</option>
+        <option value="Peach schnapps">Peach schnapps</option>
+        <option value="Pineapple juice">Pineapple juice</option>
+        <option value="Pisco">Pisco</option>
+        <option value="Prosecco">Prosecco</option>
+        <option value="Raspberry liqueur">Raspberry liqueur</option>
+        <option value="Red Port">Red Port</option>
+        <option value="Soda water">Soda water</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Tequila">Tequila</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Tomato juice">Tomato juice</option>
+        <option value="Triple Sec">Triple Sec</option>
+        <option value="Vermouth">Vermouth</option>
+        <option value="Vodka">Vodka</option>
+        <option value="Whiskey">Whiskey</option>
+        <option value="White rum">White rum</option>
+      </select>
 
-              <br><br>
-      
-              <!-- <button id="appliquer" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide" href="/choixDrink">Appliquer</button> -->
-              <a id="appliquer" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide" href="/page2">Appliquer</a>
-          </div>
+      <br><br>
+
+      <!-- <button id="appliquer" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide" href="/choixDrink">Appliquer</button> -->
+      <a id="appliquer" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Appliquer</a>
+      <a id="appliquer" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide" href="/page2">changer page</a>
+    </div>
 
 
 
-        
-          
-      </div>
+
+
+  </div>
   </div>
 
-
-
-    <div class="menu">
-      <h1>ESP32</h1>
-    </div>>
-    <p>Page content..</p>
-    <p>Note that this technique will also make the image responsive: Resize the browser window to see the effect.</p>
-
- 
-
 </body>
+
 </html>
