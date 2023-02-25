@@ -10,10 +10,12 @@
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
 
+const char *ssid = "RT-AC1200_E0_2G";
+const char *password = "eagle_4742";
 
 
-const char *ssid = "wifiquintal";
-const char *password = "totoa1q9";
+//const char *ssid = "wifiquintal";
+//const char *password = "totoa1q9";
 
 const int led = 2;
 const int capteurLuminosite = 34;
@@ -140,6 +142,11 @@ void setup()
     request->send(SPIFFS, "/index.html", "text/html");
   });
 
+  server.on("/page2", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/index1.html", "text/html");
+    Serial.println("sdfjsgdfuysdgfosudfgsdifyg");
+  });
+
   server.on("/w3.css", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/w3.css", "text/css");
   });
@@ -153,6 +160,11 @@ void setup()
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
+  server.on("/page2/AfficheDrink", HTTP_GET, [](AsyncWebServerRequest *request) {
+    String valeur = "patate";
+    Serial.println("paatteee");
+    request->send(200, "text/plain", valeur);
+  });
 
   server.on("/calibrationPompes", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
     if(request->hasParam("BouteilleNo1", true))
