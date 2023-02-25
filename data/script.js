@@ -36,6 +36,23 @@ $(document).ready(function(){             // cette fonction attend que le bouton
 });
 
 
+getBreuvages(function getdata()
+{
+    var xhhtp = new XMLHttpRequest();
+
+    xhhtp.onreadystatechange = function()
+    {
+        if (this.readyState == 4 && this.status == 200)
+        {
+          document.getElementById("listeBreuvages").innerHTML = this.responseText;
+        }
+    };
+    xhhtp.open("GET", "tableauBreuvages", true);
+    xhhtp.send();
+},2000);
+
+
+
 function filterFunction()
 {
   var input, filter, ul, li, a, i;

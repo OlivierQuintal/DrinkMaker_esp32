@@ -160,6 +160,10 @@ void setup()
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
+  server.on("/tableauBreuvages", HTTP_GET, [](AsyncWebServerRequest *request) {
+    String valeur = "patate";
+    request->send(200, "text/plain", valeur);
+  });
 
   server.on("/calibrationPompes", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
     if(request->hasParam("BouteilleNo1", true))
