@@ -7,17 +7,39 @@ function choixBouteille()
   document.getElementById("inventaire").classList.toggle("show");
 }
 
+var breuvages = ["Café", "Thé", "Jus d'orange", "Limonade"];
+
+//********************change la valeur de la variable breuvages selon les drinks possible  *********************/
+
+setInterval (function affichageBreuvages()
+{
+  var xhhtp = new XMLHttpRequest();
+
+    xhhtp.onreadystatechange = function()
+    {
+        if (this.readyState == 4 && this.status == 200)
+        {
+          document.getElementById("listeDrinksPossible").innerHTML = this.responseText;
+          breuvages = this.responseText;
+        }
+    };
+    xhhtp.open("GET", "lireBreuvagesPossible", true);
+    xhhtp.send();
+},2000);
+
+
+
 //*******************************************/
 //Fonction pour afficher les drink possibles
 //*******************************************/
 // Tableau de breuvages
-var breuvages = ["Café", "Thé", "Jus d'orange", "Limonade"];
+
         
 // Fonction pour générer les sections HTML pour chaque breuvage
 function genererBreuvages() {
     // Récupérer l'élément de liste
-    var liste = document.getElementById("breuvages");
-
+    //var liste = document.getElementById("breuvages");
+    var liste = document.getElementById("listeDrinksPossible");
     // Vider la liste
     //liste.innerHTML = "";
     liste.innerHTML = "<option value=100>Choisir un breuvage</option>";
@@ -33,6 +55,11 @@ function genererBreuvages() {
     }
 }
 /*************************************************/
+
+
+
+
+
 
 $(document).ready(function(){             // cette fonction attend que le bouton APPLIQUER sois appuyer et envoie la valeur au ESP32
   $("#appliquer").click(function(){

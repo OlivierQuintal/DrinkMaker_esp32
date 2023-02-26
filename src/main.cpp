@@ -160,9 +160,12 @@ void setup()
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
-  server.on("/page2/AfficheDrink", HTTP_GET, [](AsyncWebServerRequest *request) {
-    String valeur = "patate";
-    Serial.println("paatteee");
+
+  server.on("/lireBreuvagesPossible", HTTP_GET, [](AsyncWebServerRequest *request) {     // envoie les boissons possible au client 
+   // String valeur = String(tableauDrinkPossible[0]);
+   Serial.println("JE SUIS LA !s");
+   //String valeur = "Ca fonctionne je pense!";
+     String valeur = (tableauDrinkPossible[0] + "," + tableauDrinkPossible[1] + "," + tableauDrinkPossible[2] + "," + tableauDrinkPossible[3]) ;
     request->send(200, "text/plain", valeur);
   });
 
