@@ -6,6 +6,7 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
+#include <Adafruit_NeoPixel.h>
 
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
@@ -22,6 +23,14 @@ const int capteurLuminosite = 34;
 
 String drink_voulue;
 
+
+//RGB
+// On the ESP32S2 SAOLA GPIO is the NeoPixel.
+#define PIN 18
+
+// Single NeoPixel
+Adafruit_NeoPixel pixels(1, PIN, NEO_GRB + NEO_KHZ800);
+
 //----- Fonctions 
 
 void trouverDrinksPossibles(void);
@@ -29,6 +38,7 @@ void ingredientsDuDrink(String drink_voulue);
 String tableauDrinkPossible[50];      // augmenter cette valeur pour augmenter la valeur max de drink possible 
 String ingerdinetDrinkChoisi[10];      // augmenter cette valeur pour augmenter la valeur max d'ingrédient par drink
 String quantite[10];
+uint32_t Wheel(byte WheelPos);
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
@@ -85,10 +95,17 @@ void setup()
     #define pompe_1 1
     #define pompe_2 2
 
+    pinMode(pompe_1, OUTPUT);
+    pinMode(pompe_2, OUTPUT);
+
   // ---GPIO boutons
     #define btn_1 40
     #define btn_2 39
     #define btn_3 38
+
+    pinMode(btn_1, INPUT);
+    pinMode(btn_2, INPUT);
+    pinMode(btn_3, INPUT);
 
   //------------------------------------------------------HX711
   HX711 scale;
@@ -136,6 +153,16 @@ void setup()
   Serial.println("Connexion etablie!");
   Serial.print("Adresse IP: ");
   Serial.println(WiFi.localIP());
+
+    //RGB allume 2 seconde pour montrer que la connection est établie
+  pixels.setPixelColor(0, Wheel(150));
+
+  // Send the updated pixel colors to the hardware.
+  pixels.show();
+  // Pause before next pass through loop
+  delay(2000);
+  pixels.clear();
+  pixels.show();
 
   //----------------------------------------------------SERVER
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -222,6 +249,15 @@ void setup()
 
 void loop()
 {
+
+  if (digitalRead(btn_1) == 1)
+  {
+    digitalWrite(pompe_1, HIGH);
+  }
+  else if (digitalRead(btn_1) == 0)
+  {
+    digitalWrite(pompe_1, LOW);
+  }
 
   Serial.println(BouteilleNo1);
   Serial.println(BouteilleNo2);
@@ -402,6 +438,29 @@ void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le 
 
 }
 
+
+// Simple function to return a color in the rainbow
+// Input a value 0 to 255 to get a color value.
+uint32_t Wheel(byte WheelPos)
+{
+    //Assume the wheel value is less than 85, if so Green value is 0
+    uint32_t returnColor = Adafruit_NeoPixel::Color((byte)(255 - (WheelPos * 3)), 0, (byte)(WheelPos * 3));
+
+    //If we are greater than 170 Red value is 0
+    if (WheelPos > 84 && WheelPos < 170)
+    {
+        WheelPos -= 85;
+        returnColor = Adafruit_NeoPixel::Color(0, (byte)(WheelPos * 3), (byte)(255 - WheelPos * 3));
+    }
+    //Finally above 170 and Blue value is 0
+    else if (WheelPos >= 170)
+    {
+        WheelPos -= 170;
+        returnColor = Adafruit_NeoPixel::Color((byte)(WheelPos * 3), (byte)(255 - WheelPos * 3), 0);
+    }
+
+    return returnColor;
+}
 /*
 ------------------choses à faire------------------------------------
 
