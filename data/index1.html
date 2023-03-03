@@ -12,17 +12,36 @@
 
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-    
-	<title>Exemple de liste de breuvages</title>
-</head>
-<body onload="genererBreuvages()">
-	<h1>Liste de breuvages</h1>
-	<!-- <div id="breuvages"></div> -->
-	<select id="breuvages" class="w3-select" style="width:80%;">
-		<!-- <option value="" disabled selected>Choisir le breuvage </option> -->
-	</select>
 	
-    <p><span id="listeBreuvages">bla bla</span></p>
+	<style>
+		.hero-image {
+			background-image: url("https://www.travelandleisure.com/thmb/yJVNvkmf2Z-dGrTbT784Kd_pCuA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/whisky-drink-rocks-HOWTODRINK0521-2edae424467946f3a823327f7e2cb8a9.jpg");
+			background-color: #cccccc;
+			height: 900px;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			position: relative;
+   		}
+	</style>
+
+</head>
+<body onload="genererBreuvages()" class="hero-image">
+
+		<div class="w3-center">
+			<h1 style="color: orange;">Liste des breuvages</h1>
+		</div>
+		<br>
+		<br>
+		<br>
+		<div class="w3-center">
+			<select id="drinkPossibles" style="width:80%; height: 50px; border-color: orange;"></select>	<!--ne pas oublie de modifier le c++ si on fait des changement ici -->
+		</div>
+		<br>
+		<br>
+		<div class="w3-center">
+			<a id="FaireBreuvage" class="w3-button w3-orange w3-border w3-xlarge w3-ripple w3-wide">C'est parti!</a>
+		</div>	
+
 </body>
 </html>

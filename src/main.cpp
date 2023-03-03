@@ -37,6 +37,7 @@ void trouverDrinksPossibles(void);
 void ingredientsDuDrink(String drink_voulue);
 String tableauDrinkPossible[50];      // augmenter cette valeur pour augmenter la valeur max de drink possible 
 String ingerdinetDrinkChoisi[10];      // augmenter cette valeur pour augmenter la valeur max d'ingrédient par drink
+String listeBreuvageHTML = "";      
 String quantite[10];
 uint32_t Wheel(byte WheelPos);
 
@@ -170,8 +171,25 @@ void setup()
   });
 
   server.on("/page2", HTTP_GET, [](AsyncWebServerRequest *request) {
+    File html = SPIFFS.open("/index1.html");
+    String htmlPage2 = html.readString();
+    html.close();
+    Serial.print(htmlPage2);
+
+    // for (int i = 0; i < sizeof(tableauDrinkPossible) / sizeof(tableauDrinkPossible[0]); i++)
+    // {
+    //   listeBreuvageHTML += "<li>" + tableauDrinkPossible[i] + "</li>";
+    // }
+
+    for (int i = 0; i < sizeof(tableauDrinkPossible) / sizeof(tableauDrinkPossible[0]); i++)
+    {
+      listeBreuvageHTML += "<option value=\"" + String(i) + "\">" + tableauDrinkPossible[i] + "</option>";
+    }
+
+    // htmlPage2.replace("<select id=\"drinkPossibles\"></select>", "<ul>" + listeBreuvageHTML + "</ul>");
+    htmlPage2.replace("<select id=\"drinkPossibles\" style=\"width:80%; height: 50px; border-color: orange;\"></select>", "<select id=\"drinkPossibles\" style=\"width:80%; height: 50px; border-color: orange;\">" + listeBreuvageHTML + "</select>");
+    request->send(200, "text/html", htmlPage2);
     request->send(SPIFFS, "/index1.html", "text/html");
-    Serial.println("sdfjsgdfuysdgfosudfgsdifyg");
   });
 
   server.on("/w3.css", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -181,7 +199,7 @@ void setup()
   server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/script.js", "text/javascript");
   });
-  
+ 
 
   server.on("/jquery-3.6.0.min.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
@@ -239,6 +257,19 @@ void setup()
     request->send(204);
   });
 
+  // faire le drink choisi par l'utilisateur 
+  server.on("/faireDrink", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
+    Serial.println("JE SUIS LA BLABLABLA");
+     if(request->hasParam("drink_voulue", true))
+    {
+      drink_voulue = request->getParam("drink_voulue", true)->value();
+    }
+    Serial.println(drink_voulue);
+    request->send(204);
+  });
+
+
+
   server.begin();
   Serial.println("Serveur actif!");
 
@@ -275,7 +306,6 @@ void loop()
   delay(1000);
 
 }
-
 
 //----------------------------------------------------------
 //          FONCTION TROUVER_DRINK_POSSIBLE
@@ -352,13 +382,16 @@ void trouverDrinksPossibles(void)
       list_drink_possible += " , " + drink["name"].as<String>();    // enregistre tout les drinks possible dans un string 
 
       tableauDrinkPossible[j] = drink["name"].as<String>();         // place les drink possible dans un tableau pour pouvoir les utiliser plus tard 
-      j++;                                                      
+      j++;                                               
 
     } else {
       Serial.println("Impossible de faire ce drink ");                     
     }
     Serial.println();
   }
+
+  
+
   Serial.print("Liste des drinks possible : ");
   Serial.println(list_drink_possible);            // affiche la liste des drinks qui est possible d'etre fait 
 

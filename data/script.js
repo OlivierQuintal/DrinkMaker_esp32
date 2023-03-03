@@ -61,6 +61,16 @@ $(document).ready(function(){             // cette fonction attend que le bouton
   });
 });
 
+//*************Quand le breuvage a été choisi envoi l'info au ESP32*************************/
+$(document).ready(function(){             // cette fonction attend que le bouton APPLIQUER sois appuyer et envoie la valeur au ESP32
+  $("#FaireBreuvage").click(function(){
+      var drink = $("#drinkPossibles").val();
+      $.post("faireDrink",{
+        drink_voulue: drink 
+      });
+  });
+});
+
 
 // getBreuvages(function getdata()
 // {
