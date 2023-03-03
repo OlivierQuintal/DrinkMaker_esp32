@@ -253,7 +253,7 @@ void setup()
       BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
     trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
-    ingredientsDuDrink(drink_voulue);     // test
+    // ingredientsDuDrink(drink_voulue);     // test
     request->send(204);
   });
 
@@ -265,6 +265,7 @@ void setup()
       drink_voulue = request->getParam("drink_voulue", true)->value();
     }
     Serial.println(drink_voulue);
+    ingredientsDuDrink(drink_voulue) ;
     request->send(204);
   });
 
@@ -415,9 +416,10 @@ void trouverDrinksPossibles(void)
 
 void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le drink voulue par l'utilisateur
 {
-  
-  //String drink = drink_voulue;     // décommanter lors des vrai test ************************************************
-  String breuvage = "Planter's Punch";
+   int drink = drink_voulue.toInt();     // converti le string en int
+   
+   String breuvage = tableauDrinkPossible[drink];     // décommanter lors des vrai test ************************************************
+  //String breuvage = "Planter's Punch";
   bool breauvageTrouver = false;
 
   JsonArray drinks2 = doc.as<JsonArray>();           // créé un array avec le json des recettes
@@ -435,24 +437,23 @@ void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le 
     }  
 
 
-
     if (breauvageTrouver == true)
     {
       Serial.println("Le drink a été trouver");
 
       JsonArray ingredients2 = drink2["ingredients"];     // affiche le nom de l'ingédients 
-    int i = 0;
-    for (JsonObject ingredient2 : ingredients2) 
-      {
-        String rechercheDuDrink = ingredient2["ingredient"];
-        String rechercheQuantite = ingredient2["amount"];
-        ingerdinetDrinkChoisi[i] = rechercheDuDrink;
-        quantite[i] = rechercheQuantite;
-        i++; 
-        
-        // mettre le code pour mettre les ingrédients dans un tableau ****************************************************
-      }
-      break;
+      int i = 0;
+      for (JsonObject ingredient2 : ingredients2) 
+        {
+          String rechercheDuDrink = ingredient2["ingredient"];
+          String rechercheQuantite = ingredient2["amount"];
+          ingerdinetDrinkChoisi[i] = rechercheDuDrink;
+          quantite[i] = rechercheQuantite;
+          i++; 
+          
+          // mettre le code pour mettre les ingrédients dans un tableau ****************************************************
+        }
+        break;
     }
     
   }
