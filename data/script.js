@@ -2,11 +2,6 @@
 
 //var drink = ["Baileys Irish Cream", "Bourbon", "club soda", "Gin", "Ginger ale", "lemonade", "lime", "Malibu coconut rum", "milk", "Orange Juice", "peach schnapps", "Rhum noir", "Rhum blanc", "Sprite", "Tequila", "Tonic water", "Triple Sec", "Vodka"];
 
-function choixBouteille()
-{
-  document.getElementById("inventaire").classList.toggle("show");
-}
-
 //*******************************************/
 //Fonction pour afficher les drink possibles
 //*******************************************/
@@ -100,25 +95,6 @@ function chargerBreuvages()
     };
     xhhtp.open("GET", "tableauBreuvages", true);
     xhhtp.send();
-}
-
-
-
-function filterFunction()
-{
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("inventaire");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
-  }
 }
 
 

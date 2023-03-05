@@ -58,6 +58,11 @@ String BouteilleNo10 = "";
 AsyncWebServer server(80);
 
 
+  //------------------------------------------------------LCD 
+  LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
+
+
 void setup()
 {
   //----------------------------------------------------Serial
@@ -114,8 +119,7 @@ void setup()
   #define HX711_SCK 41
   scale.begin(HX711_SDA, HX711_SCK);       
 
-  //------------------------------------------------------LCD 
-  LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
 
   //------------------------------------------------------Capteur Alcool
   #define capteur_alcool 18
@@ -274,6 +278,9 @@ void setup()
   server.begin();
   Serial.println("Serveur actif!");
 
+  lcd.init();                      // initialize the lcd 
+  lcd.backlight();
+
  
 }
 //---------------------------------------------------------------------------
@@ -291,6 +298,24 @@ void loop()
     digitalWrite(pompe_1, LOW);
   }
 
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    WiFi.begin(ssid, password);
+    lcd.clear();
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      lcd.print("Connexion en cours");
+      Serial.print("Tentative de reconnection...");
+      delay(100);
+    }
+  }
+  
+  lcd.setCursor(2,0);
+  lcd.print(WiFi.localIP());
+  
+
+  Serial.println(WiFi.localIP());
+
   Serial.println(BouteilleNo1);
   Serial.println(BouteilleNo2);
   Serial.println(BouteilleNo3);
@@ -303,6 +328,9 @@ void loop()
   Serial.println(BouteilleNo10);
 
   Serial.println("ok");
+
+
+  
   
   delay(1000);
 
