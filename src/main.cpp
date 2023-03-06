@@ -11,9 +11,11 @@
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
 
-const char *ssid = "RT-AC1200_E0_2G";
-const char *password = "eagle_4742";
+//const char *ssid = "RT-AC1200_E0_2G";
+//const char *password = "eagle_4742";
 
+const char *ssid = "omega";
+const char *password = "Rougepomme";
 
 //const char *ssid = "wifiquintal";
 //const char *password = "totoa1q9";
@@ -58,10 +60,9 @@ String BouteilleNo10 = "";
 AsyncWebServer server(80);
 
 
-  //------------------------------------------------------LCD 
+  //------INITIALLISATION DES LIBRAIRES
   LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
-
-
+  HX711 scale;
 
 void setup()
 {
@@ -114,7 +115,7 @@ void setup()
     pinMode(btn_3, INPUT);
 
   //------------------------------------------------------HX711
-  HX711 scale;
+
   #define HX711_SDA 42
   #define HX711_SCK 41
   scale.begin(HX711_SDA, HX711_SCK);       
@@ -122,7 +123,8 @@ void setup()
 
 
   //------------------------------------------------------Capteur Alcool
-  #define capteur_alcool 18
+  //#define capteur_alcool 18     ********************************************************************************Remettre ce ligne et retirer la lumiere RGB lors des vrai testes 
+  #define capteur_alcool 19
   pinMode(capteur_alcool, INPUT);
   
   //----------------------------------------------------SPIFFS
@@ -523,6 +525,19 @@ uint32_t Wheel(byte WheelPos)
 
     return returnColor;
 }
+
+
+//*********************************************************************************************************************
+//          FONCTION POUR LE CAPTEUR D'ALCOOL
+//*********************************************************************************************************************
+
+void readAlcool(void)
+{
+    float sensorValue = analogRead(capteur_alcool);
+    
+}
+
+
 /*
 ------------------choses à faire------------------------------------
 
