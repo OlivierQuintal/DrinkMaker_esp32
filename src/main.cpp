@@ -28,7 +28,7 @@ String drink_voulue;
 
 //RGB
 // On the ESP32S2 SAOLA GPIO is the NeoPixel.
-#define PIN 18
+#define PIN 20             /// mettre 18 pour que ca foncitonne avec le RGB
 
 // Single NeoPixel
 Adafruit_NeoPixel pixels(1, PIN, NEO_GRB + NEO_KHZ800);
@@ -42,10 +42,11 @@ String ingerdinetDrinkChoisi[10];      // augmenter cette valeur pour augmenter 
 String listeBreuvageHTML = "";      
 String quantite[10];
 uint32_t Wheel(byte WheelPos);
+void menuLCD (void);
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
-//-----Variable pour les ingrédients dans la machine 
+//-----Variables---------
 
 String BouteilleNo1 = "";
 String BouteilleNo2 = "";
@@ -58,6 +59,10 @@ String BouteilleNo8 = "";
 String BouteilleNo9 = "";
 String BouteilleNo10 = "";
 AsyncWebServer server(80);
+
+int etat_menu = 0 ;
+int menu_pompe_manuelle = 1;
+
 
 
   //------INITIALLISATION DES LIBRAIRES
@@ -106,9 +111,9 @@ void setup()
     pinMode(pompe_2, OUTPUT);
 
   // ---GPIO boutons
-    #define btn_1 40
+    #define btn_1 38
     #define btn_2 39
-    #define btn_3 38
+    #define btn_3 40
 
     pinMode(btn_1, INPUT);
     pinMode(btn_2, INPUT);
@@ -123,8 +128,8 @@ void setup()
 
 
   //------------------------------------------------------Capteur Alcool
-  //#define capteur_alcool 18     ********************************************************************************Remettre ce ligne et retirer la lumiere RGB lors des vrai testes 
-  #define capteur_alcool 19
+  #define capteur_alcool 18     //********************************************************************************Remettre ce ligne et retirer la lumiere RGB lors des vrai testes 
+  //#define capteur_alcool 19
   pinMode(capteur_alcool, INPUT);
   
   //----------------------------------------------------SPIFFS
@@ -300,6 +305,7 @@ void loop()
     digitalWrite(pompe_1, LOW);
   }
 
+  // regarde si le wifi est connecter, si non, il se reconnecte
   if (WiFi.status() != WL_CONNECTED)
   {
     WiFi.begin(ssid, password);
@@ -310,31 +316,32 @@ void loop()
       Serial.print("Tentative de reconnection...");
       delay(100);
     }
-  }
+  } 
+  //------
   
-  lcd.setCursor(2,0);
-  lcd.print(WiFi.localIP());
-  
-
-  Serial.println(WiFi.localIP());
-
-  Serial.println(BouteilleNo1);
-  Serial.println(BouteilleNo2);
-  Serial.println(BouteilleNo3);
-  Serial.println(BouteilleNo4);
-  Serial.println(BouteilleNo5);
-  Serial.println(BouteilleNo6);
-  Serial.println(BouteilleNo7);
-  Serial.println(BouteilleNo8);
-  Serial.println(BouteilleNo9);
-  Serial.println(BouteilleNo10);
-
-  Serial.println("ok");
-
+  menuLCD();      // affichage sur l'écran LCD
 
   
+
+  // Serial.println(WiFi.localIP());
+
+  // Serial.println(BouteilleNo1);
+  // Serial.println(BouteilleNo2);
+  // Serial.println(BouteilleNo3);
+  // Serial.println(BouteilleNo4);
+  // Serial.println(BouteilleNo5);
+  // Serial.println(BouteilleNo6);
+  // Serial.println(BouteilleNo7);
+  // Serial.println(BouteilleNo8);
+  // Serial.println(BouteilleNo9);
+  // Serial.println(BouteilleNo10);
+
+  // Serial.println("ok");
+
+
   
-  delay(1000);
+  
+  //delay(1000);
 
 }
 
@@ -534,9 +541,99 @@ uint32_t Wheel(byte WheelPos)
 void readAlcool(void)
 {
     float sensorValue = analogRead(capteur_alcool);
-    
+
 }
 
+
+//*********************************************************************************************************************
+//          FONCTION POUR LE MENU DE L'ÉCRAN LCD 
+//*********************************************************************************************************************
+
+void menuLCD (void)
+{
+  if (digitalRead(btn_2) == 1)
+  {
+    etat_menu += 1;
+    delay(1000);
+  }
+
+  switch (etat_menu)
+  {
+    case 0:
+      lcd.setCursor(2,0);
+      lcd.print(WiFi.localIP());        // affiche l'adresse IP su serveur
+      break;
+    case 1:
+      lcd.clear();
+      lcd.setCursor(2,0);
+      lcd.print("POMPES MANUELLES");
+      lcd.setCursor(0,2);
+      lcd.print("1 2 3 4 5 6 7 8 9 10");
+      while (digitalRead(btn_1) != 1)
+      {
+        if (digitalRead(btn_3) == 1)
+        {
+          menu_pompe_manuelle += 1;
+          delay(1000);
+        }
+
+        Serial.println(menu_pompe_manuelle);
+
+        switch (menu_pompe_manuelle)
+        {
+          case 1:
+            lcd.setCursor(0,2);
+            lcd.blink();
+            break;
+          case 2:
+            lcd.setCursor(2,2);
+            lcd.blink();
+            break;
+          case 3:
+            lcd.setCursor(4,2);
+            lcd.blink();
+            break;
+          case 4:
+            lcd.setCursor(6,2);
+            lcd.blink();
+            break;
+          case 5:
+            lcd.setCursor(8,2);
+            lcd.blink();
+            break;
+          case 6:
+            lcd.setCursor(10,2);
+            lcd.blink();
+            break;
+          case 7:
+            lcd.setCursor(12,2);
+            lcd.blink();
+            break;
+          case 8:
+            lcd.setCursor(14,2);
+            lcd.blink();
+            break;
+          case 9:
+            lcd.setCursor(16,2);
+            lcd.blink();
+            break;
+          case 10:
+            lcd.setCursor(18,2);
+            lcd.blink();
+            break;
+          default:
+            menu_pompe_manuelle = 1;
+            break;
+        }
+      }
+      break;
+    case 2:
+      break;
+    default:
+      etat_menu == 0; 
+      break;
+  }
+}
 
 /*
 ------------------choses à faire------------------------------------
