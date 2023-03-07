@@ -43,6 +43,7 @@ String listeBreuvageHTML = "";
 String quantite[10];
 uint32_t Wheel(byte WheelPos);
 void menuLCD (void);
+float readAlcool(void);
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
@@ -538,10 +539,10 @@ uint32_t Wheel(byte WheelPos)
 //          FONCTION POUR LE CAPTEUR D'ALCOOL
 //*********************************************************************************************************************
 
-void readAlcool(void)
+float readAlcool(void)
 {
-    float sensorValue = analogRead(capteur_alcool);
-
+  float sensorValue = analogRead(capteur_alcool);
+  return sensorValue;
 }
 
 
@@ -551,17 +552,17 @@ void readAlcool(void)
 
 void menuLCD (void)
 {
-  if (digitalRead(btn_2) == 1)
-  {
-    etat_menu += 1;
-    delay(1000);
-  }
-
+  
   switch (etat_menu)
   {
     case 0:
       lcd.setCursor(2,0);
       lcd.print(WiFi.localIP());        // affiche l'adresse IP su serveur
+      if (digitalRead(btn_2) == 1)
+      {
+        etat_menu = 1;
+        delay(1000);
+      }
       break;
     case 1:
       lcd.clear();
@@ -569,7 +570,7 @@ void menuLCD (void)
       lcd.print("POMPES MANUELLES");
       lcd.setCursor(0,2);
       lcd.print("1 2 3 4 5 6 7 8 9 10");
-      while (digitalRead(btn_1) != 1)
+      while (digitalRead(btn_2) != 1)
       {
         if (digitalRead(btn_3) == 1)
         {
@@ -584,53 +585,181 @@ void menuLCD (void)
           case 1:
             lcd.setCursor(0,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_1,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_1,LOW);
+            }
             break;
           case 2:
             lcd.setCursor(2,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_2,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_2,LOW);
+            }
             break;
           case 3:
             lcd.setCursor(4,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_3,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_3,LOW);
+            }
             break;
           case 4:
             lcd.setCursor(6,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_4,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_4,LOW);
+            }
             break;
           case 5:
             lcd.setCursor(8,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_5,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_5,LOW);
+            }
             break;
           case 6:
             lcd.setCursor(10,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_6,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_6,LOW);
+            }
             break;
           case 7:
             lcd.setCursor(12,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_7,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_7,LOW);
+            }
             break;
           case 8:
             lcd.setCursor(14,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_8,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_8,LOW);
+            }
             break;
           case 9:
             lcd.setCursor(16,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_9,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_9,LOW);
+            }
             break;
           case 10:
             lcd.setCursor(18,2);
             lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_10,HIGH);
+            }
+            else
+            {
+              digitalWrite(solenoide_10,LOW);
+            }
             break;
           default:
             menu_pompe_manuelle = 1;
             break;
         }
       }
+      etat_menu = 2;
+      lcd.clear();
+      delay(1000);
       break;
     case 2:
+      lcd.setCursor(4,0);
+      lcd.print("TESTER ALCOOL");
+      lcd.setCursor(0,2);
+      lcd.print("COMMNECER = BOUTON 3");
+      lcd.setCursor(0,3);
+      lcd.print("SORTIR = BOUTON 2");
+      if (digitalRead(btn_3) == 1)
+      {
+        lcd.clear();
+        int i = 5;
+        while(i != 0)
+        {
+          
+          lcd.setCursor(0,0);
+          lcd.print("SOUFFLER 5 SECONDES");
+          lcd.setCursor(9,1);
+          lcd.print(i);
+          i--;
+          delay(1000);
+        }
+        lcd.clear();
+        lcd.setCursor(2,0);
+        if (readAlcool() < 120)
+        {
+          lcd.print("PAS ALCOOLISE");
+        }
+        else if (readAlcool()>120 && readAlcool() < 400)
+        {
+          lcd.print("SOUS LE 0.08 BAC");
+        }
+        else if (readAlcool() > 400)
+        {
+          lcd.print("DEPASSE 0.08 BAC");
+        }
+        delay(5000);
+        lcd.clear();
+        etat_menu = 0;
+      }
+      else if (digitalRead(btn_2) == 1)
+      {
+        etat_menu = 0;
+        lcd.clear();
+        delay(1000);
+      }
       break;
+
     default:
-      etat_menu == 0; 
+      etat_menu = 0; 
       break;
   }
 }
