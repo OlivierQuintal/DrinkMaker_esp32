@@ -355,6 +355,13 @@ void loop()
 //----------------------------------------------------------
 void trouverDrinksPossibles(void)
 {
+
+  for(int i=0 ; i <= sizeof(tableauDrinkPossible) ; i++)    // efface les drinks possible avant d'en mettre d'autres 
+  {
+      tableauDrinkPossible[i] = "";
+  }
+
+
   //-------------------- afficher le contenue d'un fichier json enregistrer dans le spiffs
   if(!SPIFFS.begin(true)){
     Serial.println("An Error has occurred while mounting SPIFFS");
@@ -454,6 +461,12 @@ void trouverDrinksPossibles(void)
 
 void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le drink voulue par l'utilisateur
 {
+   
+   for(int i = 0 ; i < sizeof(ingerdinetDrinkChoisi) ; i++)   // efface les ingédients du drink choisi précédement 
+   {
+      ingerdinetDrinkChoisi[i] = "";
+   }
+
    int drink = drink_voulue.toInt();     // converti le string en int
    
    String breuvage = tableauDrinkPossible[drink];     // décommanter lors des vrai test ************************************************
