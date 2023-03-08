@@ -11,11 +11,11 @@
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
 
-//const char *ssid = "RT-AC1200_E0_2G";
-//const char *password = "eagle_4742";
+const char *ssid = "RT-AC1200_E0_2G";
+const char *password = "eagle_4742";
 
-const char *ssid = "omega";
-const char *password = "Rougepomme";
+//const char *ssid = "omega";
+//const char *password = "Rougepomme";
 
 //const char *ssid = "wifiquintal";
 //const char *password = "totoa1q9";
@@ -355,12 +355,10 @@ void loop()
 //----------------------------------------------------------
 void trouverDrinksPossibles(void)
 {
-
-  for(int i=0 ; i <= sizeof(tableauDrinkPossible) ; i++)    // efface les drinks possible avant d'en mettre d'autres 
+  for(int i = 0; i < 50; i++)
   {
-      tableauDrinkPossible[i] = "";
+    tableauDrinkPossible[i] = " ";
   }
-
 
   //-------------------- afficher le contenue d'un fichier json enregistrer dans le spiffs
   if(!SPIFFS.begin(true)){
@@ -435,7 +433,6 @@ void trouverDrinksPossibles(void)
     }
     Serial.println();
   }
-
   
 
   Serial.print("Liste des drinks possible : ");
@@ -462,7 +459,7 @@ void trouverDrinksPossibles(void)
 void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le drink voulue par l'utilisateur
 {
    
-   for(int i = 0 ; i < sizeof(ingerdinetDrinkChoisi) ; i++)   // efface les ingédients du drink choisi précédement 
+   for(int i = 0 ; i < 10 ; i++)   // efface les ingédients du drink choisi précédement 
    {
       ingerdinetDrinkChoisi[i] = "";
    }
@@ -601,9 +598,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_1,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_1,LOW);
             }
             break;
@@ -613,9 +613,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_2,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_2,LOW);
             }
             break;
@@ -625,9 +628,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_3,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_3,LOW);
             }
             break;
@@ -637,9 +643,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_4,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_4,LOW);
             }
             break;
@@ -649,9 +658,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_5,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_5,LOW);
             }
             break;
@@ -661,9 +673,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_6,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
             }
             else
             {
+              digitalWrite(pompe_2,LOW);
               digitalWrite(solenoide_6,LOW);
             }
             break;
@@ -673,9 +688,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_7,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
             }
             else
             {
+              digitalWrite(pompe_2,LOW);
               digitalWrite(solenoide_7,LOW);
             }
             break;
@@ -685,9 +703,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_8,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
             }
             else
             {
+              digitalWrite(pompe_2,LOW);
               digitalWrite(solenoide_8,LOW);
             }
             break;
@@ -697,9 +718,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_9,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
             }
             else
             {
+              digitalWrite(pompe_2,LOW);
               digitalWrite(solenoide_9,LOW);
             }
             break;
@@ -709,9 +733,12 @@ void menuLCD (void)
             if(digitalRead(btn_1) == 1)
             {
               digitalWrite(solenoide_10,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
             }
             else
             {
+              digitalWrite(pompe_2,LOW);
               digitalWrite(solenoide_10,LOW);
             }
             break;

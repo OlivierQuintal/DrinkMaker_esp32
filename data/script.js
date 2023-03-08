@@ -1,12 +1,8 @@
 
-
-//var drink = ["Baileys Irish Cream", "Bourbon", "club soda", "Gin", "Ginger ale", "lemonade", "lime", "Malibu coconut rum", "milk", "Orange Juice", "peach schnapps", "Rhum noir", "Rhum blanc", "Sprite", "Tequila", "Tonic water", "Triple Sec", "Vodka"];
-
 //*******************************************/
 //Fonction pour afficher les drink possibles
 //*******************************************/
-// Tableau de breuvages
-var breuvages = ["Café", "Thé", "Jus d'orange", "Limonade"];
+
         
 // Fonction pour générer les sections HTML pour chaque breuvage
 function genererBreuvages() {
@@ -65,37 +61,6 @@ $(document).ready(function(){             // cette fonction attend que le bouton
       });
   });
 });
-
-
-// getBreuvages(function getdata()
-// {
-//     var xhhtp = new XMLHttpRequest();
-
-//     xhhtp.onreadystatechange = function()
-//     {
-//         if (this.readyState == 4 && this.status == 200)
-//         {
-//           document.getElementById("listeBreuvages").innerHTML = this.responseText;
-//         }
-//     };
-//     xhhtp.open("GET", "tableauBreuvages", true);
-//     xhhtp.send();
-// },2000);
-
-function chargerBreuvages()
-{
-    var xhhtp = new XMLHttpRequest();
-
-    xhhtp.onreadystatechange = function()
-    {
-        if (this.readyState == 4 && this.status == 200)
-        {
-          document.getElementById("listeBreuvages").innerHTML = this.responseText;
-        }
-    };
-    xhhtp.open("GET", "tableauBreuvages", true);
-    xhhtp.send();
-}
 
 
 
