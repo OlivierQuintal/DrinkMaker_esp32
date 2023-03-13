@@ -124,7 +124,10 @@ void setup()
 
   #define HX711_SDA 42
   #define HX711_SCK 41
-  scale.begin(HX711_SDA, HX711_SCK);       
+  scale.begin(HX711_SDA, HX711_SCK);  
+
+  scale.set_scale(10000);   // valeur random pour la valeur de valibration de la balance
+
 
 
 
@@ -296,16 +299,6 @@ void setup()
 
 void loop()
 {
-
-  if (digitalRead(btn_1) == 1)
-  {
-    digitalWrite(pompe_1, HIGH);
-  }
-  else if (digitalRead(btn_1) == 0)
-  {
-    digitalWrite(pompe_1, LOW);
-  }
-
   // regarde si le wifi est connecter, si non, il se reconnecte
   if (WiFi.status() != WL_CONNECTED)
   {
@@ -774,15 +767,15 @@ void menuLCD (void)
         }
         lcd.clear();
         lcd.setCursor(2,0);
-        if (readAlcool() < 120)
+        if (readAlcool() < 7680)
         {
           lcd.print("PAS ALCOOLISE");
         }
-        else if (readAlcool()>120 && readAlcool() < 400)
+        else if (readAlcool()>7680 && readAlcool() < 25600)
         {
           lcd.print("SOUS LE 0.08 BAC");
         }
-        else if (readAlcool() > 400)
+        else if (readAlcool() > 25600)
         {
           lcd.print("DEPASSE 0.08 BAC");
         }
@@ -807,11 +800,9 @@ void menuLCD (void)
 /*
 ------------------choses à faire------------------------------------
 
-- Quand on entre une bouteille dans le site, le met directement dans le tableau ingredientsAvailable[] --------------------- fait 
-- Attendre que le btn appliquer sois appuyer avant de donner les drinks possible  ------------------------------------------ fait 
-- Savoir la quantier de chacun des ingédients et la mettre dans une variables     ------------------------------------------ fait
-- Mettre les ingrédients dans des variables pour les comparer a ceux des pompes   ------------------------------------------ fait
-- Mettre le nom des drinks possible dans des variables (pt le mettre dans un tableau)  ------------------------------------- fait 
+- faire la lecture si un verre est présent 
+- arreter la machine s'il n'y a pas de verre
+
 
 - faire la partie affichage des drink possible sur le site web et leurs ingrédients 
 - mettre une btn back sur le site 
