@@ -8,11 +8,11 @@
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
 
-//const char *ssid = "HUAWEI";
-//const char *password = "bigtits69";
+const char *ssid = "HUAWEI";
+const char *password = "bigtits69";
 
-const char *ssid = "RT-AC1200_E0_2G";
-const char *password = "eagle_4742";
+//const char *ssid = "RT-AC1200_E0_2G";
+//const char *password = "eagle_4742";
 
 //const char *ssid = "omega";
 //const char *password = "Rougepomme";
@@ -292,7 +292,10 @@ void setup()
   lcd.init();                      // initialize the lcd 
   lcd.backlight();
 
- 
+  scale.set_scale(-1088.35);        // valeur de calibration de la balance 
+  scale.tare();                    // reset the scale to 0
+
+
 }
 //---------------------------------------------------------------------------
 
@@ -315,7 +318,10 @@ void loop()
   
   menuLCD();      // affichage sur l'écran LCD
 
-  
+
+  Serial.println("get unit  : ");
+  Serial.println(scale.get_units(2));
+
 
   // Serial.println(WiFi.localIP());
 
@@ -568,12 +574,19 @@ void menuLCD (void)
       }
       break;
     case 1:
+      while(scale.get_units(2) < 10)
+      {
+        lcd.clear();
+        lcd.setCursor(2,0);
+        lcd.print("METTRE UN VERRE");
+      }
+
       lcd.clear();
       lcd.setCursor(2,0);
       lcd.print("POMPES MANUELLES");
       lcd.setCursor(0,2);
       lcd.print("1 2 3 4 5 6 7 8 9 10");
-      while (digitalRead(btn_2) != 1)
+      while (digitalRead(btn_2) != 1 && scale.get_units() > 10)   // sort si le verre est retirer ou le btn 2 est actives
       {
         if (digitalRead(btn_3) == 1)
         {
