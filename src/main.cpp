@@ -8,11 +8,11 @@
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
 
-const char *ssid = "HUAWEI";
-const char *password = "bigtits69";
+//const char *ssid = "HUAWEI";
+//const char *password = "bigtits69";
 
-//const char *ssid = "RT-AC1200_E0_2G";
-//const char *password = "eagle_4742";
+const char *ssid = "RT-AC1200_E0_2G";
+const char *password = "eagle_4742";
 
 //const char *ssid = "omega";
 //const char *password = "Rougepomme";
@@ -319,8 +319,8 @@ void loop()
   menuLCD();      // affichage sur l'écran LCD
 
 
-  Serial.println("get unit  : ");
-  Serial.println(scale.get_units(2));
+  // Serial.println("get unit  : ");
+  // Serial.println(scale.get_units(2));
 
 
   // Serial.println(WiFi.localIP());
