@@ -6,7 +6,7 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
-
+// blabla
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
 
