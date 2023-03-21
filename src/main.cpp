@@ -217,6 +217,17 @@ void setup()
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
+<<<<<<< HEAD
+=======
+
+  server.on("/lireBreuvagesPossible", HTTP_GET, [](AsyncWebServerRequest *request) {     // envoie les boissons possible au client 
+   // String valeur = String(tableauDrinkPossible[0]);
+   Serial.println("JE SUIS LA !s");
+   //String valeur = "Ca fonctionne je pense!";
+     String valeur = (tableauDrinkPossible[0] + "," + tableauDrinkPossible[1] + "," + tableauDrinkPossible[2] + "," + tableauDrinkPossible[3]) ;
+    request->send(200, "text/plain", valeur);
+  });
+>>>>>>> origin/SiteWeb_Basic
 
   server.on("/calibrationPompes", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
     if(request->hasParam("BouteilleNo1", true))

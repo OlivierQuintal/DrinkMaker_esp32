@@ -1,16 +1,23 @@
 
+
+//var drink = ["Baileys Irish Cream", "Bourbon", "club soda", "Gin", "Ginger ale", "lemonade", "lime", "Malibu coconut rum", "milk", "Orange Juice", "peach schnapps", "Rhum noir", "Rhum blanc", "Sprite", "Tequila", "Tonic water", "Triple Sec", "Vodka"];
+
+function choixBouteille()
+{
+  document.getElementById("inventaire").classList.toggle("show");
+}
+
 //*******************************************/
 //Fonction pour afficher les drink possibles
 //*******************************************/
-
-
-
+// Tableau de breuvages
+var breuvages = ["Café", "Thé", "Jus d'orange", "Limonade"];
         
 // Fonction pour générer les sections HTML pour chaque breuvage
 function genererBreuvages() {
     // Récupérer l'élément de liste
-    var liste = document.getElementById("breuvages");
-
+    //var liste = document.getElementById("breuvages");
+    var liste = document.getElementById("listeDrinksPossible");
     // Vider la liste
     //liste.innerHTML = "";
     liste.innerHTML = "<option value=100>Choisir un breuvage</option>";
@@ -26,6 +33,11 @@ function genererBreuvages() {
     }
 }
 /*************************************************/
+
+
+
+
+
 
 $(document).ready(function(){             // cette fonction attend que le bouton APPLIQUER sois appuyer et envoie la valeur au ESP32
   $("#appliquer").click(function(){
