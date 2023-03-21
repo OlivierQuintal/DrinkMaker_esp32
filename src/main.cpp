@@ -189,22 +189,19 @@ void setup()
     File html = SPIFFS.open("/index1.html");
     String htmlPage2 = html.readString();
     html.close();
-    Serial.print(htmlPage2);
-
-    // for (int i = 0; i < sizeof(tableauDrinkPossible) / sizeof(tableauDrinkPossible[0]); i++)
-    // {
-    //   listeBreuvageHTML += "<li>" + tableauDrinkPossible[i] + "</li>";
-    // }
-
+    
+    listeBreuvageHTML = "";
     for (int i = 0; i < sizeof(tableauDrinkPossible) / sizeof(tableauDrinkPossible[0]); i++)
     {
       listeBreuvageHTML += "<option value=\"" + String(i) + "\">" + tableauDrinkPossible[i] + "</option>";
     }
 
-    // htmlPage2.replace("<select id=\"drinkPossibles\"></select>", "<ul>" + listeBreuvageHTML + "</ul>");
+    Serial.print(listeBreuvageHTML);
+
+    
     htmlPage2.replace("<select id=\"drinkPossibles\" style=\"width:80%; height: 50px; border-color: orange;\"></select>", "<select id=\"drinkPossibles\" style=\"width:80%; height: 50px; border-color: orange;\">" + listeBreuvageHTML + "</select>");
+    Serial.print(htmlPage2);
     request->send(200, "text/html", htmlPage2);
-    request->send(SPIFFS, "/index1.html", "text/html");
   });
 
   server.on("/w3.css", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -220,11 +217,6 @@ void setup()
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
-  server.on("/page2/AfficheDrink", HTTP_GET, [](AsyncWebServerRequest *request) {
-    String valeur = "patate";
-    Serial.println("paatteee");
-    request->send(200, "text/plain", valeur);
-  });
 
   server.on("/calibrationPompes", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
     if(request->hasParam("BouteilleNo1", true))
@@ -268,14 +260,12 @@ void setup()
       BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
     trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
-    // ingredientsDuDrink(drink_voulue);     // test
     request->send(204);
   });
 
   // faire le drink choisi par l'utilisateur 
   server.on("/faireDrink", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
-    Serial.println("JE SUIS LA BLABLABLA");
-     if(request->hasParam("drink_voulue", true))
+    if(request->hasParam("drink_voulue", true))
     {
       drink_voulue = request->getParam("drink_voulue", true)->value();
     }

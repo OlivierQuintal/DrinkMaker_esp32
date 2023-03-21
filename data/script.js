@@ -3,6 +3,8 @@
 //Fonction pour afficher les drink possibles
 //*******************************************/
 
+
+
         
 // Fonction pour générer les sections HTML pour chaque breuvage
 function genererBreuvages() {
