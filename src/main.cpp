@@ -196,7 +196,7 @@ void setup()
       listeBreuvageHTML += "<option value=\"" + String(i) + "\">" + tableauDrinkPossible[i] + "</option>";
     }
 
-    Serial.print(listeBreuvageHTML);
+
 
     
     htmlPage2.replace("<select id=\"drinkPossibles\" style=\"width:80%; height: 50px; border-color: orange;\"></select>", "<select id=\"drinkPossibles\" style=\"width:80%; height: 50px; border-color: orange;\">" + listeBreuvageHTML + "</select>");
@@ -385,19 +385,19 @@ void trouverDrinksPossibles(void)
   for (JsonObject drink : drinks) {                 // sépare chacun des drinks pour les analysés
     Serial.println("Drink name: " + drink["name"].as<String>());
     Serial.println("Ingredients:");
-    delay(10);
+   // delay(10);
 
     JsonArray ingredients = drink["ingredients"];     // affiche le nom de l'ingédients 
     bool canMakeDrink = true;
     
     for (JsonObject ingredient : ingredients) {
       const char *ingredientName = ingredient["ingredient"];
-      delay(10);
+     // delay(10);
       bool hasIngredient = false;
       for (int i = 0; i < ingredientsCount; i++) {            // passe en balayage un ingédient à la fois dans le breuvage X pour voir si nous l'avons ou non 
         if (ingredientsAvailable[i] == ingredientName) {
           hasIngredient = true;
-          delay(10);
+       //   delay(10);
           break;
         }
       }
