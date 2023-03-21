@@ -61,8 +61,13 @@ $(document).ready(function(){             // cette fonction attend que le bouton
       $.post("faireDrink",{
         drink_voulue: drink 
       });
+      alert("LE BREUVAGE EST EN COURS DE PREPARATION");
   });
 });
+
+
+
+
 
 
 
