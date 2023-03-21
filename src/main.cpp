@@ -6,13 +6,15 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
-// blabla
+
 //const char *ssid = "HUAWEI";
 //const char *password = "bigtits69";
 
 const char *ssid = "RT-AC1200_E0_2G";
 const char *password = "eagle_4742";
 
+//const char *ssid = "omega";
+//const char *password = "Rougepomme";
 
 //const char *ssid = "wifiquintal";
 //const char *password = "totoa1q9";
@@ -22,17 +24,28 @@ const int capteurLuminosite = 34;
 
 String drink_voulue;
 
+
+//RGB
+// On the ESP32S2 SAOLA GPIO is the NeoPixel.
+#define PIN 20             /// mettre 18 pour que ca foncitonne avec le RGB
+
+
+
 //----- Fonctions 
 
 void trouverDrinksPossibles(void);
 void ingredientsDuDrink(String drink_voulue);
 String tableauDrinkPossible[50];      // augmenter cette valeur pour augmenter la valeur max de drink possible 
 String ingerdinetDrinkChoisi[10];      // augmenter cette valeur pour augmenter la valeur max d'ingrédient par drink
+String listeBreuvageHTML = "";      
 String quantite[10];
+uint32_t Wheel(byte WheelPos);
+void menuLCD (void);
+float readAlcool(void);
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
-//-----Variable pour les ingrédients dans la machine 
+//-----Variables---------
 
 String BouteilleNo1 = "";
 String BouteilleNo2 = "";
@@ -46,6 +59,14 @@ String BouteilleNo9 = "";
 String BouteilleNo10 = "";
 AsyncWebServer server(80);
 
+int etat_menu = 0 ;
+int menu_pompe_manuelle = 1;
+
+
+
+  //------INITIALLISATION DES LIBRAIRES
+  LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+  HX711 scale;
 
 void setup()
 {
@@ -85,22 +106,32 @@ void setup()
     #define pompe_1 1
     #define pompe_2 2
 
+    pinMode(pompe_1, OUTPUT);
+    pinMode(pompe_2, OUTPUT);
+
   // ---GPIO boutons
-    #define btn_1 40
+    #define btn_1 38
     #define btn_2 39
-    #define btn_3 38
+    #define btn_3 40
+
+    pinMode(btn_1, INPUT);
+    pinMode(btn_2, INPUT);
+    pinMode(btn_3, INPUT);
 
   //------------------------------------------------------HX711
-  HX711 scale;
+
   #define HX711_SDA 42
   #define HX711_SCK 41
-  scale.begin(HX711_SDA, HX711_SCK);       
+  scale.begin(HX711_SDA, HX711_SCK);  
 
-  //------------------------------------------------------LCD 
-  LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+  scale.set_scale(10000);   // valeur random pour la valeur de valibration de la balance
+
+
+
 
   //------------------------------------------------------Capteur Alcool
-  #define capteur_alcool 18
+  #define capteur_alcool 18     //********************************************************************************Remettre ce ligne et retirer la lumiere RGB lors des vrai testes 
+  //#define capteur_alcool 19
   pinMode(capteur_alcool, INPUT);
   
   //----------------------------------------------------SPIFFS
@@ -137,14 +168,30 @@ void setup()
   Serial.print("Adresse IP: ");
   Serial.println(WiFi.localIP());
 
+
+
   //----------------------------------------------------SERVER
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html", "text/html");
   });
 
   server.on("/page2", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/index1.html", "text/html");
-    Serial.println("sdfjsgdfuysdgfosudfgsdifyg");
+    File html = SPIFFS.open("/index1.html");
+    String htmlPage2 = html.readString();
+    html.close();
+    
+    listeBreuvageHTML = "";
+    for (int i = 0; i < sizeof(tableauDrinkPossible) / sizeof(tableauDrinkPossible[0]); i++)
+    {
+      listeBreuvageHTML += "<option value=\"" + String(i) + "\">" + tableauDrinkPossible[i] + "</option>";
+    }
+
+    Serial.print(listeBreuvageHTML);
+
+    
+    htmlPage2.replace("<select id=\"drinkPossibles\" style=\"width:80%; height: 50px; border-color: orange;\"></select>", "<select id=\"drinkPossibles\" style=\"width:80%; height: 50px; border-color: orange;\">" + listeBreuvageHTML + "</select>");
+    Serial.print(htmlPage2);
+    request->send(200, "text/html", htmlPage2);
   });
 
   server.on("/w3.css", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -154,18 +201,15 @@ void setup()
   server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/script.js", "text/javascript");
   });
-  
+ 
 
   server.on("/jquery-3.6.0.min.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
-
-  server.on("/lireBreuvagesPossible", HTTP_GET, [](AsyncWebServerRequest *request) {     // envoie les boissons possible au client 
-   // String valeur = String(tableauDrinkPossible[0]);
-   Serial.println("JE SUIS LA !s");
-   //String valeur = "Ca fonctionne je pense!";
-     String valeur = (tableauDrinkPossible[0] + "," + tableauDrinkPossible[1] + "," + tableauDrinkPossible[2] + "," + tableauDrinkPossible[3]) ;
+  server.on("/page2/AfficheDrink", HTTP_GET, [](AsyncWebServerRequest *request) {
+    String valeur = "patate";
+    Serial.println("paatteee");
     request->send(200, "text/plain", valeur);
   });
 
@@ -211,38 +255,80 @@ void setup()
       BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
     trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
-    ingredientsDuDrink(drink_voulue);     // test
     request->send(204);
   });
+
+  // faire le drink choisi par l'utilisateur 
+  server.on("/faireDrink", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
+    if(request->hasParam("drink_voulue", true))
+    {
+      drink_voulue = request->getParam("drink_voulue", true)->value();
+    }
+    Serial.println(drink_voulue);
+    ingredientsDuDrink(drink_voulue) ;
+    request->send(204);
+  });
+
+
 
   server.begin();
   Serial.println("Serveur actif!");
 
- 
+  lcd.init();                      // initialize the lcd 
+  lcd.backlight();
+
+  scale.set_scale(-1088.35);        // valeur de calibration de la balance 
+  scale.tare();                    // reset the scale to 0
+
+
 }
 //---------------------------------------------------------------------------
 
 
 void loop()
 {
-
-  Serial.println(BouteilleNo1);
-  Serial.println(BouteilleNo2);
-  Serial.println(BouteilleNo3);
-  Serial.println(BouteilleNo4);
-  Serial.println(BouteilleNo5);
-  Serial.println(BouteilleNo6);
-  Serial.println(BouteilleNo7);
-  Serial.println(BouteilleNo8);
-  Serial.println(BouteilleNo9);
-  Serial.println(BouteilleNo10);
-
-  Serial.println("ok");
+  // regarde si le wifi est connecter, si non, il se reconnecte
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    WiFi.begin(ssid, password);
+    lcd.clear();
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      lcd.print("Connexion en cours");
+      Serial.print("Tentative de reconnection...");
+      delay(100);
+    }
+  } 
+  //------
   
-  delay(1000);
+  menuLCD();      // affichage sur l'écran LCD
+
+
+  // Serial.println("get unit  : ");
+  // Serial.println(scale.get_units(2));
+
+
+  // Serial.println(WiFi.localIP());
+
+  // Serial.println(BouteilleNo1);
+  // Serial.println(BouteilleNo2);
+  // Serial.println(BouteilleNo3);
+  // Serial.println(BouteilleNo4);
+  // Serial.println(BouteilleNo5);
+  // Serial.println(BouteilleNo6);
+  // Serial.println(BouteilleNo7);
+  // Serial.println(BouteilleNo8);
+  // Serial.println(BouteilleNo9);
+  // Serial.println(BouteilleNo10);
+
+  // Serial.println("ok");
+
+
+  
+  
+  //delay(1000);
 
 }
-
 
 //----------------------------------------------------------
 //          FONCTION TROUVER_DRINK_POSSIBLE
@@ -253,6 +339,11 @@ void loop()
 //----------------------------------------------------------
 void trouverDrinksPossibles(void)
 {
+  for(int i = 0; i < 50; i++)
+  {
+    tableauDrinkPossible[i] = " ";
+  }
+
   //-------------------- afficher le contenue d'un fichier json enregistrer dans le spiffs
   if(!SPIFFS.begin(true)){
     Serial.println("An Error has occurred while mounting SPIFFS");
@@ -319,13 +410,15 @@ void trouverDrinksPossibles(void)
       list_drink_possible += " , " + drink["name"].as<String>();    // enregistre tout les drinks possible dans un string 
 
       tableauDrinkPossible[j] = drink["name"].as<String>();         // place les drink possible dans un tableau pour pouvoir les utiliser plus tard 
-      j++;                                                      
+      j++;                                               
 
     } else {
       Serial.println("Impossible de faire ce drink ");                     
     }
     Serial.println();
   }
+  
+
   Serial.print("Liste des drinks possible : ");
   Serial.println(list_drink_possible);            // affiche la liste des drinks qui est possible d'etre fait 
 
@@ -349,9 +442,16 @@ void trouverDrinksPossibles(void)
 
 void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le drink voulue par l'utilisateur
 {
-  
-  //String drink = drink_voulue;     // décommanter lors des vrai test ************************************************
-  String breuvage = "Planter's Punch";
+   
+   for(int i = 0 ; i < 10 ; i++)   // efface les ingédients du drink choisi précédement 
+   {
+      ingerdinetDrinkChoisi[i] = "";
+   }
+
+   int drink = drink_voulue.toInt();     // converti le string en int
+   
+   String breuvage = tableauDrinkPossible[drink];     // décommanter lors des vrai test ************************************************
+  //String breuvage = "Planter's Punch";
   bool breauvageTrouver = false;
 
   JsonArray drinks2 = doc.as<JsonArray>();           // créé un array avec le json des recettes
@@ -369,24 +469,23 @@ void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le 
     }  
 
 
-
     if (breauvageTrouver == true)
     {
       Serial.println("Le drink a été trouver");
 
       JsonArray ingredients2 = drink2["ingredients"];     // affiche le nom de l'ingédients 
-    int i = 0;
-    for (JsonObject ingredient2 : ingredients2) 
-      {
-        String rechercheDuDrink = ingredient2["ingredient"];
-        String rechercheQuantite = ingredient2["amount"];
-        ingerdinetDrinkChoisi[i] = rechercheDuDrink;
-        quantite[i] = rechercheQuantite;
-        i++; 
-        
-        // mettre le code pour mettre les ingrédients dans un tableau ****************************************************
-      }
-      break;
+      int i = 0;
+      for (JsonObject ingredient2 : ingredients2) 
+        {
+          String rechercheDuDrink = ingredient2["ingredient"];
+          String rechercheQuantite = ingredient2["amount"];
+          ingerdinetDrinkChoisi[i] = rechercheDuDrink;
+          quantite[i] = rechercheQuantite;
+          i++; 
+          
+          // mettre le code pour mettre les ingrédients dans un tableau ****************************************************
+        }
+        break;
     }
     
   }
@@ -405,14 +504,281 @@ void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le 
 
 }
 
+
+
+
+//*********************************************************************************************************************
+//          FONCTION POUR LE CAPTEUR D'ALCOOL
+//*********************************************************************************************************************
+
+float readAlcool(void)
+{
+  float sensorValue = analogRead(capteur_alcool);
+  return sensorValue;
+}
+
+
+//*********************************************************************************************************************
+//          FONCTION POUR LE MENU DE L'ÉCRAN LCD 
+//*********************************************************************************************************************
+
+void menuLCD (void)
+{
+  
+  switch (etat_menu)
+  {
+    case 0:
+      lcd.setCursor(2,0);
+      lcd.print(WiFi.localIP());        // affiche l'adresse IP su serveur
+      if (digitalRead(btn_2) == 1)
+      {
+        etat_menu = 1;
+        delay(1000);
+      }
+      break;
+    case 1:
+      while(scale.get_units(2) < 10)
+      {
+        lcd.clear();
+        lcd.setCursor(2,0);
+        lcd.print("METTRE UN VERRE");
+      }
+
+      lcd.clear();
+      lcd.setCursor(2,0);
+      lcd.print("POMPES MANUELLES");
+      lcd.setCursor(0,2);
+      lcd.print("1 2 3 4 5 6 7 8 9 10");
+      while (digitalRead(btn_2) != 1 && scale.get_units() > 10)   // sort si le verre est retirer ou le btn 2 est actives
+      {
+        if (digitalRead(btn_3) == 1)
+        {
+          menu_pompe_manuelle += 1;
+          delay(1000);
+        }
+
+        Serial.println(menu_pompe_manuelle);
+
+        switch (menu_pompe_manuelle)
+        {
+          case 1:
+            lcd.setCursor(0,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_1,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_1,LOW);
+              digitalWrite(solenoide_1,LOW);
+            }
+            break;
+          case 2:
+            lcd.setCursor(2,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_2,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_1,LOW);
+              digitalWrite(solenoide_2,LOW);
+            }
+            break;
+          case 3:
+            lcd.setCursor(4,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_3,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_1,LOW);
+              digitalWrite(solenoide_3,LOW);
+            }
+            break;
+          case 4:
+            lcd.setCursor(6,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_4,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_1,LOW);
+              digitalWrite(solenoide_4,LOW);
+            }
+            break;
+          case 5:
+            lcd.setCursor(8,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_5,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_1,LOW);
+              digitalWrite(solenoide_5,LOW);
+            }
+            break;
+          case 6:
+            lcd.setCursor(10,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_6,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_2,LOW);
+              digitalWrite(solenoide_6,LOW);
+            }
+            break;
+          case 7:
+            lcd.setCursor(12,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_7,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_2,LOW);
+              digitalWrite(solenoide_7,LOW);
+            }
+            break;
+          case 8:
+            lcd.setCursor(14,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_8,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_2,LOW);
+              digitalWrite(solenoide_8,LOW);
+            }
+            break;
+          case 9:
+            lcd.setCursor(16,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_9,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_2,LOW);
+              digitalWrite(solenoide_9,LOW);
+            }
+            break;
+          case 10:
+            lcd.setCursor(18,2);
+            lcd.blink();
+            if(digitalRead(btn_1) == 1)
+            {
+              digitalWrite(solenoide_10,HIGH);
+              delay(500);
+              digitalWrite(pompe_2,HIGH);
+            }
+            else
+            {
+              digitalWrite(pompe_2,LOW);
+              digitalWrite(solenoide_10,LOW);
+            }
+            break;
+          default:
+            menu_pompe_manuelle = 1;
+            break;
+        }
+      }
+      etat_menu = 2;
+      lcd.clear();
+      delay(1000);
+      break;
+    case 2:
+      lcd.setCursor(4,0);
+      lcd.print("TESTER ALCOOL");
+      lcd.setCursor(0,2);
+      lcd.print("COMMNECER = BOUTON 3");
+      lcd.setCursor(0,3);
+      lcd.print("SORTIR = BOUTON 2");
+      if (digitalRead(btn_3) == 1)
+      {
+        lcd.clear();
+        int i = 5;
+        while(i != 0)
+        {
+          
+          lcd.setCursor(0,0);
+          lcd.print("SOUFFLER 5 SECONDES");
+          lcd.setCursor(9,1);
+          lcd.print(i);
+          i--;
+          delay(1000);
+        }
+        lcd.clear();
+        lcd.setCursor(2,0);
+        if (readAlcool() < 7680)
+        {
+          lcd.print("PAS ALCOOLISE");
+        }
+        else if (readAlcool()>7680 && readAlcool() < 25600)
+        {
+          lcd.print("SOUS LE 0.08 BAC");
+        }
+        else if (readAlcool() > 25600)
+        {
+          lcd.print("DEPASSE 0.08 BAC");
+        }
+        delay(5000);
+        lcd.clear();
+        etat_menu = 0;
+      }
+      else if (digitalRead(btn_2) == 1)
+      {
+        etat_menu = 0;
+        lcd.clear();
+        delay(1000);
+      }
+      break;
+
+    default:
+      etat_menu = 0; 
+      break;
+  }
+}
+
 /*
 ------------------choses à faire------------------------------------
 
-- Quand on entre une bouteille dans le site, le met directement dans le tableau ingredientsAvailable[] --------------------- fait 
-- Attendre que le btn appliquer sois appuyer avant de donner les drinks possible  ------------------------------------------ fait 
-- Savoir la quantier de chacun des ingédients et la mettre dans une variables     ------------------------------------------ fait
-- Mettre les ingrédients dans des variables pour les comparer a ceux des pompes   ------------------------------------------ fait
-- Mettre le nom des drinks possible dans des variables (pt le mettre dans un tableau)  ------------------------------------- fait 
+- faire la lecture si un verre est présent 
+- arreter la machine s'il n'y a pas de verre
+
 
 - faire la partie affichage des drink possible sur le site web et leurs ingrédients 
 - mettre une btn back sur le site 

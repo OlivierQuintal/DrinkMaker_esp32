@@ -1,38 +1,9 @@
 
-
-//var drink = ["Baileys Irish Cream", "Bourbon", "club soda", "Gin", "Ginger ale", "lemonade", "lime", "Malibu coconut rum", "milk", "Orange Juice", "peach schnapps", "Rhum noir", "Rhum blanc", "Sprite", "Tequila", "Tonic water", "Triple Sec", "Vodka"];
-
-function choixBouteille()
-{
-  document.getElementById("inventaire").classList.toggle("show");
-}
-
-var breuvages = ["Café", "Thé", "Jus d'orange", "Limonade"];
-
-//********************change la valeur de la variable breuvages selon les drinks possible  *********************/
-
-setInterval (function affichageBreuvages()
-{
-  var xhhtp = new XMLHttpRequest();
-
-    xhhtp.onreadystatechange = function()
-    {
-        if (this.readyState == 4 && this.status == 200)
-        {
-          document.getElementById("listeDrinksPossible").innerHTML = this.responseText;
-          breuvages = this.responseText;
-        }
-    };
-    xhhtp.open("GET", "lireBreuvagesPossible", true);
-    xhhtp.send();
-},2000);
-
-
-
 //*******************************************/
 //Fonction pour afficher les drink possibles
 //*******************************************/
-// Tableau de breuvages
+
+
 
         
 // Fonction pour générer les sections HTML pour chaque breuvage
@@ -88,55 +59,20 @@ $(document).ready(function(){             // cette fonction attend que le bouton
   });
 });
 
-
-// getBreuvages(function getdata()
-// {
-//     var xhhtp = new XMLHttpRequest();
-
-//     xhhtp.onreadystatechange = function()
-//     {
-//         if (this.readyState == 4 && this.status == 200)
-//         {
-//           document.getElementById("listeBreuvages").innerHTML = this.responseText;
-//         }
-//     };
-//     xhhtp.open("GET", "tableauBreuvages", true);
-//     xhhtp.send();
-// },2000);
-
-function chargerBreuvages()
-{
-    var xhhtp = new XMLHttpRequest();
-
-    xhhtp.onreadystatechange = function()
-    {
-        if (this.readyState == 4 && this.status == 200)
-        {
-          document.getElementById("listeBreuvages").innerHTML = this.responseText;
-        }
-    };
-    xhhtp.open("GET", "tableauBreuvages", true);
-    xhhtp.send();
-}
+//*************Quand le breuvage a été choisi envoi l'info au ESP32*************************/
+$(document).ready(function(){             // cette fonction attend que le bouton  sois appuyer et envoie la valeur au ESP32
+  $("#FaireBreuvage").click(function(){
+      var drink = $("#drinkPossibles").val();
+      $.post("faireDrink",{
+        drink_voulue: drink 
+      });
+      alert("LE BREUVAGE EST EN COURS DE PREPARATION");
+  });
+});
 
 
 
-function filterFunction()
-{
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("inventaire");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
-  }
-}
+
 
 
 
