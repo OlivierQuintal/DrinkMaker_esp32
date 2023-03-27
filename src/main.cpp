@@ -7,11 +7,11 @@
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
 
-//const char *ssid = "HUAWEI";
-//const char *password = "bigtits69";
+const char *ssid = "HUAWEI";
+const char *password = "bigtits69";
 
-const char *ssid = "RT-AC1200_E0_2G";
-const char *password = "eagle_4742";
+// const char *ssid = "RT-AC1200_E0_2G";
+// const char *password = "eagle_4742";
 
 //const char *ssid = "omega";
 //const char *password = "Rougepomme";
@@ -104,10 +104,10 @@ void setup()
 
   // ---GPIO Pompes
     #define pompe_1 1
-    #define pompe_2 2
+    //#define pompe_2 2
 
     pinMode(pompe_1, OUTPUT);
-    pinMode(pompe_2, OUTPUT);
+    //pinMode(pompe_2, OUTPUT);
 
   // ---GPIO boutons
     #define btn_1 38
@@ -537,19 +537,19 @@ void menuLCD (void)
       }
       break;
     case 1:
-      while(scale.get_units(2) < 10)
-      {
-        lcd.clear();
-        lcd.setCursor(2,0);
-        lcd.print("METTRE UN VERRE");
-      }
+      // while(scale.get_units(2) < 10)
+      // {
+      //   lcd.clear();
+      //   lcd.setCursor(2,0);
+      //   lcd.print("METTRE UN VERRE");
+      // }
 
       lcd.clear();
       lcd.setCursor(2,0);
       lcd.print("POMPES MANUELLES");
       lcd.setCursor(0,2);
       lcd.print("1 2 3 4 5 6 7 8 9 10");
-      while (digitalRead(btn_2) != 1 && scale.get_units() > 10)   // sort si le verre est retirer ou le btn 2 est actives
+      while (digitalRead(btn_2) != 1)   // sort si le verre est retirer ou le btn 2 est actives
       {
         if (digitalRead(btn_3) == 1)
         {
@@ -643,11 +643,11 @@ void menuLCD (void)
             {
               digitalWrite(solenoide_6,HIGH);
               delay(500);
-              digitalWrite(pompe_2,HIGH);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
-              digitalWrite(pompe_2,LOW);
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_6,LOW);
             }
             break;
@@ -658,11 +658,11 @@ void menuLCD (void)
             {
               digitalWrite(solenoide_7,HIGH);
               delay(500);
-              digitalWrite(pompe_2,HIGH);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
-              digitalWrite(pompe_2,LOW);
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_7,LOW);
             }
             break;
@@ -673,11 +673,11 @@ void menuLCD (void)
             {
               digitalWrite(solenoide_8,HIGH);
               delay(500);
-              digitalWrite(pompe_2,HIGH);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
-              digitalWrite(pompe_2,LOW);
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_8,LOW);
             }
             break;
@@ -688,11 +688,11 @@ void menuLCD (void)
             {
               digitalWrite(solenoide_9,HIGH);
               delay(500);
-              digitalWrite(pompe_2,HIGH);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
-              digitalWrite(pompe_2,LOW);
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_9,LOW);
             }
             break;
@@ -703,11 +703,11 @@ void menuLCD (void)
             {
               digitalWrite(solenoide_10,HIGH);
               delay(500);
-              digitalWrite(pompe_2,HIGH);
+              digitalWrite(pompe_1,HIGH);
             }
             else
             {
-              digitalWrite(pompe_2,LOW);
+              digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_10,LOW);
             }
             break;
