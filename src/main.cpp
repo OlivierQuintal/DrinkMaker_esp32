@@ -7,11 +7,11 @@
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
 
-const char *ssid = "HUAWEI";
-const char *password = "bigtits69";
+// const char *ssid = "HUAWEI";
+// const char *password = "bigtits69";
 
-// const char *ssid = "RT-AC1200_E0_2G";
-// const char *password = "eagle_4742";
+const char *ssid = "RT-AC1200_E0_2G";
+const char *password = "eagle_4742";
 
 //const char *ssid = "omega";
 //const char *password = "Rougepomme";
@@ -277,7 +277,7 @@ void setup()
   lcd.init();                      // initialize the lcd 
   lcd.backlight();
 
-  scale.set_scale(-1088.35);        // valeur de calibration de la balance 
+  scale.set_scale(1088.35);        // valeur de calibration de la balance 
   scale.tare();                    // reset the scale to 0
 
 
@@ -380,19 +380,19 @@ void trouverDrinksPossibles(void)
   for (JsonObject drink : drinks) {                 // sépare chacun des drinks pour les analysés
     Serial.println("Drink name: " + drink["name"].as<String>());
     Serial.println("Ingredients:");
-    delay(10);
+   // delay(10);
 
     JsonArray ingredients = drink["ingredients"];     // affiche le nom de l'ingédients 
     bool canMakeDrink = true;
     
     for (JsonObject ingredient : ingredients) {
       const char *ingredientName = ingredient["ingredient"];
-      delay(10);
+      //delay(10);
       bool hasIngredient = false;
       for (int i = 0; i < ingredientsCount; i++) {            // passe en balayage un ingédient à la fois dans le breuvage X pour voir si nous l'avons ou non 
         if (ingredientsAvailable[i] == ingredientName) {
           hasIngredient = true;
-          delay(10);
+         // delay(10);
           break;
         }
       }
