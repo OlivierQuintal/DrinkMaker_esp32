@@ -42,6 +42,7 @@ String quantite[10];
 uint32_t Wheel(byte WheelPos);
 void menuLCD (void);
 float readAlcool(void);
+ void calibrationLoadCell(void);
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
@@ -67,6 +68,9 @@ int menu_pompe_manuelle = 1;
   //------INITIALLISATION DES LIBRAIRES
   LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
   HX711 scale;
+  float calibration = 1086.66;
+
+
 
 void setup()
 {
@@ -123,6 +127,7 @@ void setup()
   #define HX711_SDA 42
   #define HX711_SCK 41
   scale.begin(HX711_SDA, HX711_SCK);  
+
 
   scale.set_scale(10000);   // valeur random pour la valeur de valibration de la balance
 
@@ -277,7 +282,7 @@ void setup()
   lcd.init();                      // initialize the lcd 
   lcd.backlight();
 
-  scale.set_scale(1088.35);        // valeur de calibration de la balance 
+  scale.set_scale(calibration);        // valeur de calibration de la balance 
   scale.tare();                    // reset the scale to 0
 
 
@@ -497,11 +502,6 @@ void ingredientsDuDrink(String drink_voulue)      // mettre dans la fonction le 
   Serial.println(ingerdinetDrinkChoisi[3] + " " + quantite[3]);
   Serial.println(ingerdinetDrinkChoisi[4] + " " + quantite[4]);
 
-
-
-
- 
-
 }
 
 
@@ -530,6 +530,11 @@ void menuLCD (void)
     case 0:
       lcd.setCursor(2,0);
       lcd.print(WiFi.localIP());        // affiche l'adresse IP su serveur
+      if (digitalRead(btn_1) == 1 && digitalRead(btn_3) == 1)
+      {
+        calibrationLoadCell();
+        scale.set_scale(calibration); // ajuste la calibration           
+      }
       if (digitalRead(btn_2) == 1)
       {
         etat_menu = 1;
@@ -537,19 +542,19 @@ void menuLCD (void)
       }
       break;
     case 1:
-      // while(scale.get_units(2) < 10)
-      // {
-      //   lcd.clear();
-      //   lcd.setCursor(2,0);
-      //   lcd.print("METTRE UN VERRE");
-      // }
+      while(scale.get_units(2) < 10)
+      {
+        lcd.clear();
+        lcd.setCursor(2,0);
+        lcd.print("METTRE UN VERRE");
+      }
 
       lcd.clear();
       lcd.setCursor(2,0);
       lcd.print("POMPES MANUELLES");
       lcd.setCursor(0,2);
       lcd.print("1 2 3 4 5 6 7 8 9 10");
-      while (digitalRead(btn_2) != 1)   // sort si le verre est retirer ou le btn 2 est actives
+      while (digitalRead(btn_2) != 1 || scale.get_units() < 10)   // si le verre est présent et que le btn_2 n'est pas appuyer 
       {
         if (digitalRead(btn_3) == 1)
         {
@@ -773,6 +778,56 @@ void menuLCD (void)
   }
 }
 
+
+
+  //*************************************************
+  // calibration de la load celle si l'utilisatieur appuie 
+  // sur le bnt 1 et le btn 2 en même temps 
+  //*************************************************
+ void calibrationLoadCell(void)
+ {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("CALIBRATION");
+    lcd.setCursor(0,1);
+    lcd.print("Vider plateau");
+    lcd.setCursor(0,4);
+    lcd.print("Btn3 = continuer");
+    delay (2000);
+
+    while(digitalRead(btn_3) == 0) {}  //attendre que le bouton 3 soit appuyé
+    lcd.clear();
+    scale.tare(10); //reset la valeur de la balance
+    lcd.setCursor(0,0);
+    lcd.print("Mettre poid calib ");
+    lcd.setCursor(0,1);
+    lcd.print("(397 g)");
+    lcd.setCursor(0,4);
+    lcd.print("Btn3 = continuer");
+
+    while(digitalRead(btn_3) == 0){}  //attendre que le bouton 3 soit appuyé
+
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Calibration en cours");
+    calibration = scale.get_value(20) / 397; //calculer la valeur de calibration  (397 est le poid du verre que je prend comme poids de référence) 
+
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Calibration termine");
+    lcd.setCursor(0,1);
+    lcd.print("Calibration = ");
+    lcd.setCursor(0,2);
+    lcd.print(calibration);
+
+
+    delay(5000);
+    lcd.clear();
+
+
+
+ }
+
 /*
 ------------------choses à faire------------------------------------
 
@@ -781,6 +836,6 @@ void menuLCD (void)
 
 
 - faire la partie affichage des drink possible sur le site web et leurs ingrédients 
-- mettre une btn back sur le site 
+- mettre une btn back sur le site  
 
 */
