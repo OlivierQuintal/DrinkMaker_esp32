@@ -554,7 +554,7 @@ void menuLCD (void)
       lcd.print("POMPES MANUELLES");
       lcd.setCursor(0,2);
       lcd.print("1 2 3 4 5 6 7 8 9 10");
-      while (digitalRead(btn_2) != 1 || scale.get_units() < 10)   // si le verre est présent et que le btn_2 n'est pas appuyer 
+      while (digitalRead(btn_2) != 1)   // si  le btn_2 n'est pas appuyer 
       {
         if (digitalRead(btn_3) == 1)
         {
@@ -569,7 +569,7 @@ void menuLCD (void)
           case 1:
             lcd.setCursor(0,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_1,HIGH);
               delay(500);
@@ -584,7 +584,7 @@ void menuLCD (void)
           case 2:
             lcd.setCursor(2,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_2,HIGH);
               delay(500);
@@ -599,7 +599,7 @@ void menuLCD (void)
           case 3:
             lcd.setCursor(4,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_3,HIGH);
               delay(500);
@@ -614,7 +614,7 @@ void menuLCD (void)
           case 4:
             lcd.setCursor(6,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_4,HIGH);
               delay(500);
@@ -629,7 +629,7 @@ void menuLCD (void)
           case 5:
             lcd.setCursor(8,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_5,HIGH);
               delay(500);
@@ -644,7 +644,7 @@ void menuLCD (void)
           case 6:
             lcd.setCursor(10,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_6,HIGH);
               delay(500);
@@ -659,7 +659,7 @@ void menuLCD (void)
           case 7:
             lcd.setCursor(12,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_7,HIGH);
               delay(500);
@@ -674,7 +674,7 @@ void menuLCD (void)
           case 8:
             lcd.setCursor(14,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_8,HIGH);
               delay(500);
@@ -689,7 +689,7 @@ void menuLCD (void)
           case 9:
             lcd.setCursor(16,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_9,HIGH);
               delay(500);
@@ -704,7 +704,7 @@ void menuLCD (void)
           case 10:
             lcd.setCursor(18,2);
             lcd.blink();
-            if(digitalRead(btn_1) == 1)
+            if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_10,HIGH);
               delay(500);
