@@ -42,7 +42,9 @@ String quantite[10];
 uint32_t Wheel(byte WheelPos);
 void menuLCD (void);
 float readAlcool(void);
- void calibrationLoadCell(void);
+void calibrationLoadCell(void);
+void trouverCentilitre(void);
+ void melange(void);
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
@@ -212,12 +214,6 @@ void setup()
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
-  server.on("/page2/AfficheDrink", HTTP_GET, [](AsyncWebServerRequest *request) {
-    String valeur = "patate";
-    Serial.println("paatteee");
-    request->send(200, "text/plain", valeur);
-  });
-
   server.on("/calibrationPompes", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
     if(request->hasParam("BouteilleNo1", true))
     {
@@ -271,6 +267,7 @@ void setup()
     }
     Serial.println(drink_voulue);
     ingredientsDuDrink(drink_voulue) ;
+    melange();
     request->send(204);
   });
 
@@ -542,12 +539,7 @@ void menuLCD (void)
       }
       break;
     case 1:
-      while(scale.get_units(2) < 10)
-      {
-        lcd.clear();
-        lcd.setCursor(2,0);
-        lcd.print("METTRE UN VERRE");
-      }
+
 
       lcd.clear();
       lcd.setCursor(2,0);
@@ -762,16 +754,19 @@ void menuLCD (void)
         }
         delay(5000);
         lcd.clear();
-        etat_menu = 0;
+        etat_menu = 3;
       }
       else if (digitalRead(btn_2) == 1)
       {
-        etat_menu = 0;
+        etat_menu = 3;
         lcd.clear();
         delay(1000);
       }
       break;
-
+    case 3:
+      trouverCentilitre();
+      etat_menu = 0;
+      break;
     default:
       etat_menu = 0; 
       break;
@@ -823,8 +818,153 @@ void menuLCD (void)
 
     delay(5000);
     lcd.clear();
+ }
 
 
+
+ void trouverCentilitre(void)
+ {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("test");
+    while (digitalRead(btn_2) == 0)
+    {
+      if (digitalRead(btn_3) == 1)
+      {
+        digitalWrite(solenoide_2,HIGH);
+        delay(500);
+        digitalWrite(pompe_1,HIGH);
+        delay(500);
+        digitalWrite(solenoide_2,LOW);
+        digitalWrite(pompe_1,LOW);
+
+        delay(500);
+        digitalWrite(solenoide_1,HIGH);
+        delay(500);
+        digitalWrite(pompe_1,HIGH);
+        delay(2000);
+        digitalWrite(solenoide_1,LOW);
+        digitalWrite(pompe_1,LOW);
+      }
+      lcd.setCursor(0,1);
+      lcd.print(scale.get_units());
+      delay(500);
+    }
+    
+ }
+
+
+ void melange (void)
+ {
+
+    int unCentilitre = 100;
+
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("MELANGE EN COURS");  
+    
+    for(int i=0 ; i<10 ; i++)
+    {
+      if(ingerdinetDrinkChoisi[i] == "")
+      {
+        break;
+      }
+      else
+      {
+        if (ingerdinetDrinkChoisi[i] == BouteilleNo1)
+        {
+          digitalWrite (solenoide_1,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_1,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo2)
+        {
+          digitalWrite (solenoide_2,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_2,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo3)
+        {
+          digitalWrite (solenoide_3,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_3,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo4)
+        {
+          digitalWrite (solenoide_4,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_4,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo5)
+        {
+          digitalWrite (solenoide_5,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_5,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo6)
+        {
+          digitalWrite (solenoide_6,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_6,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo7)
+        {
+          digitalWrite (solenoide_7,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_7,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo8)
+        {
+          digitalWrite (solenoide_8,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_8,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo9)
+        {
+          digitalWrite (solenoide_9,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_9,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        else if (ingerdinetDrinkChoisi[i] == BouteilleNo10)
+        {
+          digitalWrite (solenoide_10,HIGH);
+          delay(500);
+          digitalWrite (pompe_1,HIGH);
+          delay(unCentilitre * quantite[i].toInt());   
+          digitalWrite (solenoide_10,LOW);
+          digitalWrite (pompe_1,LOW); 
+        }
+        
+      }
+      
+    }
 
  }
 
