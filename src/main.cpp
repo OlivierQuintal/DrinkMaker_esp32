@@ -6,6 +6,7 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
+#include <esp_task_wdt.h>
 
 // const char *ssid = "HUAWEI";
 // const char *password = "bigtits69";
@@ -64,6 +65,7 @@ AsyncWebServer server(80);
 
 int etat_menu = 0 ;
 int menu_pompe_manuelle = 1;
+int serving_On = 0;
 
 
 
@@ -267,7 +269,8 @@ void setup()
     }
     Serial.println(drink_voulue);
     ingredientsDuDrink(drink_voulue) ;
-    melange();
+    serving_On = 1;
+    //melange();
     request->send(204);
   });
 
@@ -300,35 +303,15 @@ void loop()
       Serial.print("Tentative de reconnection...");
       delay(100);
     }
+    lcd.clear();
   } 
   //------
   
   menuLCD();      // affichage sur l'écran LCD
-
-
-  // Serial.println("get unit  : ");
-  // Serial.println(scale.get_units(2));
-
-
-  // Serial.println(WiFi.localIP());
-
-  // Serial.println(BouteilleNo1);
-  // Serial.println(BouteilleNo2);
-  // Serial.println(BouteilleNo3);
-  // Serial.println(BouteilleNo4);
-  // Serial.println(BouteilleNo5);
-  // Serial.println(BouteilleNo6);
-  // Serial.println(BouteilleNo7);
-  // Serial.println(BouteilleNo8);
-  // Serial.println(BouteilleNo9);
-  // Serial.println(BouteilleNo10);
-
-  // Serial.println("ok");
-
-
-  
-  
-  //delay(1000);
+  if (serving_On == 1)
+  {
+    melange();
+  }
 
 }
 
@@ -551,7 +534,7 @@ void menuLCD (void)
         if (digitalRead(btn_3) == 1)
         {
           menu_pompe_manuelle += 1;
-          delay(1000);
+          delay(500);
         }
 
         Serial.println(menu_pompe_manuelle);
@@ -857,7 +840,7 @@ void menuLCD (void)
  void melange (void)
  {
 
-    int unCentilitre = 100;
+    int unCentilitre = 3000;
 
     lcd.clear();
     lcd.setCursor(0,0);
@@ -873,30 +856,54 @@ void menuLCD (void)
       {
         if (ingerdinetDrinkChoisi[i] == BouteilleNo1)
         {
+          Serial.print("Bouteille 1 ON");
           digitalWrite (solenoide_1,HIGH);
           delay(500);
           digitalWrite (pompe_1,HIGH);
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_1,LOW);
-          digitalWrite (pompe_1,LOW); 
+          digitalWrite (pompe_1,LOW);
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo2)
         {
+          Serial.print("Bouteille 2 ON");
           digitalWrite (solenoide_2,HIGH);
           delay(500);
           digitalWrite (pompe_1,HIGH);
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_2,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo3)
         {
+          Serial.print("Bouteille 3 ON");
           digitalWrite (solenoide_3,HIGH);
           delay(500);
           digitalWrite (pompe_1,HIGH);
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_3,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo4)
         {
@@ -906,6 +913,13 @@ void menuLCD (void)
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_4,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo5)
         {
@@ -915,6 +929,13 @@ void menuLCD (void)
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_5,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo6)
         {
@@ -924,6 +945,13 @@ void menuLCD (void)
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_6,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo7)
         {
@@ -933,6 +961,13 @@ void menuLCD (void)
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_7,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo8)
         {
@@ -942,6 +977,13 @@ void menuLCD (void)
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_8,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo9)
         {
@@ -951,6 +993,13 @@ void menuLCD (void)
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_9,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         else if (ingerdinetDrinkChoisi[i] == BouteilleNo10)
         {
@@ -960,11 +1009,25 @@ void menuLCD (void)
           delay(unCentilitre * quantite[i].toInt());   
           digitalWrite (solenoide_10,LOW);
           digitalWrite (pompe_1,LOW); 
+
+          digitalWrite(solenoide_4,HIGH);
+          delay(500);
+          digitalWrite(pompe_1,HIGH); 
+          delay(4000);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(solenoide_4,LOW);
         }
         
       }
       
     }
+    lcd.clear();
+    lcd.setCursor(2,0);
+    lcd.print("MELANGE TERMINE");
+    Serial.print("MELANGE TERMINE");
+    delay(1000);
+    lcd.clear();
+    serving_On = 0;
 
  }
 
