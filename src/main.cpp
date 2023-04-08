@@ -863,7 +863,7 @@ void menuLCD (void)
           lcd.print("PLATEAU VIDE");
           lcd.setCursor(0,1);
           lcd.print("METTRE VERRE");
-          delay(5000);
+          delay(1000);
           lcd.clear();
         }
         else 
