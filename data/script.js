@@ -56,6 +56,7 @@ $(document).ready(function(){             // cette fonction attend que le bouton
           BouteilleNo9: Bouteille9,
           BouteilleNo10: Bouteille10
       });
+      alert("LES BOUTEILLES ONT ÉTÉ ENREGISTRÉES");
   });
 });
 
