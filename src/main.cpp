@@ -68,10 +68,10 @@ int serving_On = 0;
 
 
 
-  //------INITIALLISATION DES LIBRAIRES
-  LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
-  HX711 scale;
-  float calibration = 1086.66;
+//------INITIALLISATION DES LIBRAIRES
+LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+HX711 scale;
+float calibration = 1086.66;
 
 
 
@@ -111,10 +111,9 @@ void setup()
 
   // ---GPIO Pompes
     #define pompe_1 1
-    //#define pompe_2 2
 
     pinMode(pompe_1, OUTPUT);
-    //pinMode(pompe_2, OUTPUT);
+
 
   // ---GPIO boutons
     #define btn_1 38
@@ -135,14 +134,11 @@ void setup()
   scale.set_scale(10000);   // valeur random pour la valeur de valibration de la balance
 
 
-
-
-  //------------------------------------------------------Capteur Alcool
-  #define capteur_alcool 18     //********************************************************************************Remettre ce ligne et retirer la lumiere RGB lors des vrai testes 
-  //#define capteur_alcool 19
+  //---------------------------------------------------------------------------------Capteur Alcool
+  #define capteur_alcool 18   
   pinMode(capteur_alcool, INPUT);
   
-  //----------------------------------------------------SPIFFS
+  //-----------------------------------------------------------------------------------------SPIFFS
   if (!SPIFFS.begin())
   {
     Serial.println("Erreur SPIFFS...");
@@ -161,7 +157,7 @@ void setup()
     file = root.openNextFile();
   }
 
-  //----------------------------------------------------WIFI
+  //------------------------------------------------------------------------------------------WIFI
   WiFi.begin(ssid, password);
   Serial.print("Tentative de connexion...");
 
@@ -178,11 +174,11 @@ void setup()
 
 
 
-  //----------------------------------------------------SERVER
+  //-------SERVER PAGE ACCUEILLE
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html", "text/html");
   });
-
+  //-------SERVER PAGE 2
   server.on("/page2", HTTP_GET, [](AsyncWebServerRequest *request) {
     File html = SPIFFS.open("/index1.html");
     String htmlPage2 = html.readString();
@@ -202,19 +198,22 @@ void setup()
     request->send(200, "text/html", htmlPage2);
   });
 
+  //-------FICHIER CSS
   server.on("/w3.css", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/w3.css", "text/css");
   });
 
+  //-------FICHIER JS
   server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/script.js", "text/javascript");
   });
  
-
+  //-------FICHIER JQUERY
   server.on("/jquery-3.6.0.min.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/jquery-3.6.0.min.js", "text/javascript");
   });
 
+  //-------RECUILLE LES BOUTEILLES ENTREES DANS LA MACHINE 
   server.on("/calibrationPompes", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
     if(request->hasParam("BouteilleNo1", true))
     {
@@ -260,7 +259,7 @@ void setup()
     request->send(204);
   });
 
-  // faire le drink choisi par l'utilisateur 
+  // FAIRE LE DRINK CHOISI PAR L'UTILISATEUR 
   server.on("/faireDrink", HTTP_POST, [](AsyncWebServerRequest *request) {     // recuille les boissons que nous avons mis dans chacunes des pompes 
     if(request->hasParam("drink_voulue", true))
     {
@@ -268,7 +267,7 @@ void setup()
     }
     Serial.println(drink_voulue);
     ingredientsDuDrink(drink_voulue) ;
-    serving_On = 1;
+    serving_On = 1;           //flag pour le mélange 
     //melange();
     request->send(204);
   });
@@ -282,7 +281,7 @@ void setup()
   lcd.backlight();
 
   scale.set_scale(calibration);        // valeur de calibration de la balance 
-  scale.tare();                    // reset the scale to 0
+  scale.tare();                       // reset the scale to 0
 
 
 }
@@ -837,7 +836,7 @@ void menuLCD (void)
  }
 
 
- void melange (void)
+void melange (void)
  {
 
     int unCentilitre = 3000;
@@ -1051,8 +1050,8 @@ void menuLCD (void)
 /*
 ------------------choses à faire------------------------------------
 
-- faire la lecture si un verre est présent 
-- arreter la machine s'il n'y a pas de verre
+- faire la lecture si un verre est présent  --- fait 
+- arreter la machine s'il n'y a pas de verre --- fait
 
 
 - faire la partie affichage des drink possible sur le site web et leurs ingrédients 

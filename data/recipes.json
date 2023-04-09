@@ -1283,5 +1283,37 @@
         "ingredient": "Orange juice" }
     ],
     "garnish": "Orance slice and a cherry",
-    "preparation": "Build vodka and orange juice into a highball glass filled with ice. Stir gently and float Galliano on top." }
+    "preparation": "Build vodka and orange juice into a highball glass filled with ice. Stir gently and float Galliano on top." },
+
+
+
+    { "name": "Dark Rum and coke",
+      "glass": "highball",
+      "category": "All Day Cocktail",
+      "ingredients": [
+        { "unit": "cl",
+          "amount": 6,
+          "ingredient": "Dark rum" },
+        { "unit": "cl",
+          "amount": 15,
+          "ingredient": "Cola" }
+      ],
+      "garnish": "",
+      "preparation": "" },
+
+
+
+      { "name": "White Rum and coke",
+        "glass": "highball",
+        "category": "All Day Cocktail",
+        "ingredients": [
+          { "unit": "cl",
+            "amount": 6,
+            "ingredient": "White rum" },
+          { "unit": "cl",
+            "amount": 15,
+            "ingredient": "Cola" }
+        ],
+        "garnish": "",
+        "preparation": "" }
 ]
