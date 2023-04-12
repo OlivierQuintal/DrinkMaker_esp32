@@ -20,14 +20,14 @@ const char *password = "eagle_4742";
 //const char *password = "totoa1q9";
 
 const int led = 2;
-const int capteurLuminosite = 34;
+//const int capteurLuminosite = 34;
 
 String drink_voulue;
 
 
 //RGB
 // On the ESP32S2 SAOLA GPIO is the NeoPixel.
-#define PIN 20             /// mettre 18 pour que ca foncitonne avec le RGB
+//#define PIN 20             /// mettre 18 pour que ca foncitonne avec le RGB
 
 
 
@@ -84,7 +84,7 @@ void setup()
   //----------------------------------------------------GPIO
     pinMode(led, OUTPUT);
     digitalWrite(led, LOW);
-    pinMode(capteurLuminosite, INPUT);
+    //pinMode(capteurLuminosite, INPUT);
 
   // ---GIOP solenoide
     #define solenoide_1 6
@@ -111,8 +111,10 @@ void setup()
 
   // ---GPIO Pompes
     #define pompe_1 1
+    #define buzzer 2
 
     pinMode(pompe_1, OUTPUT);
+    pinMode(buzzer, OUTPUT);
 
 
   // ---GPIO boutons
@@ -123,6 +125,13 @@ void setup()
     pinMode(btn_1, INPUT);
     pinMode(btn_2, INPUT);
     pinMode(btn_3, INPUT);
+
+  // -- GPIO LEDS
+  #define led_rouge 19  // allume si le wifi est déconnecter 
+  #define led_bleu 20   //allume si le verre n'est pas présent 
+  
+  pinMode(led_rouge, OUTPUT);
+  pinMode(led_bleu, OUTPUT);
 
   //------------------------------------------------------HX711
 
@@ -293,6 +302,7 @@ void loop()
   // regarde si le wifi est connecter, si non, il se reconnecte
   if (WiFi.status() != WL_CONNECTED)
   {
+    digitalWrite(led_rouge,HIGH);
     lcd.clear();
     while (WiFi.status() != WL_CONNECTED)
     {
@@ -304,8 +314,18 @@ void loop()
     }
     lcd.clear();
   } 
+  digitalWrite(led_rouge, LOW);
+
+  if (scale.get_units() > 10)   // allume la led si aucun verre n'est présent 
+  {
+    digitalWrite(led_bleu, LOW);
+  }
+  else
+  {
+    digitalWrite(led_bleu, HIGH);
+  }
   //------
-  
+  //Serial.println(WiFi.RSSI());
   menuLCD();      // affichage sur l'écran LCD
   if (serving_On == 1)
   {
@@ -519,6 +539,16 @@ void menuLCD (void)
         etat_menu = 1;
         delay(1000);
       }
+
+      if (scale.get_units() > 10)
+      {
+        digitalWrite(led_bleu, LOW);
+      }
+      else
+      {
+        digitalWrite(led_bleu, HIGH);
+      }
+
       break;
     case 1:
 
@@ -530,6 +560,16 @@ void menuLCD (void)
       lcd.print("1 2 3 4 5 6 7 8 9 10");
       while (digitalRead(btn_2) != 1)   // si  le btn_2 n'est pas appuyer 
       {
+
+        if (scale.get_units() > 10)
+        {
+          digitalWrite(led_bleu, LOW);
+        }
+        else
+        {
+          digitalWrite(led_bleu, HIGH);
+        }
+
         if (digitalRead(btn_3) == 1)
         {
           menu_pompe_manuelle += 1;
@@ -540,9 +580,7 @@ void menuLCD (void)
 
         switch (menu_pompe_manuelle)
         {
-          case 1:
-            lcd.setCursor(0,2);
-            lcd.blink();
+          case 2:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_1,HIGH);
@@ -555,9 +593,7 @@ void menuLCD (void)
               digitalWrite(solenoide_1,LOW);
             }
             break;
-          case 2:
-            lcd.setCursor(2,2);
-            lcd.blink();
+          case 4:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_2,HIGH);
@@ -570,9 +606,7 @@ void menuLCD (void)
               digitalWrite(solenoide_2,LOW);
             }
             break;
-          case 3:
-            lcd.setCursor(4,2);
-            lcd.blink();
+          case 6:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_3,HIGH);
@@ -585,9 +619,7 @@ void menuLCD (void)
               digitalWrite(solenoide_3,LOW);
             }
             break;
-          case 4:
-            lcd.setCursor(6,2);
-            lcd.blink();
+          case 8:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_4,HIGH);
@@ -600,9 +632,7 @@ void menuLCD (void)
               digitalWrite(solenoide_4,LOW);
             }
             break;
-          case 5:
-            lcd.setCursor(8,2);
-            lcd.blink();
+          case 10:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_5,HIGH);
@@ -615,9 +645,7 @@ void menuLCD (void)
               digitalWrite(solenoide_5,LOW);
             }
             break;
-          case 6:
-            lcd.setCursor(10,2);
-            lcd.blink();
+          case 12:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_6,HIGH);
@@ -630,9 +658,7 @@ void menuLCD (void)
               digitalWrite(solenoide_6,LOW);
             }
             break;
-          case 7:
-            lcd.setCursor(12,2);
-            lcd.blink();
+          case 14:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_7,HIGH);
@@ -645,9 +671,7 @@ void menuLCD (void)
               digitalWrite(solenoide_7,LOW);
             }
             break;
-          case 8:
-            lcd.setCursor(14,2);
-            lcd.blink();
+          case 16:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_8,HIGH);
@@ -660,9 +684,7 @@ void menuLCD (void)
               digitalWrite(solenoide_8,LOW);
             }
             break;
-          case 9:
-            lcd.setCursor(16,2);
-            lcd.blink();
+          case 18:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_9,HIGH);
@@ -675,9 +697,7 @@ void menuLCD (void)
               digitalWrite(solenoide_9,LOW);
             }
             break;
-          case 10:
-            lcd.setCursor(18,2);
-            lcd.blink();
+          case 20:
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_10,HIGH);
@@ -689,6 +709,76 @@ void menuLCD (void)
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_10,LOW);
             }
+            break;
+          case 1:
+            lcd.setCursor(18,3);
+            lcd.print(" ");
+            lcd.setCursor(0,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 3:
+            lcd.setCursor(0,3);
+            lcd.print(" ");
+            lcd.setCursor(2,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 5:
+            lcd.setCursor(2,3);
+            lcd.print(" ");
+            lcd.setCursor(4,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 7:
+            lcd.setCursor(4,3);
+            lcd.print(" ");
+            lcd.setCursor(6,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 9:
+            lcd.setCursor(6,3);
+            lcd.print(" ");
+            lcd.setCursor(8,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 11:
+            lcd.setCursor(8,3);
+            lcd.print(" ");
+            lcd.setCursor(10,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 13:
+            lcd.setCursor(10,3);
+            lcd.print(" ");
+            lcd.setCursor(12,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 15:
+            lcd.setCursor(12,3);
+            lcd.print(" ");
+            lcd.setCursor(14,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 17:
+            lcd.setCursor(14,3);
+            lcd.print(" ");
+            lcd.setCursor(16,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
+            break;
+          case 19:
+            lcd.setCursor(16,3);
+            lcd.print(" ");
+            lcd.setCursor(18,3);
+            lcd.print("^");
+            menu_pompe_manuelle += 1;
             break;
           default:
             menu_pompe_manuelle = 1;
@@ -848,6 +938,16 @@ void melange (void)
     
     for(int i=0 ; i<10 ; i++)
     {
+
+      if (scale.get_units() > 10)
+      {
+        digitalWrite(led_bleu, LOW);
+      }
+      else
+      {
+        digitalWrite(led_bleu, HIGH);
+      }
+
       if(ingerdinetDrinkChoisi[i] == "")
       {
         break;
@@ -1040,6 +1140,19 @@ void melange (void)
     lcd.setCursor(2,0);
     lcd.print("MELANGE TERMINE");
     Serial.print("MELANGE TERMINE");
+
+    digitalWrite(buzzer,HIGH);    // active le buzzer quand le drink est fini 
+    delay(50);
+    digitalWrite(buzzer,LOW);
+    delay(50);
+    digitalWrite(buzzer,HIGH);
+    delay(50);
+    digitalWrite(buzzer,LOW);
+    delay(50);
+    digitalWrite(buzzer,HIGH);
+    delay(50);
+    digitalWrite(buzzer,LOW);
+   
     delay(1000);
     lcd.clear();
     serving_On = 0;
