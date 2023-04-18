@@ -47,6 +47,8 @@ void calibrationLoadCell(void);
 void trouverCentilitre(void);
 void melange(void);
 void enregistreBouteilles(void);
+void modifierPageAccueil(void);
+
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
@@ -206,6 +208,8 @@ void setup()
 
   //-------SERVER PAGE ACCUEILLE
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+   
+    //modifierPageAccueil;
     request->send(SPIFFS, "/index.html", "text/html");
   });
   //-------SERVER PAGE 2
@@ -1203,6 +1207,29 @@ void enregistreBouteilles (void)
   preferences.putString("BouteilleNo8", BouteilleNo8);
   preferences.putString("BouteilleNo9", BouteilleNo9);
   preferences.putString("BouteilleNo10", BouteilleNo10);
+
+}
+
+void modifierPageAccueil(void)
+{
+  File html = SPIFFS.open("/index.html");
+  String htmlPage1 = html.readString();
+  html.close();
+  
+
+  Serial.print(listeBreuvageHTML);
+
+  
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo1+ "\" disabled selected>Bouteille no1 ("+BouteilleNo1+") </option>");
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo2+ "\" disabled selected>Bouteille no1 ("+BouteilleNo2+") </option>");
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo3+ "\" disabled selected>Bouteille no1 ("+BouteilleNo3+") </option>");
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo4+ "\" disabled selected>Bouteille no1 ("+BouteilleNo4+") </option>");
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo6+ "\" disabled selected>Bouteille no1 ("+BouteilleNo6+") </option>");
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo7+ "\" disabled selected>Bouteille no1 ("+BouteilleNo7+") </option>");
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo8+ "\" disabled selected>Bouteille no1 ("+BouteilleNo8+") </option>");
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo9+ "\" disabled selected>Bouteille no1 ("+BouteilleNo9+") </option>");
+  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo10+ "\" disabled selected>Bouteille no1 ("+BouteilleNo10+") </option>");
+  Serial.print(htmlPage1);
 
 }
 
