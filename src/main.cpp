@@ -6,6 +6,7 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
+#include <Preferences.h>  // librairy pour la mémoire non volatile 
 
 // const char *ssid = "HUAWEI";
 // const char *password = "bigtits69";
@@ -44,7 +45,8 @@ void menuLCD (void);
 float readAlcool(void);
 void calibrationLoadCell(void);
 void trouverCentilitre(void);
- void melange(void);
+void melange(void);
+void enregistreBouteilles(void);
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
 
@@ -66,11 +68,15 @@ int etat_menu = 0 ;
 int menu_pompe_manuelle = 1;
 int serving_On = 0;
 
+int ajoutBouteillesMemoire = 0;
+
 
 
 //------INITIALLISATION DES LIBRAIRES
 LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 HX711 scale;
+Preferences preferences;  // objet pour la mémoire non volatile
+
 float calibration = 1086.66;
 
 
@@ -80,6 +86,21 @@ void setup()
   //----------------------------------------------------Serial
   Serial.begin(115200);
   Serial.println("\n");
+
+  //----------------------------------------------------MEMOIRE NON VOLATTILE BOUTEILLES 
+  preferences.begin("bouteilles", false);  // false pour ne pas effacer les données si elles existent déjà
+  BouteilleNo1 = preferences.getString("BouteilleNo1", "");     // si n'as pa de valeur met rien 
+  BouteilleNo2 = preferences.getString("BouteilleNo2", "");
+  BouteilleNo3 = preferences.getString("BouteilleNo3", "");
+  BouteilleNo4 = preferences.getString("BouteilleNo4", "");
+  BouteilleNo5 = preferences.getString("BouteilleNo5", "");
+  BouteilleNo6 = preferences.getString("BouteilleNo6", "");
+  BouteilleNo7 = preferences.getString("BouteilleNo7", "");
+  BouteilleNo8 = preferences.getString("BouteilleNo8", "");
+  BouteilleNo9 = preferences.getString("BouteilleNo9", "");
+  BouteilleNo10 = preferences.getString("BouteilleNo10", "");
+  //preferences.end();
+
 
   //----------------------------------------------------GPIO
     pinMode(led, OUTPUT);
@@ -264,6 +285,8 @@ void setup()
     {
       BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
+
+    ajoutBouteillesMemoire = 1;
     trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
     request->send(204);
   });
@@ -291,6 +314,7 @@ void setup()
 
   scale.set_scale(calibration);        // valeur de calibration de la balance 
   scale.tare();                       // reset the scale to 0
+
 
 
 }
@@ -324,6 +348,13 @@ void loop()
   {
     digitalWrite(led_bleu, HIGH);
   }
+
+  if (ajoutBouteillesMemoire == 1)
+  {
+    ajoutBouteillesMemoire = 0;
+    enregistreBouteilles();           // met les bouteilles dans la mémoire non-volatile
+  }
+
   //------
   //Serial.println(WiFi.RSSI());
   menuLCD();      // affichage sur l'écran LCD
@@ -1159,6 +1190,21 @@ void melange (void)
 
  }
 
+// enregistre les bouteilles dans la flash avec la librairie preferences 
+void enregistreBouteilles (void)
+{
+  preferences.putString("BouteilleNo1", BouteilleNo1);
+  preferences.putString("BouteilleNo2", BouteilleNo2);
+  preferences.putString("BouteilleNo3", BouteilleNo3);
+  preferences.putString("BouteilleNo4", BouteilleNo4);
+  preferences.putString("BouteilleNo5", BouteilleNo5);
+  preferences.putString("BouteilleNo6", BouteilleNo6);
+  preferences.putString("BouteilleNo7", BouteilleNo7);
+  preferences.putString("BouteilleNo8", BouteilleNo8);
+  preferences.putString("BouteilleNo9", BouteilleNo9);
+  preferences.putString("BouteilleNo10", BouteilleNo10);
+
+}
 
 /*
 ------------------choses à faire------------------------------------
