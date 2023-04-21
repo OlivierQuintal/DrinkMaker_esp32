@@ -6,19 +6,19 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
-#include <Preferences.h>  // librairy pour la mémoire non volatile 
+#include <EEPROM.h>
 
 // const char *ssid = "HUAWEI";
 // const char *password = "bigtits69";
 
-const char *ssid = "RT-AC1200_E0_2G";
-const char *password = "eagle_4742";
+// const char *ssid = "RT-AC1200_E0_2G";
+// const char *password = "eagle_4742";
 
 //const char *ssid = "omega";
 //const char *password = "Rougepomme";
 
-//const char *ssid = "wifiquintal";
-//const char *password = "totoa1q9";
+const char *ssid = "wifiquintal";
+const char *password = "totoa1q9";
 
 const int led = 2;
 //const int capteurLuminosite = 34;
@@ -26,11 +26,20 @@ const int led = 2;
 String drink_voulue;
 
 
-//RGB
-// On the ESP32S2 SAOLA GPIO is the NeoPixel.
-//#define PIN 20             /// mettre 18 pour que ca foncitonne avec le RGB
+// adresse eeprom
+#define adr_eeprom_bouteille_1 0
+#define adr_eeprom_bouteille_2 100
+#define adr_eeprom_bouteille_3 200
+#define adr_eeprom_bouteille_4 300
+#define adr_eeprom_bouteille_5 400
+#define adr_eeprom_bouteille_6 500
+#define adr_eeprom_bouteille_7 600
+#define adr_eeprom_bouteille_8 700
+#define adr_eeprom_bouteille_9 800
+#define adr_eeprom_bouteille_10 900
 
 
+int enregistrement_bouteille = 0;
 
 //----- Fonctions 
 
@@ -46,8 +55,9 @@ float readAlcool(void);
 void calibrationLoadCell(void);
 void trouverCentilitre(void);
 void melange(void);
-void enregistreBouteilles(void);
-void modifierPageAccueil(void);
+void saveBouteillesEEPROM(void);
+void readBouteilleEEPROM(void);
+
 
 
 DynamicJsonDocument doc (65535);      // document dans le quel nous allons parse le fichier reccipes.json
@@ -70,14 +80,15 @@ int etat_menu = 0 ;
 int menu_pompe_manuelle = 1;
 int serving_On = 0;
 
-int ajoutBouteillesMemoire = 0;
+String patate = "patate";
+
+
 
 
 
 //------INITIALLISATION DES LIBRAIRES
 LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 HX711 scale;
-Preferences preferences;  // objet pour la mémoire non volatile
 
 float calibration = 1086.66;
 
@@ -87,21 +98,8 @@ void setup()
 {
   //----------------------------------------------------Serial
   Serial.begin(115200);
+  EEPROM.begin(1500);
   Serial.println("\n");
-
-  //----------------------------------------------------MEMOIRE NON VOLATTILE BOUTEILLES 
-  preferences.begin("bouteilles", false);  // false pour ne pas effacer les données si elles existent déjà
-  BouteilleNo1 = preferences.getString("BouteilleNo1", "");     // si n'as pa de valeur met rien 
-  BouteilleNo2 = preferences.getString("BouteilleNo2", "");
-  BouteilleNo3 = preferences.getString("BouteilleNo3", "");
-  BouteilleNo4 = preferences.getString("BouteilleNo4", "");
-  BouteilleNo5 = preferences.getString("BouteilleNo5", "");
-  BouteilleNo6 = preferences.getString("BouteilleNo6", "");
-  BouteilleNo7 = preferences.getString("BouteilleNo7", "");
-  BouteilleNo8 = preferences.getString("BouteilleNo8", "");
-  BouteilleNo9 = preferences.getString("BouteilleNo9", "");
-  BouteilleNo10 = preferences.getString("BouteilleNo10", "");
-  //preferences.end();
 
 
   //----------------------------------------------------GPIO
@@ -208,8 +206,6 @@ void setup()
 
   //-------SERVER PAGE ACCUEILLE
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-   
-    //modifierPageAccueil;
     request->send(SPIFFS, "/index.html", "text/html");
   });
   //-------SERVER PAGE 2
@@ -289,8 +285,7 @@ void setup()
     {
       BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
-
-    ajoutBouteillesMemoire = 1;
+    enregistrement_bouteille =1;
     trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
     request->send(204);
   });
@@ -353,12 +348,14 @@ void loop()
     digitalWrite(led_bleu, HIGH);
   }
 
-  if (ajoutBouteillesMemoire == 1)
-  {
-    ajoutBouteillesMemoire = 0;
-    enregistreBouteilles();           // met les bouteilles dans la mémoire non-volatile
-  }
 
+
+  if (enregistrement_bouteille == 1)
+  {
+    enregistrement_bouteille = 0;
+    saveBouteillesEEPROM();
+    readBouteilleEEPROM();
+  }
   //------
   //Serial.println(WiFi.RSSI());
   menuLCD();      // affichage sur l'écran LCD
@@ -1194,43 +1191,167 @@ void melange (void)
 
  }
 
-// enregistre les bouteilles dans la flash avec la librairie preferences 
-void enregistreBouteilles (void)
+void saveBouteillesEEPROM(void)
 {
-  preferences.putString("BouteilleNo1", BouteilleNo1);
-  preferences.putString("BouteilleNo2", BouteilleNo2);
-  preferences.putString("BouteilleNo3", BouteilleNo3);
-  preferences.putString("BouteilleNo4", BouteilleNo4);
-  preferences.putString("BouteilleNo5", BouteilleNo5);
-  preferences.putString("BouteilleNo6", BouteilleNo6);
-  preferences.putString("BouteilleNo7", BouteilleNo7);
-  preferences.putString("BouteilleNo8", BouteilleNo8);
-  preferences.putString("BouteilleNo9", BouteilleNo9);
-  preferences.putString("BouteilleNo10", BouteilleNo10);
+  for (int i = 0; i < BouteilleNo1.length(); ++i) {
+    EEPROM.write(0+i, BouteilleNo1[i]);
+  }
+  EEPROM.write(0+BouteilleNo1.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo2.length(); ++i) {
+    EEPROM.write(100+i, BouteilleNo2[i]);
+  }
+  EEPROM.write(100+BouteilleNo2.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo3.length(); ++i) {
+    EEPROM.write(200+i, BouteilleNo3[i]);
+  }
+  EEPROM.write(200+BouteilleNo3.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo4.length(); ++i) {
+    EEPROM.write(300+i, BouteilleNo4[i]);
+  }
+  EEPROM.write(300+BouteilleNo4.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo5.length(); ++i) {
+    EEPROM.write(400+i, BouteilleNo5[i]);
+  }
+  EEPROM.write(400+BouteilleNo5.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo6.length(); ++i) {
+    EEPROM.write(500+i, BouteilleNo6[i]);
+  }
+  EEPROM.write(500+BouteilleNo6.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo7.length(); ++i) {
+    EEPROM.write(600+i, BouteilleNo7[i]);
+  }
+  EEPROM.write(600+BouteilleNo7.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo8.length(); ++i) {
+    EEPROM.write(700+i, BouteilleNo8[i]);
+  }
+  EEPROM.write(700+BouteilleNo8.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo9.length(); ++i) {
+    EEPROM.write(800+i, BouteilleNo9[i]);
+  }
+  EEPROM.write(800+BouteilleNo9.length(), '\0');
+
+  for (int i = 0; i < BouteilleNo10.length(); ++i) {
+    EEPROM.write(900+i, BouteilleNo10[i]);
+  }
+  EEPROM.write(900+BouteilleNo10.length(), '\0');
+
+  EEPROM.commit();
 
 }
 
-void modifierPageAccueil(void)
+void readBouteilleEEPROM(void)
 {
-  File html = SPIFFS.open("/index.html");
-  String htmlPage1 = html.readString();
-  html.close();
-  
+  char readChar;
+  int i = 0;
 
-  Serial.print(listeBreuvageHTML);
+  while (readChar != '\0') {
+    readChar = EEPROM.read(0+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo1 += readChar;
+  }
 
-  
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo1+ "\" disabled selected>Bouteille no1 ("+BouteilleNo1+") </option>");
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo2+ "\" disabled selected>Bouteille no1 ("+BouteilleNo2+") </option>");
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo3+ "\" disabled selected>Bouteille no1 ("+BouteilleNo3+") </option>");
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo4+ "\" disabled selected>Bouteille no1 ("+BouteilleNo4+") </option>");
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo6+ "\" disabled selected>Bouteille no1 ("+BouteilleNo6+") </option>");
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo7+ "\" disabled selected>Bouteille no1 ("+BouteilleNo7+") </option>");
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo8+ "\" disabled selected>Bouteille no1 ("+BouteilleNo8+") </option>");
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo9+ "\" disabled selected>Bouteille no1 ("+BouteilleNo9+") </option>");
-  htmlPage1.replace("<option value="" disabled selected>Bouteille no1 </option>", "<option value=\"" +BouteilleNo10+ "\" disabled selected>Bouteille no1 ("+BouteilleNo10+") </option>");
-  Serial.print(htmlPage1);
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(100+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo2 += readChar;
+  }
 
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(200+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo3 += readChar;
+  }
+
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(300+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo4 += readChar;
+  }
+
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(400+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo5 += readChar;
+  }
+
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(500+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo6 += readChar;
+  }
+
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(600+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo7 += readChar;
+  }
+
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(700+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo8 += readChar;
+  }
+
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(800+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo9 += readChar;
+  }
+
+  i = 0;
+  while (readChar != '\0') {
+    readChar = EEPROM.read(900+i);   
+    i++;
+    delay(10);
+    if(readChar != '\0')
+      BouteilleNo10 += readChar;
+  }
+
+
+  Serial.println(BouteilleNo1);
+  Serial.println(BouteilleNo2);
+  Serial.println(BouteilleNo3);
+  Serial.println(BouteilleNo4);
+  Serial.println(BouteilleNo5);
+  Serial.println(BouteilleNo6);
+  Serial.println(BouteilleNo7);
+  Serial.println(BouteilleNo8);
+  Serial.println(BouteilleNo9);
+  Serial.println(BouteilleNo10);
 }
 
 /*
