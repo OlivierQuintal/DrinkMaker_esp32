@@ -144,6 +144,9 @@ function resetSelections() {
   V_Bouteille8 = "";
   V_Bouteille9 = "";
   V_Bouteille10 = "";
+
+  // Rafraîchir la page
+  location.reload();
   
 }
 

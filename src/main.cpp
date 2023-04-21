@@ -1357,19 +1357,10 @@ void readBouteilleEEPROM(void)
 /*
 ------------------choses à faire------------------------------------
 
-- faire la lecture si un verre est présent  --- fait 
-- arreter la machine s'il n'y a pas de verre --- fait
+- faire afficher les bouteilles prédente sur l'ecran lcd au lieu de sur le site web 
 
 
 - faire la partie affichage des drink possible sur le site web et leurs ingrédients 
 - mettre une btn back sur le site  
-
-
-
-<option value="" disabled selected>Bouteille no1 </option>
-
-remplacer la ligne plus haut. 
-Mettre la valeur a la bouteille précédente.
-et changer bouteille no1 pour mettre -> bouteille no1 (nom de l'alcool)
 
 */
