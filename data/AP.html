@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Configuration du réseau Wi-Fi</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+      
+      h1 {
+        text-align: center;
+      }
+      
+      form {
+        background-color: #ffffff;
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+      
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+      
+      input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+      }
+      
+      input[type="submit"] {
+        background-color: #4CAF50;
+        color: #ffffff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <h1>Configuration du réseau Wi-Fi</h1>
+    
+    <form action="/AP_enregister" method="post">
+      <label for="ssid">SSID :</label>
+      <input type="text" id="ssid" name="ssid" placeholder="Entrez le nom de votre réseau Wi-Fi...">
+      
+      <label for="password">Mot de passe :</label>
+      <input type="password" id="password" name="password" placeholder="Entrez le mot de passe de votre réseau Wi-Fi...">
+      
+      <input type="submit" value="Enregistrer">
+    </form>
+  </body>
+</html>

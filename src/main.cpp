@@ -9,6 +9,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <ArduinoJson.h>
 #include <EEPROM.h>
+#include <WiFi.h>
+#include <preferences.h>
 
 // const char *ssid = "HUAWEI";
 // const char *password = "bigtits69";
@@ -19,8 +21,19 @@
 //const char *ssid = "omega";
 //const char *password = "Rougepomme";
 
-const char *ssid = "wifiquintal";
-const char *password = "totoa1q9";
+// const char *ssid = "wifiquintal";
+// const char *password = "totoa1q9";
+
+String ssid = "";
+String password = "";
+
+const char *soft_ap_ssid          = "DRINK_MAKER";
+const char *soft_ap_password      = NULL;
+
+
+
+// preference (flash)
+Preferences preferences;
 
 const int led = 2;
 //const int capteurLuminosite = 34;
@@ -81,6 +94,8 @@ AsyncWebServer server(80);
 int etat_menu = 0 ;
 int menu_pompe_manuelle = 1;
 int serving_On = 0;
+
+int ServeurAP_ON = 0;
 
 String patate = "patate";
 
@@ -189,26 +204,67 @@ void setup()
     file = root.openNextFile();
   }
 
-  //------------------------------------------------------------------------------------------WIFI
-  WiFi.begin(ssid, password);
-  Serial.print("Tentative de connexion...");
+  //------------------------------------------------------------------------------------------data wifi
+  preferences.begin("data_wifi", false);
+  ssid = preferences.getString("ssid", "default");
+  password = preferences.getString("password", "default");
 
+
+  //------------------------------------------------------------------------------------------WIFI
+  WiFi.begin(ssid.c_str(), password.c_str());
+  Serial.print("Tentative de connexion...");
+  int comteur = 0;
+  int errreurConnection = 0;
   while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
     delay(100);
+    comteur++;
+    if (comteur == 30)                          // donne une erreur de connection et sort de la boucle 
+    {
+      Serial.println("Erreur de connexion");
+      errreurConnection = 1;
+      break;
+    }
+
   }
 
-  Serial.println("\n");
-  Serial.println("Connexion etablie!");
-  Serial.print("Adresse IP: ");
-  Serial.println(WiFi.localIP());
+  if (errreurConnection == 0)       // si la connection a été établie
+  {
+    Serial.println("\n");
+    Serial.println("Connexion etablie!");
+    Serial.print("Adresse IP: ");
+    Serial.println(WiFi.localIP());
+  }
+  else if (errreurConnection == 1)  // si la connection n'a pas été établie
+  {
+    if(WiFi.SSID() == "")          // si le ssid est vide
+    {
+      WiFi.mode(WIFI_AP);           // met le mode en point d'accès
+      WiFi.softAP(soft_ap_ssid,soft_ap_password);    // ssid , mot de passe
+      Serial.println("Mode point d'acces");
+      Serial.print("Adresse IP: ");
+      Serial.println(WiFi.softAPIP());
+      ServeurAP_ON = 1;
+    }
+
+  }
+
 
 
 
   //-------SERVER PAGE ACCUEILLE
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/index.html", "text/html");
+
+    if (ServeurAP_ON == 1)
+    {
+      request -> send(SPIFFS, "/AP.html", "text/html");
+    }
+    else
+    {
+      request->send(SPIFFS, "/index.html", "text/html");
+    }
+    // request->send(SPIFFS, "/index.html", "text/html");
   });
   //-------SERVER PAGE 2
   server.on("/page2", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -306,6 +362,34 @@ void setup()
   });
 
 
+  // enregistre le ssid et le mot de passe du wifi
+  server.on("/AP_enregister", HTTP_POST, [](AsyncWebServerRequest *request) {     
+    if(request->hasParam("ssid", true))
+    {
+      ssid = request->getParam("ssid", true)->value();
+      Serial.println("ssid avant enregistrement: " + ssid);
+      preferences.putString("ssid", ssid);
+    }
+    if(request->hasParam("password", true))
+    {
+      password = request->getParam("password", true)->value();
+      Serial.println("password avant enregistrement: " + password);
+      preferences.putString("password", password);
+    }
+    String s = preferences.getString("ssid", "default");
+    String p = preferences.getString("password", "default");
+    Serial.print("ssid: ");
+    Serial.println(s);
+    Serial.print("password: ");
+    Serial.println(p);
+
+    delay(500);
+    ESP.restart();
+
+    request->send(204);
+  });
+
+
 
   server.begin();
   Serial.println("Serveur actif!");
@@ -325,21 +409,38 @@ void setup()
 void loop()
 {
   // regarde si le wifi est connecter, si non, il se reconnecte
-  if (WiFi.status() != WL_CONNECTED)
+  // if (WiFi.status() != WL_CONNECTED)
+  // {
+  //   digitalWrite(led_rouge,HIGH);
+  //   lcd.clear();
+  //   while (WiFi.status() != WL_CONNECTED)
+  //   {
+  //     WiFi.begin(ssid, password);
+  //     lcd.setCursor(0,0);
+  //     lcd.print("Connexion en cours");
+  //     Serial.print("Tentative de reconnection...");
+  //     delay(100);
+  //   }
+  //   lcd.clear();
+  // } 
+
+  if (ServeurAP_ON == 1 )
   {
-    digitalWrite(led_rouge,HIGH);
     lcd.clear();
-    while (WiFi.status() != WL_CONNECTED)
-    {
-      WiFi.begin(ssid, password);
-      lcd.setCursor(0,0);
-      lcd.print("Connexion en cours");
-      Serial.print("Tentative de reconnection...");
-      delay(100);
-    }
-    lcd.clear();
-  } 
-  digitalWrite(led_rouge, LOW);
+    lcd.setCursor(0,0);
+    lcd.print(" CONNECTION ROUTEUR");
+    lcd.setCursor(0,1);
+    lcd.print("1. Wifi = DRINKMAKER");
+    lcd.setCursor(0,2);
+    lcd.print("2. IP ="+ WiFi.localIP().toString());
+
+    while(1){}
+
+
+  }
+  else
+  {
+    digitalWrite(led_rouge, LOW);
 
   if (scale.get_units() > 10)   // allume la led si aucun verre n'est présent 
   {
@@ -365,6 +466,8 @@ void loop()
   {
     melange();
   }
+  }
+  
 
 }
 
