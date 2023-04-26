@@ -382,6 +382,67 @@ void setup()
   });
 
 
+  // enregistre les bouteilles precedentes 
+  server.on("/afficheBouteille_1_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b1 = BouteilleNo1;
+    request->send(200, "text/plain", b1);
+  });
+
+  server.on("/afficheBouteille_2_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b2 = BouteilleNo2;
+    request->send(200, "text/plain", b2);
+  }); 
+
+  server.on("/afficheBouteille_3_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b3 = BouteilleNo3;
+    request->send(200, "text/plain", b3);
+  });
+
+  server.on("/afficheBouteille_4_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b4 = BouteilleNo4;
+    request->send(200, "text/plain", b4);
+  });
+
+  server.on("/afficheBouteille_5_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b5 = BouteilleNo5;
+    request->send(200, "text/plain", b5);
+  });
+
+  server.on("/afficheBouteille_6_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b6 = BouteilleNo6;
+    request->send(200, "text/plain", b6);
+  });
+
+  server.on("/afficheBouteille_7_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b7 = BouteilleNo7;
+    request->send(200, "text/plain", b7);
+  });
+
+  server.on("/afficheBouteille_8_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b8 = BouteilleNo8;
+    request->send(200, "text/plain", b8);
+  });
+
+  server.on("/afficheBouteille_9_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b9 = BouteilleNo9;
+    request->send(200, "text/plain", b9);
+  });
+
+  server.on("/afficheBouteille_10_Precedentes", HTTP_GET, [](AsyncWebServerRequest *request)
+  {
+    String b10 = BouteilleNo10;
+    request->send(200, "text/plain", b10);
+  });
+
 
   server.begin();
   Serial.println("Serveur actif!");
@@ -425,9 +486,8 @@ void loop()
     lcd.print("1. Wifi = DRINKMAKER");
     lcd.setCursor(0,2);
     lcd.print("2. IP ="+ WiFi.localIP().toString());
-
+    digitalWrite(led_rouge, HIGH);
     while(1){}
-
 
   }
   else
@@ -448,8 +508,6 @@ void loop()
   if (enregistrement_bouteille == 1)
   {
     enregistrement_bouteille = 0;
-    // saveBouteillesEEPROM();
-    // readBouteilleEEPROM();
     saveBouteillesFlash();
     readBouteilleFlash();
   }
@@ -1290,169 +1348,6 @@ void melange (void)
 
  }
 
-// void saveBouteillesEEPROM(void)
-// {
-//   for (int i = 0; i < BouteilleNo1.length(); ++i) {
-//     EEPROM.write(0+i, BouteilleNo1[i]);
-//   }
-//   EEPROM.write(0+BouteilleNo1.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo2.length(); ++i) {
-//     EEPROM.write(100+i, BouteilleNo2[i]);
-//   }
-//   EEPROM.write(100+BouteilleNo2.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo3.length(); ++i) {
-//     EEPROM.write(200+i, BouteilleNo3[i]);
-//   }
-//   EEPROM.write(200+BouteilleNo3.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo4.length(); ++i) {
-//     EEPROM.write(300+i, BouteilleNo4[i]);
-//   }
-//   EEPROM.write(300+BouteilleNo4.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo5.length(); ++i) {
-//     EEPROM.write(400+i, BouteilleNo5[i]);
-//   }
-//   EEPROM.write(400+BouteilleNo5.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo6.length(); ++i) {
-//     EEPROM.write(500+i, BouteilleNo6[i]);
-//   }
-//   EEPROM.write(500+BouteilleNo6.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo7.length(); ++i) {
-//     EEPROM.write(600+i, BouteilleNo7[i]);
-//   }
-//   EEPROM.write(600+BouteilleNo7.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo8.length(); ++i) {
-//     EEPROM.write(700+i, BouteilleNo8[i]);
-//   }
-//   EEPROM.write(700+BouteilleNo8.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo9.length(); ++i) {
-//     EEPROM.write(800+i, BouteilleNo9[i]);
-//   }
-//   EEPROM.write(800+BouteilleNo9.length(), '\0');
-
-//   for (int i = 0; i < BouteilleNo10.length(); ++i) {
-//     EEPROM.write(900+i, BouteilleNo10[i]);
-//   }
-//   EEPROM.write(900+BouteilleNo10.length(), '\0');
-
-//   EEPROM.commit();
-
-// }
-
-// void readBouteilleEEPROM(void)
-// {
-//   char readChar;
-//   int i = 0;
-
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(0+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo1 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(100+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo2 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(200+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo3 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(300+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo4 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(400+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo5 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(500+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo6 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(600+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo7 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(700+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo8 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(800+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo9 += readChar;
-//   }
-
-//   i = 0;
-//   while (readChar != '\0') {
-//     readChar = EEPROM.read(900+i);   
-//     i++;
-//     delay(10);
-//     if(readChar != '\0')
-//       BouteilleNo10 += readChar;
-//   }
-
-
-//   Serial.println(BouteilleNo1);
-//   Serial.println(BouteilleNo2);
-//   Serial.println(BouteilleNo3);
-//   Serial.println(BouteilleNo4);
-//   Serial.println(BouteilleNo5);
-//   Serial.println(BouteilleNo6);
-//   Serial.println(BouteilleNo7);
-//   Serial.println(BouteilleNo8);
-//   Serial.println(BouteilleNo9);
-//   Serial.println(BouteilleNo10);
-// }
-
 
 // save les bouteilles enregistrées dans la mémoire flash
 void saveBouteillesFlash(void)
@@ -1509,6 +1404,9 @@ void readBouteilleFlash(void)
   Serial.println(BouteilleNo10);
 
 }
+
+
+
 /*
 ------------------choses à faire------------------------------------
 

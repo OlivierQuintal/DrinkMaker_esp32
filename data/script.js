@@ -80,75 +80,243 @@ $(document).ready(function(){             // cette fonction attend que le bouton
   });
 });
 
-
-
-// Fonction pour enregistrer les sélections dans localStorage
-function saveSelections() {
-  var selections = {
-    Bouteille1: V_Bouteille1,
-    Bouteille2: V_Bouteille2,
-    Bouteille3: V_Bouteille3,
-    Bouteille4: V_Bouteille4,
-    Bouteille5: V_Bouteille5,
-    Bouteille6: V_Bouteille6,
-    Bouteille7: V_Bouteille7,
-    Bouteille8: V_Bouteille8,
-    Bouteille9: V_Bouteille9,
-    Bouteille10: V_Bouteille10   
-  };
-  localStorage.setItem("selections", JSON.stringify(selections));
-}
-
-// Fonction pour charger les sélections depuis localStorage
-var savedSelections = JSON.parse(localStorage.getItem("selections")) || {};
-V_Bouteille1 = savedSelections.Bouteille1 || "";
-V_Bouteille2 = savedSelections.Bouteille2 || "";
-V_Bouteille3 = savedSelections.Bouteille3 || "";
-V_Bouteille4 = savedSelections.Bouteille4 || "";
-V_Bouteille5 = savedSelections.Bouteille5 || "";
-V_Bouteille6 = savedSelections.Bouteille6 || "";
-V_Bouteille7 = savedSelections.Bouteille7 || "";
-V_Bouteille8 = savedSelections.Bouteille8 || "";
-V_Bouteille9 = savedSelections.Bouteille9 || "";
-V_Bouteille10 = savedSelections.Bouteille10 || "";
-
-// affichage des sélections précédentes dans les selects correspondants
-document.getElementById("Bouteille1").value = V_Bouteille1;
-document.getElementById("Bouteille2").value = V_Bouteille2;
-document.getElementById("Bouteille3").value = V_Bouteille3;
-document.getElementById("Bouteille4").value = V_Bouteille4;
-document.getElementById("Bouteille5").value = V_Bouteille5;
-document.getElementById("Bouteille6").value = V_Bouteille6;
-document.getElementById("Bouteille7").value = V_Bouteille7;
-document.getElementById("Bouteille8").value = V_Bouteille8;
-document.getElementById("Bouteille9").value = V_Bouteille9;
-document.getElementById("Bouteille10").value = V_Bouteille10;
-
-
-// Écouteur d'événements pour enregistrer les sélections avant de quitter la page
-window.addEventListener("beforeunload", function() {
-  saveSelections();
-});
-
-
 function resetSelections() {
-  localStorage.clear();
-  
-  V_Bouteille1 = "";
-  V_Bouteille2 = "";
-  V_Bouteille3 = "";
-  V_Bouteille4 = "";
-  V_Bouteille5 = "";
-  V_Bouteille6 = "";
-  V_Bouteille7 = "";
-  V_Bouteille8 = "";
-  V_Bouteille9 = "";
-  V_Bouteille10 = "";
+  $.post("calibrationPompes",{
+    BouteilleNo1: "Bouteille no1",
+    BouteilleNo2: "Bouteille no2",
+    BouteilleNo3: "Bouteille no3",
+    BouteilleNo4: "Bouteille no4",
+    BouteilleNo5: "Bouteille no5",
+    BouteilleNo6: "Bouteille no6",
+    BouteilleNo7: "Bouteille no7",
+    BouteilleNo8: "Bouteille no8",
+    BouteilleNo9: "Bouteille no9",
+    BouteilleNo10: "Bouteille no10"
+  });
 
   // Rafraîchir la page
   location.reload();
   
 }
+
+
+setInterval(function getB1()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("b1").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_1_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB2()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("b2").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_2_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB3()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("b3").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_3_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB4()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("b4").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_4_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB5()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("b5").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_5_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB6()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("b6").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_6_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB7()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("b7").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_7_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB8()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("b8").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_8_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB9()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        { 
+            document.getElementById("b9").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_9_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+setInterval(function getB10()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        { 
+            document.getElementById("b10").innerHTML = this.responseText;  
+        }
+    };
+    xhttp.open("GET", "afficheBouteille_10_Precedentes", true);
+    xhttp.send();
+}, 2000);
+
+
+
+
+
+
+
+
+
+
+
+// // Fonction pour enregistrer les sélections dans localStorage
+// function saveSelections() {
+//   var selections = {
+//     Bouteille1: V_Bouteille1,
+//     Bouteille2: V_Bouteille2,
+//     Bouteille3: V_Bouteille3,
+//     Bouteille4: V_Bouteille4,
+//     Bouteille5: V_Bouteille5,
+//     Bouteille6: V_Bouteille6,
+//     Bouteille7: V_Bouteille7,
+//     Bouteille8: V_Bouteille8,
+//     Bouteille9: V_Bouteille9,
+//     Bouteille10: V_Bouteille10   
+//   };
+//   localStorage.setItem("selections", JSON.stringify(selections));
+// }
+
+// // Fonction pour charger les sélections depuis localStorage
+// var savedSelections = JSON.parse(localStorage.getItem("selections")) || {};
+// V_Bouteille1 = savedSelections.Bouteille1 || "";
+// V_Bouteille2 = savedSelections.Bouteille2 || "";
+// V_Bouteille3 = savedSelections.Bouteille3 || "";
+// V_Bouteille4 = savedSelections.Bouteille4 || "";
+// V_Bouteille5 = savedSelections.Bouteille5 || "";
+// V_Bouteille6 = savedSelections.Bouteille6 || "";
+// V_Bouteille7 = savedSelections.Bouteille7 || "";
+// V_Bouteille8 = savedSelections.Bouteille8 || "";
+// V_Bouteille9 = savedSelections.Bouteille9 || "";
+// V_Bouteille10 = savedSelections.Bouteille10 || "";
+
+// // affichage des sélections précédentes dans les selects correspondants
+// document.getElementById("Bouteille1").value = V_Bouteille1;
+// document.getElementById("Bouteille2").value = V_Bouteille2;
+// document.getElementById("Bouteille3").value = V_Bouteille3;
+// document.getElementById("Bouteille4").value = V_Bouteille4;
+// document.getElementById("Bouteille5").value = V_Bouteille5;
+// document.getElementById("Bouteille6").value = V_Bouteille6;
+// document.getElementById("Bouteille7").value = V_Bouteille7;
+// document.getElementById("Bouteille8").value = V_Bouteille8;
+// document.getElementById("Bouteille9").value = V_Bouteille9;
+// document.getElementById("Bouteille10").value = V_Bouteille10;
+
+
+// // Écouteur d'événements pour enregistrer les sélections avant de quitter la page
+// window.addEventListener("beforeunload", function() {
+//   saveSelections();
+// });
+
+
+// function resetSelections() {
+//   localStorage.clear();
+  
+//   V_Bouteille1 = "";
+//   V_Bouteille2 = "";
+//   V_Bouteille3 = "";
+//   V_Bouteille4 = "";
+//   V_Bouteille5 = "";
+//   V_Bouteille6 = "";
+//   V_Bouteille7 = "";
+//   V_Bouteille8 = "";
+//   V_Bouteille9 = "";
+//   V_Bouteille10 = "";
+
+//   // Rafraîchir la page
+//   location.reload();
+  
+// }
 
 
 

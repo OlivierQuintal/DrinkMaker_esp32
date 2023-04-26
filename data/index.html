@@ -181,7 +181,7 @@
       <h1 class="w3-padding">INVENTAIRE</h1>
 
       <select id="Bouteille1" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no1 </option>
+        <option value="Bouteille no1" id="b1">Bouteille no1 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -238,7 +238,7 @@
       </select>
 
       <select id="Bouteille2" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no2 </option>
+        <option value="Bouteille no2" id="b2">Bouteille no2 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -295,7 +295,7 @@
       </select>
 
       <select id="Bouteille3" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no3 </option>
+        <option value="Bouteille no3" id="b3">Bouteille no3 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -352,7 +352,7 @@
       </select>
 
       <select id="Bouteille4" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no4 </option>
+        <option value="Bouteille no4" id="b4">Bouteille no4 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -409,11 +409,11 @@
       </select>
 
       <select id="Bouteille5" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no5 (reste vide)</option>
+        <option value="Bouteille no5" disabled selected>Bouteille no5 (reste vide)</option>
       </select>
 
       <select id="Bouteille6" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no6 </option>
+        <option value="Bouteille no6" id="b6">Bouteille no6 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -470,7 +470,7 @@
       </select>
 
       <select id="Bouteille7" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no7 </option>
+        <option value="Bouteille no7" id="b7">Bouteille no7 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -527,7 +527,7 @@
       </select>
 
       <select id="Bouteille8" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no8 </option>
+        <option value="Bouteille no8" id="b8">Bouteille no8 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -584,7 +584,7 @@
       </select>
 
       <select id="Bouteille9" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no9 </option>
+        <option value="Bouteille no9" id="b9">Bouteille no9 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -641,7 +641,7 @@
       </select>
 
       <select id="Bouteille10" class="w3-select" style="width:80%;">
-        <option value="" disabled selected>Bouteille no10 </option>
+        <option value="Bouteille no10" id="b10">Bouteille no10 </option>
         <option value="Absinthe">Absinthe</option>
         <option value="Aperol">Aperol</option>
         <option value="Apricot brandy">Apricot brandy</option>
@@ -703,12 +703,21 @@
       <a id="appliquer" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Appliquer</a>
       <a id="chnager_page" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide" href="/page2">Afficher breuvages</a>
       <button onclick="resetSelections()" class="w3-button w3-white w3-border w3-xlarge w3-ripple w3-wide">Réinitialiser</button>
+      <br><br>
+      <div style="text-align:left; margin-left: 187px; margin-right: 187px; border-style: solid;border-color: #111; background-color: #111; opacity: 75%;">
+        <h3 style="color:white; opacity: 100%;"> Changer l'inventaire du bar:</h3>
+        <p>
+          1. Appuyer sur le bouton "Rénitialiser"<br>
+          2. Selectionner les bouteilles que vous avez dans votre bar<br>
+          3. Appuyer sur le bouton "Appliquer"<br>
+        </p>
+        <h3 style="color:white; opacity: 100%;"> Aucun changement dans l'inventaire:</h3>
+        <p>
+          1. Appuyer sur le bouton "Afficher breuvages" <br>
+          ***Note NE PAS APPUYER SUR "APPLIQUER" S'IL N'Y AS PAS EU DE CHANGEMENT DANS L'INVENTAIRE***
+      </div>
+      
     </div>
-
-
-
-
-
   </div>
   </div>
 
