@@ -257,6 +257,7 @@ void setup()
   });
   //-------SERVER PAGE 2
   server.on("/page2", HTTP_GET, [](AsyncWebServerRequest *request) {
+    trouverDrinksPossibles();
     File html = SPIFFS.open("/index1.html");
     String htmlPage2 = html.readString();
     html.close();
@@ -333,7 +334,7 @@ void setup()
       BouteilleNo10 = request->getParam("BouteilleNo10", true)->value();
     }
     enregistrement_bouteille =1;
-    trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
+    // trouverDrinksPossibles();       // une fois que le bouton APPLIQUER est appuyer, affiche la liste des drink possible d'etre fait  
     request->send(204);
   });
 
