@@ -86,12 +86,8 @@ int etat_menu = 0 ;
 int menu_pompe_manuelle = 1;
 int serving_On = 0;
 
+String AP_IP = "";
 int ServeurAP_ON = 0;
-
-String patate = "patate";
-
-
-
 
 
 //------INITIALLISATION DES LIBRAIRES
@@ -108,7 +104,7 @@ void setup()
   Serial.begin(115200);
   EEPROM.begin(1500);
   Serial.println("\n");
-
+  
 
   //----------------------------------------------------GPIO
     pinMode(led, OUTPUT);
@@ -236,6 +232,7 @@ void setup()
       WiFi.softAP(soft_ap_ssid,soft_ap_password);    // ssid , mot de passe
       Serial.println("Mode point d'acces");
       Serial.print("Adresse IP: ");
+      AP_IP = WiFi.softAPIP().toString();
       Serial.println(WiFi.softAPIP());
       ServeurAP_ON = 1;
     }
@@ -485,7 +482,9 @@ void loop()
     lcd.setCursor(0,1);
     lcd.print("1. Wifi = DRINKMAKER");
     lcd.setCursor(0,2);
-    lcd.print("2. IP ="+ WiFi.localIP().toString());
+    lcd.print("2. IP ="+ AP_IP);
+    Serial.print("IP");
+    Serial.println(AP_IP);
     digitalWrite(led_rouge, HIGH);
     while(1){}
 
