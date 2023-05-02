@@ -769,12 +769,16 @@ void menuLCD (void)
 
         switch (menu_pompe_manuelle)
         {
-          case 2:
+          case 2:           // test 1 cl quand on appuie sur le btn
             if(digitalRead(btn_1) == 1 && scale.get_units() > 10)
             {
               digitalWrite(solenoide_1,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_1,LOW);
+              delay(5000);
             }
             else
             {
