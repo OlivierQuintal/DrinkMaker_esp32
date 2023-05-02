@@ -784,6 +784,7 @@ void menuLCD (void)
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_1,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 4:
@@ -792,11 +793,16 @@ void menuLCD (void)
               digitalWrite(solenoide_2,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_2,LOW);
+              delay(5000);
             }
             else
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_2,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 6:
@@ -805,11 +811,16 @@ void menuLCD (void)
               digitalWrite(solenoide_3,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_3,LOW);
+              delay(5000);
             }
             else
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_3,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 8:
@@ -818,11 +829,16 @@ void menuLCD (void)
               digitalWrite(solenoide_4,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_4,LOW);
+              delay(5000);
             }
             else
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_4,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 10:
@@ -836,6 +852,7 @@ void menuLCD (void)
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_5,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 12:
@@ -844,11 +861,16 @@ void menuLCD (void)
               digitalWrite(solenoide_6,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_6,LOW);
+              delay(5000);
             }
             else
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_6,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 14:
@@ -857,11 +879,16 @@ void menuLCD (void)
               digitalWrite(solenoide_7,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_7,LOW);
+              delay(5000);
             }
             else
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_7,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 16:
@@ -870,11 +897,16 @@ void menuLCD (void)
               digitalWrite(solenoide_8,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_8,LOW);
+              delay(5000);
             }
             else
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_8,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 18:
@@ -883,11 +915,16 @@ void menuLCD (void)
               digitalWrite(solenoide_9,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_9,LOW);
+              delay(5000);
             }
             else
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_9,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 20:
@@ -896,11 +933,16 @@ void menuLCD (void)
               digitalWrite(solenoide_10,HIGH);
               delay(500);
               digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_10,LOW);
+              delay(5000);
             }
             else
             {
               digitalWrite(pompe_1,LOW);
               digitalWrite(solenoide_10,LOW);
+              digitalWrite(solenoide_5,LOW);
             }
             break;
           case 1:
