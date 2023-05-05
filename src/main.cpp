@@ -718,6 +718,8 @@ void menuLCD (void)
     case 0:
       lcd.setCursor(2,0);
       lcd.print(WiFi.localIP());        // affiche l'adresse IP su serveur
+      lcd.setCursor(0,3);
+      lcd.print("PAGE SUIVANTE = MENU");
       if (digitalRead(btn_1) == 1 && digitalRead(btn_3) == 1)
       {
         calibrationLoadCell();
@@ -1028,9 +1030,9 @@ void menuLCD (void)
       lcd.setCursor(4,0);
       lcd.print("TESTER ALCOOL");
       lcd.setCursor(0,2);
-      lcd.print("COMMNECER = BOUTON 3");
+      lcd.print("COMMNECER = SELECT");
       lcd.setCursor(0,3);
-      lcd.print("SORTIR = BOUTON 2");
+      lcd.print("SORTIR = MENU");
       if (digitalRead(btn_3) == 1)
       {
         lcd.clear();
