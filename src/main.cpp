@@ -459,22 +459,6 @@ void setup()
 
 void loop()
 {
-  // regarde si le wifi est connecter, si non, il se reconnecte
-  // if (WiFi.status() != WL_CONNECTED)
-  // {
-  //   digitalWrite(led_rouge,HIGH);
-  //   lcd.clear();
-  //   while (WiFi.status() != WL_CONNECTED)
-  //   {
-  //     WiFi.begin(ssid, password);
-  //     lcd.setCursor(0,0);
-  //     lcd.print("Connexion en cours");
-  //     Serial.print("Tentative de reconnection...");
-  //     delay(100);
-  //   }
-  //   lcd.clear();
-  // } 
-
   if (ServeurAP_ON == 1 )
   {
     lcd.clear();
@@ -1033,7 +1017,7 @@ void menuLCD (void)
       lcd.print("COMMNECER = SELECT");
       lcd.setCursor(0,3);
       lcd.print("SORTIR = MENU");
-      if (digitalRead(btn_3) == 1)
+      if (digitalRead(btn_1) == 1)
       {
         lcd.clear();
         int i = 5;
@@ -1175,8 +1159,9 @@ void melange (void)
     
     for(int i=0 ; i<10 ; i++)
     {
-
-      if (scale.get_units() > 10)
+      delay(500);
+      float loadCellVerre = scale.get_units();
+      if (loadCellVerre > 10)
       {
         digitalWrite(led_bleu, LOW);
       }
@@ -1191,7 +1176,7 @@ void melange (void)
       }
       else
       {
-        if (scale.get_units() < 10)
+        if (loadCellVerre < 10)
         {
           verrePresent = 0;
           lcd.clear();
