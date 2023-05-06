@@ -100,7 +100,22 @@ function resetSelections() {
 }
 
 
-setInterval(function getB1()
+document.addEventListener("DOMContentLoaded", function() {
+    getB1();
+    getB2();
+    getB3();
+    getB4();
+    getB5();
+    getB6();
+    getB7();
+    getB8();
+    getB9();
+    getB10();
+});
+
+
+
+function getB1()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -112,9 +127,9 @@ setInterval(function getB1()
     };
     xhttp.open("GET", "afficheBouteille_1_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB2()
+function getB2()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -126,9 +141,9 @@ setInterval(function getB2()
     };
     xhttp.open("GET", "afficheBouteille_2_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB3()
+function getB3()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -140,9 +155,9 @@ setInterval(function getB3()
     };
     xhttp.open("GET", "afficheBouteille_3_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB4()
+function getB4()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -154,9 +169,9 @@ setInterval(function getB4()
     };
     xhttp.open("GET", "afficheBouteille_4_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB5()
+function getB5()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -168,9 +183,9 @@ setInterval(function getB5()
     };
     xhttp.open("GET", "afficheBouteille_5_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB6()
+function getB6()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -182,9 +197,9 @@ setInterval(function getB6()
     };
     xhttp.open("GET", "afficheBouteille_6_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB7()
+function getB7()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -196,9 +211,9 @@ setInterval(function getB7()
     };
     xhttp.open("GET", "afficheBouteille_7_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB8()
+function getB8()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -210,9 +225,9 @@ setInterval(function getB8()
     };
     xhttp.open("GET", "afficheBouteille_8_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB9()
+function getB9()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -224,9 +239,9 @@ setInterval(function getB9()
     };
     xhttp.open("GET", "afficheBouteille_9_Precedentes", true);
     xhttp.send();
-}, 2000);
+}
 
-setInterval(function getB10()
+function getB10()
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function()
@@ -238,10 +253,7 @@ setInterval(function getB10()
     };
     xhttp.open("GET", "afficheBouteille_10_Precedentes", true);
     xhttp.send();
-}, 2000);
-
-
-
+}
 
 
 
