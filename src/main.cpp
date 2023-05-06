@@ -1056,10 +1056,71 @@ void menuLCD (void)
         delay(1000);
       }
       break;
-    // case 3:
-    //   trouverCentilitre();
-    //   etat_menu = 0;
-    //   break;
+      case 3:
+        lcd.setCursor(4,0);
+        lcd.print("MODE RINCAGE");
+        lcd.setCursor(0,1);
+        lcd.print("Mettre une bouteille");
+        lcd.setCursor(0,2);
+        lcd.print("Dans l'emplacement 4");
+        lcd.setCursor(0,3);
+        lcd.print("Commencer = SELECT");
+        if(digitalRead(btn_1) == 1)
+        {
+          if (scale.get_units() < 10)
+          {
+            lcd.clear();
+            lcd.setCursor(0,0);
+            lcd.print("PLATEAU VIDE");
+            lcd.setCursor(0,1);
+            lcd.print("METTRE UN VERRE");
+          }
+          
+          while(scale.get_units() < 10)
+          {           
+          }
+
+          lcd.setCursor(4,0);
+          lcd.print("MODE RINCAGE");
+          lcd.setCursor(0,1);
+          lcd.print("Mettre une bouteille");
+          lcd.setCursor(0,2);
+          lcd.print("Dans l'emplacement 4");
+          lcd.setCursor(0,3);
+          lcd.print("Commencer = SELECT");
+
+          for(int i = 0; i < 3; i++)
+          {
+              digitalWrite(solenoide_4,HIGH);
+              delay(500);
+              digitalWrite(pompe_1,HIGH);
+              delay(3000);
+              digitalWrite(solenoide_5,HIGH);
+              digitalWrite(solenoide_4,LOW);
+              delay(5000);
+          }
+          
+          digitalWrite(solenoide_5,LOW);
+          digitalWrite(pompe_1,LOW);
+          digitalWrite(buzzer,HIGH);    // active le buzzer quand le drink est fini 
+          delay(50);
+          digitalWrite(buzzer,LOW);
+          delay(50);
+          digitalWrite(buzzer,HIGH);
+          delay(50);
+          digitalWrite(buzzer,LOW);
+          delay(50);
+          digitalWrite(buzzer,HIGH);
+          delay(50);
+          digitalWrite(buzzer,LOW);
+        } 
+        else if (digitalRead(btn_2) == 1)
+        {
+          etat_menu = 4;
+          lcd.clear();
+          delay(1000);
+        }
+        break;
     default:
       etat_menu = 0; 
       break;
