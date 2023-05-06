@@ -1047,7 +1047,7 @@ void menuLCD (void)
         }
         delay(5000);
         lcd.clear();
-        etat_menu = 1;
+        etat_menu = 0;
       }
       else if (digitalRead(btn_2) == 1)
       {
