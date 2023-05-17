@@ -12,17 +12,7 @@
 #include <WiFi.h>
 #include <preferences.h>
 
-// const char *ssid = "HUAWEI";
-// const char *password = "bigtits69";
 
-// const char *ssid = "RT-AC1200_E0_2G";
-// const char *password = "eagle_4742";
-
-//const char *ssid = "omega";
-//const char *password = "Rougepomme";
-
-// const char *ssid = "wifiquintal";
-// const char *password = "totoa1q9";
 
 String ssid = "";
 String password = "";
